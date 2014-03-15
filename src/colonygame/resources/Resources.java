@@ -6,7 +6,6 @@
 package colonygame.resources;
 
 import colonygame.Main;
-import colonygame.World;
 import java.io.File;
 import java.io.IOException;
 import java.util.AbstractMap;

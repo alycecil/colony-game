@@ -1,5 +1,7 @@
 package colonygame;
 
+import colonygame.resources.WorldMap;
+
 /**
  *
  * @author WilCecil
