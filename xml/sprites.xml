@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<sprites>
+
+    <sprite>
+        <id>red</id>
+        <file>BITMAPS\260.bmp</file>
+        <x>108</x>
+        <y>46</y>
+        <xOff>37</xOff>
+        <yOff>163</yOff>
+        <xDelta>7</xDelta>
+        <yDelta>7</yDelta>
+        <width>5</width>
+        <height>2</height>
+    </sprite>
+            
+    
+</sprites>
+    
+
+
