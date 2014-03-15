@@ -6,20 +6,24 @@ and open the template in the editor.
 
 
 <maps>
-    <setting>
+    <map>
+        <id>500</id>
+        <image>BITMAPS\500.bmp</image>
+        <terrain>BITMAPS\500A.bmp</terrain>
+        <world>red</world>
         <clear>0,0,0</clear>
         <rough>128,0,0</rough>
         <difficult>0,128,0</difficult>
         <impassible>128,128,0</impassible>
-    </setting>
-    <map>
-        <id>500</id>
-        <image>\BITMAPS\500.bmp</image>
-        <terrain>\BITMAPS\500A.bmp</terrain>
     </map>
     <map>
         <id>501</id>
-        <image>\BITMAPS\501.bmp</image>
-        <terrain>\BITMAPS\501A.bmp</terrain>
+        <image>BITMAPS\501.bmp</image>
+        <terrain>BITMAPS\501A.bmp</terrain>
+        <world>red</world>
+        <clear>0,0,0</clear>
+        <rough>128,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
     </map>
 </maps>

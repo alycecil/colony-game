@@ -29,6 +29,14 @@ public abstract class XMLParser {
                 
                 //tempNode.getNodeName()
                 
+                if(tempNode.getNodeName().equalsIgnoreCase("worlds")){
+                    
+                }else if(tempNode.getNodeName().equalsIgnoreCase("sprites")){
+                    
+                }else if(tempNode.getNodeName().equalsIgnoreCase("maps")){
+                    
+                }
+                
             }
             
 
