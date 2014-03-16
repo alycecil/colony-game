@@ -36,9 +36,9 @@ public class WorldMap {
     public static final char IMPASSIBLE = 4;
     public static char DEFAULT_VALUE = CLEAR;
     public static final char STANDARD_DEPTH = 5;
-    public static final char UNDISCOVERED = 10;
-    public static final char DISCOVERED = 11;
-    public static final char UNDERGROUND_DOZED = 12;
+    public static final char UNDERGROUND_DOZED = 6;
+    public static final char DISCOVERED = 8;
+    public static final char UNDISCOVERED = 9;
     char[][][] map;
 
     public WorldMap(char[][][] map, World pWorld) {
@@ -112,7 +112,7 @@ public class WorldMap {
                 }
 
                 Logger.getLogger(Sprite.class.getName()).log(
-                        Level.INFO, "Added " + added + " maps to resources.");
+                        Level.INFO, "Added {0} maps to resources.", added);
             }
 
 
@@ -230,7 +230,9 @@ public class WorldMap {
 
                 tempWorld = Main.resources.getWorld(tempChild.getTextContent());
 
-                bWorld = true;
+                if (tempWorld != null) {
+                    bWorld = true;
+                }
 
             } else if (tempChild.getNodeName().equalsIgnoreCase("#text")) {
                 //ignore whitespace  
@@ -327,7 +329,7 @@ public class WorldMap {
         Color temp;
         for (int i = 0; i < imgTerrain.getWidth(); i++) {
             for (int j = 0; j < imgTerrain.getHeight(); j++) {
-                temp = new Color(imgMap.getRGB(i, j));
+                temp = new Color(imgTerrain.getRGB(i, j));
 
                 if (temp.equals(clear)) {
                     map[0][i][j] = CLEAR;
@@ -339,11 +341,11 @@ public class WorldMap {
                     map[0][i][j] = IMPASSIBLE;
                 } else {
                     Logger.getLogger(World.class.getName()).log(
-                            Level.WARNING, 
-                            "Unknown color ({0},{1},{2}) at ({3},{4})\n", 
-                            new Object[]{temp.getRed(), temp.getGreen(), 
-                                temp.getBlue(), i, j});
-                    
+                            Level.WARNING,
+                            "Unknown color ({0},{1},{2}) at ({3},{4})\n",
+                            new Object[]{temp.getRed(), temp.getGreen(),
+                        temp.getBlue(), i, j});
+
                     map[0][i][j] = DEFAULT_VALUE;
                 }
             }
@@ -351,5 +353,41 @@ public class WorldMap {
 
         return new WorldMap(map, pWorld);
 
+    }
+
+    public int getDepth() {
+        return map.length;
+
+    }
+
+    public int getWidth() {
+        return map[0].length;
+
+    }
+
+    public int getHeight() {
+        return map[0][0].length;
+
+    }
+
+    public char[][] getBlock(int x, int y, int z, int width, int height) {
+        char[][] block = new char[width][height];
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                //
+                //\/\/\/\/\/\/\/\/\/\/\/\/\//
+                //   copy subset of map    //
+                //\/\/\/\/\/\/\/\/\/\/\/\/\//
+                //
+                block[i][j] = map[z][x + i][y + j];
+            }
+        }
+
+        return block;
+    }
+
+    public World getWorld() {
+        return parent;
     }
 }

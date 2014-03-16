@@ -140,7 +140,8 @@ public class World {
               //ignore whitespace  
             } else {
                 Logger.getLogger(World.class.getName()).log(
-                        Level.WARNING, "Current Node type unexpedcted for world, {0}", tempChild.getNodeName());
+                        Level.WARNING, "Current Node type unexpedcted "
+                        + "for world, {0}", tempChild.getNodeName());
             }
 
         }
@@ -149,16 +150,12 @@ public class World {
         if (tempSprite == null || tempId == null) {
             //uh oh
             Logger.getLogger(World.class.getName()).log(
-                    Level.INFO, 
-                    "current world node not well defined, missing attributes. "
-                    + pNode.getTextContent());
+                    Level.INFO, "current world node not well defined, "
+                    + "missing attributes. {0}", pNode.getTextContent());
 
             return false;
 
         } else {
-
-            Logger.getLogger(Sprite.class.getName()).log(
-                    Level.INFO, "Adding world to resources.");
             
             //add to resources
             Main.resources.addWorld(tempId, new World(tempSprite, tempId));

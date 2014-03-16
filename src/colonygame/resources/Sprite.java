@@ -5,7 +5,15 @@
 package colonygame.resources;
 
 import colonygame.Main;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
+import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,15 +31,16 @@ import org.xml.sax.SAXException;
  *
  * @author WilCecil
  */
-public class Sprite   {
+public class Sprite {
 
     protected static final String ROOT_NODE = "sprites";
     protected static final String CHILD_NODE = "sprite";
     BufferedImage tileSet;
+    BufferedImage tileSetTrans;
     int width, height, startX, startY, deltaX, deltaY;
     int cellsWidth, cellsHeight;
 
-    public Sprite(BufferedImage tileSet, int width, int height, 
+    public Sprite(BufferedImage tileSet, int width, int height,
             int startX, int startY, int deltaX, int deltaY, int cellsWidth, int cellsHeight) {
         this.tileSet = tileSet;
         this.width = width;
@@ -42,11 +51,44 @@ public class Sprite   {
         this.deltaY = deltaY;
         this.cellsHeight = cellsHeight;
         this.cellsWidth = cellsWidth;
+
+
+        //get trans. color
+        Color c;
+        c = new Color(tileSet.getRGB(startX, startY));
+
+
+        //add transparency layer
+        tileSetTrans = new BufferedImage(
+                tileSet.getWidth(), tileSet.getTileWidth(),
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = tileSetTrans.createGraphics();
+        g2.drawImage(Sprite.makeColorTransparent(tileSet, c), 0, 0, null);
+        g2.dispose();
+
     }
 
-    public Sprite() {
+    public BufferedImage getCell(int cell){
+        
+        if(cell > cellsHeight*cellsHeight){
+            //what the hell guy?
+            
+            Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE, 
+                    "Trying to request sprite cell outside valid #{0}",cell);
+            
+            cell = 0;
+        }
+        
+        int i,j;
+        
+        i = cell%width;
+        j = cell/width;
+        
+        i=i*(width+deltaX)+startX;
+        j=j*(height+deltaY)+startY;
+        
+        return tileSetTrans.getSubimage(i, j, width, height);
     }
-
     
     public static boolean readXML(File pfSource) {
         try {
@@ -62,21 +104,21 @@ public class Sprite   {
             if (!doc.getDocumentElement().getNodeName().equalsIgnoreCase(ROOT_NODE)) {
                 throw new ParserConfigurationException("Root Node of Type "
                         + doc.getDocumentElement().getNodeName()
-                        + " unexpected, expected "+ROOT_NODE+".");
+                        + " unexpected, expected " + ROOT_NODE + ".");
             }
 
             //add children
             if (doc.hasChildNodes()) {
                 int index;
                 NodeList roots = doc.getChildNodes();
-                
-                for(index = 0; index < roots.getLength(); index++){
-                    if(roots.item(index).getNodeName().equalsIgnoreCase(ROOT_NODE)){
+
+                for (index = 0; index < roots.getLength(); index++) {
+                    if (roots.item(index).getNodeName().equalsIgnoreCase(ROOT_NODE)) {
                         break;
                     }
                 }
-                
-                /////
+
+                /////\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
                 //this block is :
                 //readXML(doc.getChildNodes());
                 /////
@@ -92,13 +134,13 @@ public class Sprite   {
                         added++;
                     }
                 }
-                
+
                 Logger.getLogger(Sprite.class.getName()).log(
-                    Level.INFO, "Added {0} sprites to resources.", added);
+                        Level.INFO, "Added {0} sprites to resources.", added);
             }
 
 
-            
+
             //we were successful
             return true;
         } catch (ParserConfigurationException | SAXException | IOException ex) {
@@ -109,7 +151,6 @@ public class Sprite   {
         }
     }
 
-    
     public static boolean readXML(Node pNode) {
         //ensure type
         if (!pNode.getNodeName().equalsIgnoreCase(CHILD_NODE)) {
@@ -200,11 +241,11 @@ public class Sprite   {
                 height = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
                 bheight = true;
-            }else if(tempChild.getNodeName().equalsIgnoreCase("#text")){
-              //ignore whitespace  
+            } else if (tempChild.getNodeName().equalsIgnoreCase("#text")) {
+                //ignore whitespace  
             } else {
                 Logger.getLogger(Sprite.class.getName()).log(
-                        Level.WARNING, 
+                        Level.WARNING,
                         "Current Node type unexpedcted for " + CHILD_NODE
                         + ", {0}", tempChild.getNodeName());
             }
@@ -219,13 +260,13 @@ public class Sprite   {
             try {
                 File imagefile = new File(tempFile);
                 BufferedImage img = ImageIO.read(imagefile);
-                
+
                 //add to resources
-                Main.resources.addSprite(tempId, new Sprite(img, x, y, xOff,yOff,xDelta,yDelta,width,height));
+                Main.resources.addSprite(tempId, new Sprite(img, x, y, xOff, yOff, xDelta, yDelta, width, height));
 
                 return true;
             } catch (IOException ex) {
-                Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE, null, ex);   
+                Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
 
@@ -233,8 +274,46 @@ public class Sprite   {
             Logger.getLogger(Sprite.class.getName()).log(
                     Level.WARNING, "current world node not well defined, missing attributes. {0}", pNode.getNodeValue());
         }
-        
+
         //failed!
         return false;
+    }
+
+    /**
+     * Takes an image and creates transparency/alpha mapped from a color
+     *
+     * from
+     * http://www.javaworld.com/article/2074105/core-java/making-white-image-backgrounds-transparent-with-java-2d-groovy.html
+     *
+     * @param im
+     * @param color
+     * @return
+     */
+    public static Image makeColorTransparent(final BufferedImage im, final Color color) {
+        final ImageFilter filter = new RGBImageFilter() {
+            // the color we are looking for (white)... Alpha bits are set to opaque
+            public int markerRGB = color.getRGB() | 0xFFFFFFFF;
+
+            @Override
+            public final int filterRGB(final int x, final int y, final int rgb) {
+                if ((rgb | 0xFF000000) == markerRGB) {
+                    // Mark the alpha bits as zero - transparent
+                    return 0x00FFFFFF & rgb;
+                } else {
+                    // nothing to do
+                    return rgb;
+                }
+            }
+        };
+
+        final ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
+        return Toolkit.getDefaultToolkit().createImage(ip);
+    }
+
+    public int getCellWidth() {
+        return width;
+    }
+    public int getCellHeight() {
+        return height;
     }
 }

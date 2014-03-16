@@ -8,7 +8,7 @@ and open the template in the editor.
 <worlds>
     
     <world>
-        <id>Red</id>
+        <id>red</id>
         <sprite>red</sprite>
         
     </world>

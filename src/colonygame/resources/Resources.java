@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.Set;
 import org.ini4j.Wini;
 
 /**
@@ -72,6 +73,11 @@ public class Resources {
     public Sprite getSprite(String keyId) {
         return sprites.get(keyId);
     }
+    
+    public Set<String> getMaps(){
+        return maps.keySet();
+    }
+    
 
     public void addMap(String keyId, WorldMap map) {
         maps.put(keyId, map);

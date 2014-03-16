@@ -16,37 +16,41 @@ public class Main {
     public static UI ui;
     public static WorldMap map;
     public static Resources resources;
+    public static Game game;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         try {
-            // TODO code application logic here
-
-            resources = new Resources();
-            
-            resources.loadXML();
-            
-            
-            //ui = new UI();
-
-            //ui.prep();
-
-            
             
             /*
-             java.awt.EventQueue.invokeLater(new Runnable() {
-             @Override
-             public void run() {
-             Main.ui.renderFrame();
-             try {
-             this.wait(1000);
-             } catch (InterruptedException e) {
-             Main.ui.error(e);
-             }
-             }
-             }*/
+             * Load Resources
+             */
+            
+            resources = new Resources();
+
+            resources.loadXML();
+
+
+            game = new Game(0);
+            
+            /*
+             * Start UI 
+             */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new UI().setVisible(true);
+                }
+            });
+
+            /*
+             * Start Game Loop
+             */
+
+            
+            
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

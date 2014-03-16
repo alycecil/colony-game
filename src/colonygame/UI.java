@@ -4,17 +4,28 @@
  */
 package colonygame;
 
+import colonygame.resources.Sprite;
+import java.awt.Graphics;
+
 /**
  *
  * @author TOM
  */
 public class UI extends javax.swing.JFrame {
 
+    int x, y, z;
+    public static int RENDER_WIDTH = 4;
+    public static int RENDER_HEIGHT = 7;
+    
+    public static int MARGIN_X = 40;
+    public static int MARGIN_Y = 40;
+
     /**
      * Creates new form UI
      */
     public UI() {
         initComponents();
+        x = y = z = 0;
     }
 
     /**
@@ -26,22 +37,29 @@ public class UI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jpCanvas = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(620, 480));
+        setPreferredSize(new java.awt.Dimension(620, 480));
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+        jpCanvas.setBackground(new java.awt.Color(0, 0, 0));
+        jpCanvas.setForeground(new java.awt.Color(255, 255, 255));
+        jpCanvas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jpCanvasMouseClicked(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jpCanvasLayout = new javax.swing.GroupLayout(jpCanvas);
+        jpCanvas.setLayout(jpCanvasLayout);
+        jpCanvasLayout.setHorizontalGroup(
+            jpCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 447, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jpCanvasLayout.setVerticalGroup(
+            jpCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -64,9 +82,9 @@ public class UI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -75,12 +93,17 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jpCanvasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpCanvasMouseClicked
+        
+        renderFrame();
+    }//GEN-LAST:event_jpCanvasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -118,21 +141,52 @@ public class UI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jpCanvas;
     // End of variables declaration//GEN-END:variables
 
     void prep() {
-        
-        
-        
     }
 
+    /**
+     * get the current map cell and render it to the appropriate frame
+     */
     void renderFrame() {
+
+        //Sprite
+        Sprite tile = Main.game.getMap().getWorld().getTile();
         
+        //calc size to pull
+        RENDER_WIDTH=(jpCanvas.getBounds().width-2*MARGIN_X)/tile.getCellWidth();
+        RENDER_HEIGHT=(jpCanvas.getBounds().height-2*MARGIN_Y)/tile.getCellHeight();
+        
+        //get map subset to render
+        char[][] mapBlock = Main.game.getMap().getBlock(x, y, z,
+                RENDER_WIDTH, RENDER_HEIGHT);
+
+        
+
+
+        Graphics g = jpCanvas.getGraphics();
+
+        // _ _ _ _ _
+        //  _ _ _ _ _ 
+        // _ _ _ _ _
+        //  _ _ _ _ _ 
+        // _ _ _ _ _
+        for (int i = 0; i < RENDER_WIDTH; i++) {
+            for (int j = 0; j < RENDER_HEIGHT; j++) {
+                
+                g.drawImage(tile.getCell(mapBlock[i][j]),
+                        MARGIN_X+i*tile.getCellWidth()+(tile.getCellWidth()/2)*(j%2),
+                        MARGIN_Y+j*tile.getCellHeight()/2, null);
+            }
+        }
+
+        
+
     }
 
     void error(InterruptedException e) {
-        
     }
 }

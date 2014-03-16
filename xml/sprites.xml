@@ -10,7 +10,7 @@ and open the template in the editor.
     <sprite>
         <id>red</id>
         <file>BITMAPS\260.bmp</file>
-        <x>108</x>
+        <x>107</x>
         <y>46</y>
         <xOff>37</xOff>
         <yOff>163</yOff>
