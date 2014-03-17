@@ -9,9 +9,12 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 import SASLib.Geom.Vector;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -27,12 +30,17 @@ public class UI extends javax.swing.JFrame {
     public static int TEXT_AREA_WIDTH = 100;
     public static int TEXT_AREA_HEIGHT = 100;
     public static int MAP_COLOR = 0x00F00000;
+    public static int BUTTON_COLOR = 0x00FF0000;
     private Vector touch = null;
     int[][] hitBoxRef;
     BufferedImage hitBox;
     BufferedImage gridLines;
     int lastColor;
     boolean bResized = true;
+    ArrayList<UIButton> buttons;
+    ArrayList<Color> buttonsColors;
+    int nextButtonColor = BUTTON_COLOR;
+   
 
     /**
      * Creates new form UI
@@ -54,7 +62,11 @@ public class UI extends javax.swing.JFrame {
 
 
         bResized = true;
-
+        
+        
+        //create buttons
+        
+        buttons = new ArrayList<>();
     }
 
     /**
@@ -177,7 +189,9 @@ public class UI extends javax.swing.JFrame {
             //do nothing
         } else if (c == MAP_COLOR) {
             //map click
-            x=evt.getX();
+            Image img = Main.game.getMap().getImage();
+            
+            x=evt.getX()-jpCanvas.getWidth()+img.getWidth(null);
             y=evt.getY();
         } else {
 
@@ -288,6 +302,11 @@ public class UI extends javax.swing.JFrame {
 
         //gGrid for grid lines over tiles, update on resize
         Graphics gGrid = null;
+        
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, 
+                    jpCanvas.getWidth(),
+                    jpCanvas.getHeight());
 
         if (bResized) {
 
@@ -384,7 +403,9 @@ public class UI extends javax.swing.JFrame {
         writeText(g, "x:" + x + " y:" + y, 0);
 
         g.setColor(Color.red);
-        writeText(g, "x:" + (int) touch.getX() + " y:" + (int) touch.getY(), 1);
+        writeText(g, 
+                "x:" + (int) touch.getX() + 
+                " y:" + (int) touch.getY(), 1);
 
 
 
@@ -422,13 +443,61 @@ public class UI extends javax.swing.JFrame {
         //check if i need to update hitbox
         if (bResized) {
             gHit.setColor(new Color(MAP_COLOR));
-            gHit.fillRect(0, 0,
+            gHit.fillRect(jpCanvas.getWidth()-img.getWidth(null), 0,
                     img.getWidth(null),
                     img.getHeight(null));
 
         }
 
-        g.drawImage(img, 0, 0, null);
+        g.drawImage(img, jpCanvas.getWidth()-img.getWidth(null), 0, null);
+        
+        g.setColor(Color.magenta);
+        g.fillRect(jpCanvas.getWidth()-img.getWidth(null)+x, y, RENDER_WIDTH, RENDER_HEIGHT);
 
     }
+    
+    
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param txt
+     * @param bg
+     * @param cTxt 
+     */
+    public void addButton(int x, int y, int w, int h, String txt, 
+            Color cBg, Color cTxt){
+        
+        //make the button
+        UIButton b = new UIButton(x, y, w, h, txt, cBg, cTxt);
+        
+        //add button to ref
+        buttons.add(b);
+        buttonsColors.add(new Color(nextButtonColor));
+        
+        //add 2
+        nextButtonColor+=2;
+    }
+    
+    public void renderButtons(Graphics g){
+        Iterator<UIButton> iterButton = buttons.iterator();
+        Iterator<Color> iterBColor = buttonsColors.iterator();
+        
+        UIButton tempButton;
+        Color tempColor;
+        
+        while(iterBColor.hasNext() && iterButton.hasNext()){
+            
+        }
+        
+    }
+    
+    public void renderButtonsHit(Graphics g){
+        
+        
+    }
+    
+    
 }
