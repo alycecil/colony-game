@@ -6,6 +6,7 @@ package colonygame.resources;
 
 import colonygame.Main;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -40,30 +41,76 @@ public class WorldMap {
     public static final char DISCOVERED = 8;
     public static final char UNDISCOVERED = 9;
     char[][][] map;
-
-    public WorldMap(char[][][] map, World pWorld) {
+    Image image;
+    
+    
+    public WorldMap(char[][][] map, World pWorld){
+        this(map, pWorld, null);
+        
+        image = renderMap(map, 0);
+    }
+    
+    public WorldMap(char[][][] map, World pWorld, Image img) {
         this.map = map;
+        image = img;
 
         parent = pWorld;
     }
-
-    public WorldMap(int size, World pWorld) {
-        this(size, size, STANDARD_DEPTH, pWorld);
-    }
-
-    public WorldMap(int size_width, int size_height, int depth, World pWorld) {
-        map = new char[depth][size_width][size_height];
-        parent = pWorld;
-
-        for (int z = 0; z < 5; z++) {
-            for (int i = 0; i < size_width; i++) {
-                for (int j = 0; j < size_height; j++) {
-                    map[z][i][j] = DEFAULT_VALUE;
+    
+    public static Image renderMap(char[][][] map, int depth){
+        //get the sub image
+        char[][] squares = map[depth];
+        
+        //make space
+        BufferedImage img = new BufferedImage(squares.length,
+                    squares[0].length, BufferedImage.TYPE_INT_RGB);
+        
+        
+        //\/\/\/\/\/\/\/\
+        //--  render!  --
+        //\/\/\/\/\/\/\/\
+        
+        for(int i = 0; i < squares.length; i++){
+            for(int j = 0; j < squares.length; j++){
+                Color c = Color.pink;
+                
+                if(squares[i][j]==DOZED){
+                    c = Color.GREEN;
+                    
+                }else if(squares[i][j]==CLEAR){
+                    c = Color.YELLOW;
+                    
+                }else if(squares[i][j]==ROUGH){
+                    c = Color.RED;
+                    
+                }else if(squares[i][j]==DIFFICULT){
+                    c = Color.GREEN;
+                    
+                }else if(squares[i][j]==IMPASSIBLE){
+                    c = Color.WHITE;
+                    
+                }else if(squares[i][j]==STANDARD_DEPTH){
+                    c = Color.DARK_GRAY;
+                    
+                }else if(squares[i][j]==UNDERGROUND_DOZED){
+                    c = Color.GREEN;
+                    
+                }else if(squares[i][j]==DISCOVERED){
+                    c = Color.LIGHT_GRAY;
+                    
+                }else if(squares[i][j]==UNDISCOVERED){
+                    c = Color.BLACK;
+                    
                 }
+                
+                img.setRGB(i, j, c.getRGB());
             }
         }
+            
+        //return image
+        return img;
     }
-
+    
     public static boolean readXML(File pfSource) {
         try {
             //parse as DOM
@@ -351,7 +398,7 @@ public class WorldMap {
             }
         }
 
-        return new WorldMap(map, pWorld);
+        return new WorldMap(map, pWorld, imgMap);
 
     }
 
@@ -380,7 +427,11 @@ public class WorldMap {
                 //   copy subset of map    //
                 //\/\/\/\/\/\/\/\/\/\/\/\/\//
                 //
+                try{
                 block[i][j] = map[z][x + i][y + j];
+                }catch(Exception e){
+                    block[i][j]=DEFAULT_VALUE;
+                }
             }
         }
 
@@ -389,5 +440,9 @@ public class WorldMap {
 
     public World getWorld() {
         return parent;
+    }
+
+    public Image getImage() {
+        return image;
     }
 }

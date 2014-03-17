@@ -6,6 +6,12 @@ package colonygame;
 
 import colonygame.resources.Sprite;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+
+import SASLib.Geom.Vector;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -15,17 +21,40 @@ public class UI extends javax.swing.JFrame {
 
     int x, y, z;
     public static int RENDER_WIDTH = 4;
-    public static int RENDER_HEIGHT = 7;
-    
+    public static int RENDER_HEIGHT = 4;
     public static int MARGIN_X = 40;
     public static int MARGIN_Y = 40;
+    public static int TEXT_AREA_WIDTH = 100;
+    public static int TEXT_AREA_HEIGHT = 100;
+    public static int MAP_COLOR = 0x00F00000;
+    private Vector touch = null;
+    int[][] hitBoxRef;
+    BufferedImage hitBox;
+    BufferedImage gridLines;
+    int lastColor;
+    boolean bResized = true;
 
     /**
      * Creates new form UI
      */
     public UI() {
         initComponents();
-        x = y = z = 0;
+        lastColor = x = y = z = 0;
+
+
+        //touch vector
+        touch = new Vector();
+
+
+        hitBox = new BufferedImage(jpCanvas.getWidth(),
+                jpCanvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        gridLines = new BufferedImage(jpCanvas.getWidth(),
+                jpCanvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+
+        bResized = true;
+
     }
 
     /**
@@ -38,17 +67,30 @@ public class UI extends javax.swing.JFrame {
     private void initComponents() {
 
         jpCanvas = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(620, 480));
         setPreferredSize(new java.awt.Dimension(620, 480));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jpCanvas.setBackground(new java.awt.Color(0, 0, 0));
-        jpCanvas.setForeground(new java.awt.Color(255, 255, 255));
         jpCanvas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jpCanvasMouseClicked(evt);
+                jCanvasMouseClicked(evt);
+            }
+        });
+        jpCanvas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
             }
         });
 
@@ -56,24 +98,11 @@ public class UI extends javax.swing.JFrame {
         jpCanvas.setLayout(jpCanvasLayout);
         jpCanvasLayout.setHorizontalGroup(
             jpCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 447, Short.MAX_VALUE)
+            .addGap(0, 655, Short.MAX_VALUE)
         );
         jpCanvasLayout.setVerticalGroup(
             jpCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 143, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 429, Short.MAX_VALUE)
+            .addGap(0, 457, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -81,29 +110,96 @@ public class UI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jpCanvasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpCanvasMouseClicked
-        
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b); //To change body of generated methods, choose Tools | Templates.
+
         renderFrame();
-    }//GEN-LAST:event_jpCanvasMouseClicked
+    }
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
+
+
+            if (x < Main.game.getMap().getWidth() - RENDER_WIDTH) {
+                x++;
+            }
+
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
+
+            if (x > 0) {
+                x--;
+            }
+
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+
+
+            if (y < Main.game.getMap().getHeight() - 1 - RENDER_HEIGHT) {
+                y++;
+            }
+
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+
+            if (y > 0) {
+                y--;
+            }
+
+        }
+
+
+
+    }//GEN-LAST:event_formKeyPressed
+
+    private void jCanvasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCanvasMouseClicked
+        //\/\/\/\/\/\/\/\/\/\/\/\/\//
+        //   get clicked tile      //
+        //\/\/\/\/\/\/\/\/\/\/\/\/\//
+        int c = hitBox.getRGB(evt.getX(), evt.getY()) & 0x00ffffff;
+
+        //ensure not a black click
+        if (c == 0) {
+            //do nothing
+        } else if (c == MAP_COLOR) {
+            //map click
+            x=evt.getX();
+            y=evt.getY();
+        } else {
+
+
+            for (int i = 0; i < hitBoxRef.length; i++) {
+                for (int j = 0; j < hitBoxRef[0].length; j++) {
+                    if (c == hitBoxRef[i][j]) {
+                        touch = new Vector(i + x, j + y);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jCanvasMouseClicked
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        // TODO add your handling code here:
+        jpCanvas.setBounds(0, 0,
+                evt.getComponent().getWidth() - MARGIN_X,
+                evt.getComponent().getHeight() - MARGIN_Y);
+
+        bResized = true;
+    }//GEN-LAST:event_formComponentResized
 
     /**
      * @param args the command line arguments
@@ -141,7 +237,6 @@ public class UI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jpCanvas;
     // End of variables declaration//GEN-END:variables
 
@@ -155,38 +250,185 @@ public class UI extends javax.swing.JFrame {
 
         //Sprite
         Sprite tile = Main.game.getMap().getWorld().getTile();
-        
+
         //calc size to pull
-        RENDER_WIDTH=(jpCanvas.getBounds().width-2*MARGIN_X)/tile.getCellWidth();
-        RENDER_HEIGHT=(jpCanvas.getBounds().height-2*MARGIN_Y)/tile.getCellHeight();
-        
+        //    |margin y
+        //  / |
+        //- - -
+        //X
+        // 
+        RENDER_WIDTH = (jpCanvas.getBounds().width - 2 * MARGIN_X)
+                / tile.getCellWidth();
+        RENDER_HEIGHT = (jpCanvas.getBounds().height - 2 * MARGIN_Y)
+                / tile.getCellHeight();
+
+        RENDER_WIDTH = RENDER_HEIGHT = (int) Math.sqrt(RENDER_WIDTH * RENDER_HEIGHT);
+
         //get map subset to render
         char[][] mapBlock = Main.game.getMap().getBlock(x, y, z,
                 RENDER_WIDTH, RENDER_HEIGHT);
 
-        
 
 
-        Graphics g = jpCanvas.getGraphics();
 
-        // _ _ _ _ _
-        //  _ _ _ _ _ 
-        // _ _ _ _ _
-        //  _ _ _ _ _ 
-        // _ _ _ _ _
+
+
+
+        BufferedImage tempImg = new BufferedImage(jpCanvas.getWidth(),
+                jpCanvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+
+        //create all the graphics we need
+        //g for generic/the canvas
+        Graphics gFinal = jpCanvas.getGraphics();
+        Graphics g = tempImg.createGraphics();
+
+        //gHit for for mouse click box, update on resize
+        Graphics gHit = null;
+
+        //gGrid for grid lines over tiles, update on resize
+        Graphics gGrid = null;
+
+        if (bResized) {
+
+            //create image size as needed
+            hitBox = new BufferedImage(jpCanvas.getWidth(),
+                    jpCanvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            gridLines = new BufferedImage(jpCanvas.getWidth(),
+                    jpCanvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+            //get graphis
+            gHit = hitBox.createGraphics();
+            gGrid = gridLines.createGraphics();
+
+            //create storage
+            hitBoxRef = new int[RENDER_WIDTH][RENDER_HEIGHT];
+        }
+
+
+        //clear box
+        g.setColor(Color.BLACK);
+        g.drawRect(0, 0, jpCanvas.getWidth(), jpCanvas.getHeight());
+
+
+        //the diamond approach
+        //http://stackoverflow.com/questions/892811/drawing-isometric-game-worlds
+        int cellx, celly;
+
         for (int i = 0; i < RENDER_WIDTH; i++) {
-            for (int j = 0; j < RENDER_HEIGHT; j++) {
-                
+
+            for (int j = RENDER_HEIGHT - 1; j >= 0; j--) {
+                // Changed loop condition here.
+                cellx = (j * tile.getCellWidth() / 2)
+                        + (i * tile.getCellWidth() / 2)
+                        + MARGIN_X;
+                celly = (i * tile.getCellHeight() / 2)
+                        - (j * tile.getCellHeight() / 2)
+                        + jpCanvas.getHeight() / 2
+                        + MARGIN_Y;
+                         
+
                 g.drawImage(tile.getCell(mapBlock[i][j]),
-                        MARGIN_X+i*tile.getCellWidth()+(tile.getCellWidth()/2)*(j%2),
-                        MARGIN_Y+j*tile.getCellHeight()/2, null);
+                        cellx,
+                        celly, null);
+
+
+
+
+                if (bResized) {
+                    //debug
+//                g.setColor(new Color(hitBoxRef[i][j]));               
+//                g.fillPolygon(xPoints, yPoints, 4);
+
+                    //draw poly
+                    int[] xPoints, yPoints;
+                    xPoints = new int[]{0 + cellx,
+                        tile.getCellWidth() / 2 + cellx,
+                        tile.getCellWidth() + cellx,
+                        tile.getCellWidth() / 2 + cellx};
+                    yPoints = new int[]{
+                        tile.getCellHeight() / 2 + celly,
+                        celly,
+                        tile.getCellHeight() / 2 + celly,
+                        tile.getCellHeight() + celly};
+
+                    //gridlines!
+                    gGrid.setColor(Color.white);
+                    gGrid.drawPolygon(xPoints, yPoints, 4);
+
+
+                    //save color
+                    hitBoxRef[i][j] = i << 8 | j << 1 | 1;
+
+                    //draw ref
+                    gHit.setColor(new Color(hitBoxRef[i][j]));
+
+                    gHit.fillPolygon(xPoints, yPoints, 4);
+                }
             }
         }
 
-        
+
+        //paint cell lines
+        g.drawImage(gridLines, 0, 0, null);
+
+        //DRAW TEXT BOX
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(jpCanvas.getWidth() - TEXT_AREA_WIDTH,
+                jpCanvas.getHeight() - TEXT_AREA_HEIGHT,
+                TEXT_AREA_WIDTH, TEXT_AREA_HEIGHT);
+
+        //write in it
+
+        g.setColor(Color.red);
+        writeText(g, "x:" + x + " y:" + y, 0);
+
+        g.setColor(Color.red);
+        writeText(g, "x:" + (int) touch.getX() + " y:" + (int) touch.getY(), 1);
+
+
+
+        //draw map
+        drawMap(g, gHit);
+
+
+
+        //resized repainting off
+        bResized = false;
+
+        //and draw buffer to panel
+        gFinal.drawImage(tempImg, 0, 0, null);
+
 
     }
 
     void error(InterruptedException e) {
+        java.util.logging.Logger.getLogger(
+                UI.class.getName()).log(
+                java.util.logging.Level.SEVERE, null, e);
+    }
+
+    private void writeText(Graphics g, String string, int i) {
+        g.drawString(string,
+                jpCanvas.getWidth() - TEXT_AREA_WIDTH + 5,
+                jpCanvas.getHeight() - TEXT_AREA_HEIGHT + 14 * (1 + i));
+
+    }
+
+    private void drawMap(Graphics g, Graphics gHit) {
+
+        Image img = Main.game.getMap().getImage();
+
+        //check if i need to update hitbox
+        if (bResized) {
+            gHit.setColor(new Color(MAP_COLOR));
+            gHit.fillRect(0, 0,
+                    img.getWidth(null),
+                    img.getHeight(null));
+
+        }
+
+        g.drawImage(img, 0, 0, null);
+
     }
 }

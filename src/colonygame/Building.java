@@ -5,6 +5,8 @@
 
 package colonygame;
 
+import colonygame.resources.BuildingType;
+
 /**
  *
  * @author WilCecil

@@ -19,6 +19,19 @@ and open the template in the editor.
         <width>5</width>
         <height>2</height>
     </sprite>
+    
+    <sprite>
+        <id>tile1</id>
+        <file>BITMAPS\TILE1.bmp</file>
+        <x>93</x>
+        <y>74</y>
+        <xOff>17</xOff>
+        <yOff>15</yOff>
+        <xDelta>6</xDelta>
+        <yDelta>22</yDelta>
+        <width>6</width>
+        <height>5</height>
+    </sprite>
             
     
 </sprites>

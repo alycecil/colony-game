@@ -5,15 +5,8 @@
 package colonygame.resources;
 
 import colonygame.Main;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
+
 import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageFilter;
-import java.awt.image.ImageProducer;
-import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -31,115 +24,24 @@ import org.xml.sax.SAXException;
  *
  * @author WilCecil
  */
-public class Sprite {
+public class BuildingType {
 
-    protected static final String ROOT_NODE = "sprites";
-    protected static final String CHILD_NODE = "sprite";
-    BufferedImage tileSet;
-    BufferedImage tileSetTrans;
-    //BufferedImage tileSetHit;
-    BufferedImage[] cells;
-    //BufferedImage[] cellsHit;
-    int width, height, startX, startY, deltaX, deltaY;
-    int cellsWidth, cellsHeight;
-    
-
-    public Sprite(BufferedImage tileSet, int width, int height,
-            int startX, int startY, int deltaX, int deltaY, int cellsWidth, int cellsHeight) {
-        this.tileSet = tileSet;
-        this.width = width;
-        this.height = height;
-        this.startX = startX;
-        this.startY = startY;
-        this.deltaX = deltaX;
-        this.deltaY = deltaY;
-        this.cellsHeight = cellsHeight;
-        this.cellsWidth = cellsWidth;
-
-
-        //get trans. color
-        Color c;
-        c = new Color(tileSet.getRGB(startX, startY));
-
-
-        //add transparency layer
-        tileSetTrans = new BufferedImage(
-                tileSet.getWidth(), tileSet.getTileWidth(),
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = tileSetTrans.createGraphics();
-        g2.drawImage(Sprite.makeColorTransparent(tileSet, c), 0, 0, null);
-        g2.dispose();
-
-
-        //make hit box
-//        tileSetHit = new BufferedImage(
-//                tileSet.getWidth(), tileSet.getTileWidth(),
-//                BufferedImage.TYPE_INT_ARGB);
-//        g2 = tileSetHit.createGraphics();
-//        g2.drawImage(Sprite.makeHitMap(tileSetTrans), 0, 0, null);
-//        g2.dispose();
-//        
-        //create cell storage
-        cells = new BufferedImage[cellsHeight * cellsWidth];
-//        cellsHit = new BufferedImage[cellsHeight * cellsWidth];
-
-    }
-
-    public BufferedImage getCell(int cell) {
-
-        if (cell >= cellsHeight * cellsWidth) {
-            //what the hell guy?
-
-            Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE,
-                    "Trying to request sprite cell outside valid #{0}", cell);
-
-            cell = 0;
-        }
-
-        if (cells[cell] == null) {
-
-            int i, j;
-
-            i = cell % width;
-            j = cell / width;
-
-            i = i * (width + deltaX) + startX;
-            j = j * (height + deltaY) + startY;
-
-            cells[cell] = tileSetTrans.getSubimage(i, j, width, height);
-
-        }
-
-        return cells[cell];
-    }
-    
-    
-//        public Image getCellBox(char cell) {
-//         if (cell >= cellsHeight * cellsWidth) {
-//            //what the hell guy?
-//
-//            Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE,
-//                    "Trying to request sprite cell outside valid #{0}", cell);
-//
-//            cell = 0;
-//        }
-//
-//        if (cellsHit[cell] == null) {
-//
-//            int i, j;
-//
-//            i = cell % width;
-//            j = cell / width;
-//
-//            i = i * (width + deltaX) + startX;
-//            j = j * (height + deltaY) + startY;
-//
-//            cellsHit[cell] = tileSetHit.getSubimage(i, j, width, height);
-//
-//        }
-//
-//        return cellsHit[cell];
-//    }
+    protected static final String ROOT_NODE = "buildings";
+    protected static final String CHILD_NODE = "building";
+    int capacity;
+    char type;
+    String decription;
+    Sprite sprite;
+    int spriteX, spriteY;
+    public static final char TYPE_TUBE = 0;
+    public static final char TYPE_HOUSE = 1;
+    public static final char TYPE_FACTORY = 2;
+    public static final char TYPE_SCIENCE = 4;
+    public static final char TYPE_MEDICAL = 8;
+    public static final char TYPE_ENTERTAINMENT = 16;
+    public static final char TYPE_POWER = 32;
+    public static final char TYPE_POLITICAL = 64;
+    public static final char TYPE_storage = 128;
 
     public static boolean readXML(File pfSource) {
         try {
@@ -329,71 +231,4 @@ public class Sprite {
         //failed!
         return false;
     }
-
-    /**
-     * Takes an image and creates transparency/alpha mapped from a color
-     *
-     * from
-     * http://www.javaworld.com/article/2074105/core-java/making-white-image-backgrounds-transparent-with-java-2d-groovy.html
-     *
-     * @param im
-     * @param color
-     * @return
-     */
-    public static Image makeColorTransparent(final BufferedImage im, final Color color) {
-        final ImageFilter filter = new RGBImageFilter() {
-            // the color we are looking for (white)... Alpha bits are set to opaque
-            public int markerRGB = color.getRGB() | 0xFFFFFFFF;
-
-            @Override
-            public final int filterRGB(final int x, final int y, final int rgb) {
-                if ((rgb | 0xFF000000) == markerRGB) {
-                    // Mark the alpha bits as zero - transparent
-                    return 0x00FFFFFF & rgb;
-                } else {
-                    // nothing to do
-                    return rgb;
-                }
-            }
-        };
-
-        final ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
-        return Toolkit.getDefaultToolkit().createImage(ip);
-    }
-    
-//    /**
-//     * Creates a box of the hit area for the cell
-//     * @param im
-//     * @return 
-//     */
-//    public static Image makeHitMap(final BufferedImage im) {
-//        final ImageFilter filter = new RGBImageFilter() {
-//
-//            @Override
-//            public final int filterRGB(final int x, final int y, final int rgb) {
-//                //if alpha make opaque black
-//                //otherwize make trans white
-//                if ((rgb & 0xFF000000) == 0) {
-//                    //no alpha
-//                    return 0xFFFFFFFF;
-//                } else {
-//                    //clear it out
-//                    return  0x00000000;
-//                }
-//            }
-//        };
-//
-//        final ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
-//        return Toolkit.getDefaultToolkit().createImage(ip);
-//    }
-
-    public int getCellWidth() {
-        return width;
-    }
-
-    public int getCellHeight() {
-        return height;
-    }
-
-
 }

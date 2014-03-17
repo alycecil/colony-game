@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+TYPES
+    TUBE
+    HOUSE
+    FACTORY
+    SCIENCE
+    MEDICAL
+    ENTERTAINMENT
+    POWER
+    POLITICAL
+    STORAGE
+
+-->
+
+
+<buildings>
+
+    <building>
+        <id>tube</id>
+        <description>Generic Tube</description>
+        <type></type>
+        <sprite></sprite>
+        <cellx></cellx>
+        <celly></celly>
+        <capacity>10</capacity>
+    </building>
+</buildings>

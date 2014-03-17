@@ -5,6 +5,7 @@ import colonygame.resources.WorldMap;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
 
 /**
  *
@@ -14,7 +15,6 @@ public class Main {
 
     public static final String SETTINGS_FILE = "settings.ini";
     public static UI ui;
-    public static WorldMap map;
     public static Resources resources;
     public static Game game;
 
@@ -41,10 +41,16 @@ public class Main {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    new UI().setVisible(true);
+                    Main.ui = new UI();
+                    Main.ui.setVisible(true);
                 }
             });
 
+            /**
+             * start UI Manager
+             */
+            new Timer(20, new UIManager()).start();
+            
             /*
              * Start Game Loop
              */

@@ -11,8 +11,8 @@ and open the template in the editor.
         <image>BITMAPS\500.bmp</image>
         <terrain>BITMAPS\500A.bmp</terrain>
         <world>red</world>
-        <clear>0,0,0</clear>
-        <rough>128,0,0</rough>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
         <difficult>0,128,0</difficult>
         <impassible>128,128,0</impassible>
     </map>
@@ -21,8 +21,8 @@ and open the template in the editor.
         <image>BITMAPS\501.bmp</image>
         <terrain>BITMAPS\501A.bmp</terrain>
         <world>red</world>
-        <clear>0,0,0</clear>
-        <rough>128,0,0</rough>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
         <difficult>0,128,0</difficult>
         <impassible>128,128,0</impassible>
     </map>
