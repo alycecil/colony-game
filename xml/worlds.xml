@@ -10,6 +10,29 @@ and open the template in the editor.
     <world>
         <id>red</id>
         <sprite>red</sprite>
-        
+    </world>
+    <world>
+        <id>blue</id>
+        <sprite>blue</sprite>
+    </world>
+    <world>
+        <id>grey</id>
+        <sprite>grey</sprite>
+    </world>
+    <world>
+        <id>fire</id>
+        <sprite>fire</sprite>
+    </world>
+    <world>
+        <id>dust</id>
+        <sprite>dust</sprite>
+    </world>
+    <world>
+        <id>ice</id>
+        <sprite>ice</sprite>
+    </world>
+    <world>
+        <id>pink</id>
+        <sprite>pink</sprite>
     </world>
 </worlds>

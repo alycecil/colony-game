@@ -7,6 +7,8 @@ package colonygame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -18,8 +20,12 @@ public class UIButton {
     String sText;
     Color cBg;
     Color cText;
+    ActionListener e;
+    
+    Color selected;
+    Color unSelected;
 
-    public UIButton(int x, int y, int width, int height, String sText, Color cBg, Color cText) {
+    public UIButton(int x, int y, int width, int height, String sText, Color cBg, Color cText, ActionListener e) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -27,8 +33,13 @@ public class UIButton {
         this.sText = sText;
         this.cBg = cBg;
         this.cText = cText;
+        this.e = e;
+        
+        selected = cBg.darker();
+        unSelected = cBg;
     }
 
+    
     public int getX() {
         return x;
     }
@@ -56,6 +67,11 @@ public class UIButton {
     public Color getTextColor() {
         return cText;
     }
+
+    public void setActionListener(ActionListener e) {
+        this.e = e;
+    }
+    
     
     /**
      * Render the button
@@ -68,7 +84,7 @@ public class UIButton {
         
         //write string
         g.setColor(cText);
-        g.drawString(sText, x+5, y+5);
+        g.drawString(sText, x+5, y+15);
         
     }
     
@@ -78,5 +94,20 @@ public class UIButton {
         g.setColor(c);
         g.fillRect(x, y, width, height);
      }
+
+
+
+    public void click(ActionEvent evt){
+        
+        e.actionPerformed(evt);
+        
+        cBg = selected;
+
+    }
+    
+    public void unclick(){
+        
+        cBg = unSelected;
+    }
     
 }

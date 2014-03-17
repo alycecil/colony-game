@@ -9,9 +9,13 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 import SASLib.Geom.Vector;
-import java.awt.Button;
+import UITools.Bulldoze;
+import UITools.Tool;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,7 +44,7 @@ public class UI extends javax.swing.JFrame {
     ArrayList<UIButton> buttons;
     ArrayList<Color> buttonsColors;
     int nextButtonColor = BUTTON_COLOR;
-   
+    Tool currentTool;
 
     /**
      * Creates new form UI
@@ -62,11 +66,31 @@ public class UI extends javax.swing.JFrame {
 
 
         bResized = true;
-        
-        
+
+
         //create buttons
-        
+
         buttons = new ArrayList<>();
+        buttonsColors = new ArrayList<>();
+
+
+
+        //make bulldoze button
+        final UIButton bull;
+        bull = addButton(2, 2, 80, 25, "Bulldoze", Color.orange.darker(), Color.green,
+                null);
+        
+        bull.setActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.ui.setCurrentTool(new Bulldoze(bull));
+            }
+        });
+        
+        
+        final UIButton build;
+        build = addButton(2, 2, 80, 25, "Bulldoze", Color.orange.darker(), Color.green,
+                null);
     }
 
     /**
@@ -179,29 +203,61 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyPressed
 
     private void jCanvasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCanvasMouseClicked
-        //\/\/\/\/\/\/\/\/\/\/\/\/\//
-        //   get clicked tile      //
-        //\/\/\/\/\/\/\/\/\/\/\/\/\//
-        int c = hitBox.getRGB(evt.getX(), evt.getY()) & 0x00ffffff;
+        //is left or right click?
 
-        //ensure not a black click
-        if (c == 0) {
-            //do nothing
-        } else if (c == MAP_COLOR) {
-            //map click
-            Image img = Main.game.getMap().getImage();
-            
-            x=evt.getX()-jpCanvas.getWidth()+img.getWidth(null);
-            y=evt.getY();
-        } else {
+        if (evt.getButton() == MouseEvent.BUTTON1) {
 
+            //\/\/\/\/\/\/\/\/\/\/\/\/\//
+            //   get clicked tile      //
+            //\/\/\/\/\/\/\/\/\/\/\/\/\//
+            int c = hitBox.getRGB(evt.getX(), evt.getY()) & 0x00ffffff;
 
-            for (int i = 0; i < hitBoxRef.length; i++) {
-                for (int j = 0; j < hitBoxRef[0].length; j++) {
-                    if (c == hitBoxRef[i][j]) {
-                        touch = new Vector(i + x, j + y);
+            //ensure not a black click
+            if (c == 0) {
+                //do nothing
+            } else if (c == MAP_COLOR) {
+                //map click
+                Image img = Main.game.getMap().getImage();
+
+                x = evt.getX() - jpCanvas.getWidth() + img.getWidth(null);
+                y = evt.getY();
+            } else if ((c & 1) == 0) {
+                //this is a button probably
+                //get button
+
+                for (int i = buttonsColors.size() - 1; i >= 0; i--) {
+                    if ((buttonsColors.get(i).getRGB() & 0x00ffffff) == c) {
+
+                        UIButton b = buttons.get(i);
+                        //found the button
+                        b.click(null);
+                        
+                        break;
                     }
                 }
+
+            } else {
+                for (int i = 0; i < hitBoxRef.length; i++) {
+                    for (int j = 0; j < hitBoxRef[0].length; j++) {
+                        if (c == hitBoxRef[i][j]) {
+                            touch = new Vector(i + x, j + y);
+                            
+                            //CHECK IF A TOOL WAS USED
+                            if(currentTool!=null){
+                                currentTool.interact(
+                                        (int)touch.getX(), 
+                                        (int)touch.getY(), 
+                                        z);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            //cancel current tool
+            if(currentTool!=null){
+                currentTool.unselect();
+                currentTool = null;
             }
         }
     }//GEN-LAST:event_jCanvasMouseClicked
@@ -302,11 +358,11 @@ public class UI extends javax.swing.JFrame {
 
         //gGrid for grid lines over tiles, update on resize
         Graphics gGrid = null;
-        
+
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, 
-                    jpCanvas.getWidth(),
-                    jpCanvas.getHeight());
+        g.fillRect(0, 0,
+                jpCanvas.getWidth(),
+                jpCanvas.getHeight());
 
         if (bResized) {
 
@@ -345,7 +401,7 @@ public class UI extends javax.swing.JFrame {
                         - (j * tile.getCellHeight() / 2)
                         + jpCanvas.getHeight() / 2
                         + MARGIN_Y;
-                         
+
 
                 g.drawImage(tile.getCell(mapBlock[i][j]),
                         cellx,
@@ -387,31 +443,25 @@ public class UI extends javax.swing.JFrame {
             }
         }
 
+        
+        
+        
 
-        //paint cell lines
-        g.drawImage(gridLines, 0, 0, null);
-
-        //DRAW TEXT BOX
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(jpCanvas.getWidth() - TEXT_AREA_WIDTH,
-                jpCanvas.getHeight() - TEXT_AREA_HEIGHT,
-                TEXT_AREA_WIDTH, TEXT_AREA_HEIGHT);
-
-        //write in it
-
-        g.setColor(Color.red);
-        writeText(g, "x:" + x + " y:" + y, 0);
-
-        g.setColor(Color.red);
-        writeText(g, 
-                "x:" + (int) touch.getX() + 
-                " y:" + (int) touch.getY(), 1);
-
-
+        
+        drawInfoBox(g);
 
         //draw map
         drawMap(g, gHit);
 
+
+
+        //draw buttons
+        renderButtons(g);
+
+        //if i need to draw bnutton boxes
+        if (bResized) {
+            renderButtonsHit(gHit);
+        }
 
 
         //resized repainting off
@@ -443,61 +493,119 @@ public class UI extends javax.swing.JFrame {
         //check if i need to update hitbox
         if (bResized) {
             gHit.setColor(new Color(MAP_COLOR));
-            gHit.fillRect(jpCanvas.getWidth()-img.getWidth(null), 0,
+            gHit.fillRect(jpCanvas.getWidth() - img.getWidth(null), 0,
                     img.getWidth(null),
                     img.getHeight(null));
 
         }
 
-        g.drawImage(img, jpCanvas.getWidth()-img.getWidth(null), 0, null);
-        
+        g.drawImage(img, jpCanvas.getWidth() - img.getWidth(null), 0, null);
+
         g.setColor(Color.magenta);
-        g.fillRect(jpCanvas.getWidth()-img.getWidth(null)+x, y, RENDER_WIDTH, RENDER_HEIGHT);
+        g.fillRect(jpCanvas.getWidth() - img.getWidth(null) + x, y, RENDER_WIDTH, RENDER_HEIGHT);
 
     }
-    
-    
+
     /**
-     * 
+     *
      * @param x
      * @param y
      * @param w
      * @param h
      * @param txt
      * @param bg
-     * @param cTxt 
+     * @param cTxt
      */
-    public void addButton(int x, int y, int w, int h, String txt, 
-            Color cBg, Color cTxt){
-        
+    public UIButton addButton(int x, int y, int w, int h, String txt,
+            Color cBg, Color cTxt, ActionListener e) {
+
         //make the button
-        UIButton b = new UIButton(x, y, w, h, txt, cBg, cTxt);
-        
+        UIButton b = new UIButton(x, y, w, h, txt, cBg, cTxt, e);
+
         //add button to ref
         buttons.add(b);
         buttonsColors.add(new Color(nextButtonColor));
-        
+
         //add 2
-        nextButtonColor+=2;
+        nextButtonColor += 2;
+        
+        return b;
     }
-    
-    public void renderButtons(Graphics g){
+
+    public void renderButtons(Graphics g) {
+        Iterator<UIButton> iterButton = buttons.iterator();
+
+        UIButton tempButton;
+
+        while (iterButton.hasNext()) {
+            //get next
+            tempButton = iterButton.next();
+
+
+            //draws!
+            tempButton.render(g);
+
+        }
+
+    }
+
+    public void renderButtonsHit(Graphics g) {
         Iterator<UIButton> iterButton = buttons.iterator();
         Iterator<Color> iterBColor = buttonsColors.iterator();
-        
+
         UIButton tempButton;
         Color tempColor;
-        
-        while(iterBColor.hasNext() && iterButton.hasNext()){
-            
+
+        while (iterBColor.hasNext() && iterButton.hasNext()) {
+            //get next
+            tempButton = iterButton.next();
+            tempColor = iterBColor.next();
+
+
+            //draws!
+            tempButton.renderHit(g, tempColor);
+
         }
-        
+
     }
-    
-    public void renderButtonsHit(Graphics g){
-        
-        
+
+    public void setCurrentTool(Tool currentTool) {
+        this.currentTool = currentTool;
     }
-    
-    
+
+    public Tool getCurrentTool() {
+        return currentTool;
+    }
+
+    private void drawInfoBox(Graphics g) {
+        //paint cell lines
+        g.drawImage(gridLines, 0, 0, null);
+
+        //DRAW TEXT BOX
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(jpCanvas.getWidth() - TEXT_AREA_WIDTH,
+                jpCanvas.getHeight() - TEXT_AREA_HEIGHT,
+                TEXT_AREA_WIDTH, TEXT_AREA_HEIGHT);
+
+        //write in it
+
+        g.setColor(Color.red);
+        writeText(g, "Map::x:" + x + " y:" + y, 0);
+
+        
+        writeText(g,
+                "Click::x:" + (int) touch.getX()
+                + " y:" + (int) touch.getY(), 1);
+        
+        g.setColor(Color.MAGENTA);
+        if(currentTool!=null){
+        writeText(g,
+                "Tool::"+currentTool.toString(), 2);
+        
+        }else{
+            writeText(g,
+                "No Tool", 2);
+        }
+
+    }
 }

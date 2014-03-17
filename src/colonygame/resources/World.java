@@ -89,7 +89,7 @@ public class World {
                     }
                 }
                 
-                Logger.getLogger(Sprite.class.getName()).log(
+                Logger.getLogger(World.class.getName()).log(
                     Level.INFO, "Added {0} worlds to resources.", added);
             }
 

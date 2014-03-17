@@ -4,7 +4,9 @@
  */
 package colonygame;
 
+import colonygame.resources.BuildingType;
 import colonygame.resources.WorldMap;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
@@ -14,21 +16,11 @@ import java.util.Set;
  */
 public class Game implements Runnable {
 
+    public static final int NUM_LANDERS = 1;
     int timeStamp;
     public Random rnd;
     WorldMap map;
-
-    public Game() {
-        timeStamp = 0;
-
-        rnd = new Random();
-
-        Set<String> maps = Main.resources.getMaps();
-        
-        map = Main.resources.getMap(
-                maps.toArray()[rnd.nextInt(maps.size())].toString());
-
-    }
+    ArrayList<BuildingType> buildables;
 
     public Game(long seed) {
         timeStamp = 0;
@@ -39,6 +31,11 @@ public class Game implements Runnable {
         
         map = Main.resources.getMap(
                 maps.toArray()[rnd.nextInt(maps.size())].toString());
+        
+        
+        buildables= new ArrayList<>();
+        
+        addInitialBuildings();
     }
 
     @Override
@@ -102,5 +99,19 @@ public class Game implements Runnable {
      */
     public WorldMap getMap() {
         return map;
+    }
+
+    private void addInitialBuildings() {
+        //scan resources and add all special type lander buildings
+        //these building willonlybe allowed to be built a set number of times
+        ArrayList<BuildingType> buildings = Main.resources.getBuildings(BuildingType.TYPE_LANDER);
+        
+        buildables.addAll(buildings);
+        
+    }
+    
+    
+    public boolean build(BuildingType type, int x, int y, int z){
+        return false;
     }
 }

@@ -4,6 +4,7 @@
  */
 package colonygame.resources;
 
+import colonygame.Building;
 import colonygame.Main;
 import java.awt.Color;
 import java.awt.Image;
@@ -42,87 +43,91 @@ public class WorldMap {
     public static final char UNDISCOVERED = 9;
     char[][][] map;
     Image image;
-    
-    
-    public WorldMap(char[][][] map, World pWorld){
+    Building[][][] buildings;
+
+    public WorldMap(char[][][] map, World pWorld) {
         this(map, pWorld, null);
-        
+
         image = renderMap(map, 0);
     }
-    
+
     public WorldMap(char[][][] map, World pWorld, Image img) {
         this.map = map;
         image = img;
 
         parent = pWorld;
+
+        buildings = new Building[map.length][map[0].length][map[0][0].length];
     }
-    
-    public static Image renderMap(char[][][] map, int depth){
+
+    public static Image renderMap(char[][][] map, int depth) {
         //get the sub image
         char[][] squares = map[depth];
-        
+
         //make space
         BufferedImage img = new BufferedImage(squares.length,
-                    squares[0].length, BufferedImage.TYPE_INT_RGB);
-        
-        
+                squares[0].length, BufferedImage.TYPE_INT_RGB);
+
+
         //\/\/\/\/\/\/\/\
         //--  render!  --
         //\/\/\/\/\/\/\/\
-        
-        for(int i = 0; i < squares.length; i++){
-            for(int j = 0; j < squares.length; j++){
+
+        for (int i = 0; i < squares.length; i++) {
+            for (int j = 0; j < squares.length; j++) {
                 Color c = Color.pink;
-                
-                if(squares[i][j]==DOZED){
+
+                if (squares[i][j] == DOZED) {
                     c = Color.GREEN;
-                    
-                }else if(squares[i][j]==CLEAR){
+
+                } else if (squares[i][j] == CLEAR) {
                     c = Color.YELLOW;
-                    
-                }else if(squares[i][j]==ROUGH){
+
+                } else if (squares[i][j] == ROUGH) {
                     c = Color.RED;
-                    
-                }else if(squares[i][j]==DIFFICULT){
+
+                } else if (squares[i][j] == DIFFICULT) {
                     c = Color.GREEN;
-                    
-                }else if(squares[i][j]==IMPASSIBLE){
+
+                } else if (squares[i][j] == IMPASSIBLE) {
                     c = Color.WHITE;
-                    
-                }else if(squares[i][j]==STANDARD_DEPTH){
+
+                } else if (squares[i][j] == STANDARD_DEPTH) {
                     c = Color.DARK_GRAY;
-                    
-                }else if(squares[i][j]==UNDERGROUND_DOZED){
+
+                } else if (squares[i][j] == UNDERGROUND_DOZED) {
                     c = Color.GREEN;
-                    
-                }else if(squares[i][j]==DISCOVERED){
+
+                } else if (squares[i][j] == DISCOVERED) {
                     c = Color.LIGHT_GRAY;
-                    
-                }else if(squares[i][j]==UNDISCOVERED){
+
+                } else if (squares[i][j] == UNDISCOVERED) {
                     c = Color.BLACK;
-                    
+
                 }
-                
+
                 img.setRGB(i, j, c.getRGB());
             }
         }
-            
+
         //return image
         return img;
     }
-    
+
     public static boolean readXML(File pfSource) {
         try {
             //parse as DOM
 
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory dbFactory =
+                    DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(pfSource);
 
             //do norm, as its the norm!
             doc.getDocumentElement().normalize();
 
-            if (!doc.getDocumentElement().getNodeName().equalsIgnoreCase(ROOT_NODE)) {
+            if (!doc.getDocumentElement().getNodeName().equalsIgnoreCase(
+                    ROOT_NODE)) {
                 throw new ParserConfigurationException("Root Node of Type "
                         + doc.getDocumentElement().getNodeName()
                         + " unexpected, expected " + ROOT_NODE + ".");
@@ -135,7 +140,8 @@ public class WorldMap {
                 NodeList roots = doc.getChildNodes();
 
                 for (index = 0; index < roots.getLength(); index++) {
-                    if (roots.item(index).getNodeName().equalsIgnoreCase(ROOT_NODE)) {
+                    if (roots.item(index).getNodeName().equalsIgnoreCase(
+                            ROOT_NODE)) {
                         break;
                     }
                 }
@@ -158,7 +164,7 @@ public class WorldMap {
                     }
                 }
 
-                Logger.getLogger(Sprite.class.getName()).log(
+                Logger.getLogger(WorldMap.class.getName()).log(
                         Level.INFO, "Added {0} maps to resources.", added);
             }
 
@@ -166,7 +172,7 @@ public class WorldMap {
             //we were successful
             return true;
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(World.class.getName()).log(
+            Logger.getLogger(WorldMap.class.getName()).log(
                     Level.SEVERE, null, ex);
 
             return false;
@@ -312,14 +318,19 @@ public class WorldMap {
 
                 return true;
             } catch (IOException ex) {
-                Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(WorldMap.class.getName()).log(Level.SEVERE,
+                        null, ex);
+                Logger.getLogger(WorldMap.class.getName()).log(Level.SEVERE, 
+                        "File names:{0}, and {1}", 
+                        new Object[]{tempTerrain, tempImage});
             }
         } else {
 
             //uh oh
-            Logger.getLogger(World.class.getName()).log(
+            Logger.getLogger(WorldMap.class.getName()).log(
                     Level.WARNING,
-                    "current world node not well defined, missing attributes. {0}", pNode.getTextContent());
+                    "current world node not well defined, missing attributes. "
+                    + "{0}", pNode.getTextContent());
         }
 
         //failed!
@@ -360,7 +371,8 @@ public class WorldMap {
             BufferedImage imgMap, World pWorld,
             Color clear, Color rough, Color difficult, Color impassible) {
 
-        char[][][] map = new char[STANDARD_DEPTH][imgTerrain.getWidth()][imgTerrain.getHeight()];
+        char[][][] map =
+                new char[STANDARD_DEPTH][imgTerrain.getWidth()][imgTerrain.getHeight()];
 
 
         //set underground to darkness
@@ -427,10 +439,10 @@ public class WorldMap {
                 //   copy subset of map    //
                 //\/\/\/\/\/\/\/\/\/\/\/\/\//
                 //
-                try{
-                block[i][j] = map[z][x + i][y + j];
-                }catch(Exception e){
-                    block[i][j]=DEFAULT_VALUE;
+                try {
+                    block[i][j] = map[z][x + i][y + j];
+                } catch (Exception e) {
+                    block[i][j] = DEFAULT_VALUE;
                 }
             }
         }
@@ -444,5 +456,67 @@ public class WorldMap {
 
     public Image getImage() {
         return image;
+    }
+
+    public char getTile(int x, int y, int z) {
+        try {
+            return map[z][x][y];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return DEFAULT_VALUE;
+        }
+    }
+
+    public boolean setTile(int x, int y, int z, char value) {
+        try {
+            map[z][x][y] = value;
+            return true;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+
+    }
+
+    public Building[][][] getBuildings() {
+        return buildings;
+    }
+
+    public Building[][] getBlockBuildings(int x, int y, int z, int width, int height) {
+        Building[][] block = new Building[width][height];
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                //
+                //\/\/\/\/\/\/\/\/\/\/\/\/\//
+                //   copy subset of map    //
+                //\/\/\/\/\/\/\/\/\/\/\/\/\//
+                //
+                try {
+                    block[i][j] = buildings[z][x + i][y + j];
+                } catch (Exception e) {
+                    block[i][j] = null;
+                }
+            }
+        }
+
+        return block;
+    }
+
+    public Building getBuilding(int x, int y, int z) {
+        try {
+            return buildings[z][x][y];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
+
+    }
+
+    public boolean setBuilding(int x, int y, int z, Building value) {
+        try {
+            buildings[z][x][y] = value;
+            return true;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+
     }
 }

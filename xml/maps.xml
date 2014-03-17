@@ -4,7 +4,6 @@ To change this template, choose Tools | Templates
 and open the template in the editor.
 -->
 
-
 <maps>
     <map>
         <id>500</id>
@@ -16,6 +15,7 @@ and open the template in the editor.
         <difficult>0,128,0</difficult>
         <impassible>128,128,0</impassible>
     </map>
+
     <map>
         <id>501</id>
         <image>BITMAPS\501.bmp</image>
@@ -26,4 +26,753 @@ and open the template in the editor.
         <difficult>0,128,0</difficult>
         <impassible>128,128,0</impassible>
     </map>
+
+    <map>
+        <id>502</id>
+        <image>BITMAPS\502.bmp</image>
+        <terrain>BITMAPS\502A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>503</id>
+        <image>BITMAPS\503.bmp</image>
+        <terrain>BITMAPS\503A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>504</id>
+        <image>BITMAPS\504.bmp</image>
+        <terrain>BITMAPS\504A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>505</id>
+        <image>BITMAPS\505.bmp</image>
+        <terrain>BITMAPS\505A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>506</id>
+        <image>BITMAPS\506.bmp</image>
+        <terrain>BITMAPS\506A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>507</id>
+        <image>BITMAPS\507.bmp</image>
+        <terrain>BITMAPS\507A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>508</id>
+        <image>BITMAPS\508.bmp</image>
+        <terrain>BITMAPS\508A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>509</id>
+        <image>BITMAPS\509.bmp</image>
+        <terrain>BITMAPS\509A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>510</id>
+        <image>BITMAPS\510.bmp</image>
+        <terrain>BITMAPS\510A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>511</id>
+        <image>BITMAPS\511.bmp</image>
+        <terrain>BITMAPS\511A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>512</id>
+        <image>BITMAPS\512.bmp</image>
+        <terrain>BITMAPS\512A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>513</id>
+        <image>BITMAPS\513.bmp</image>
+        <terrain>BITMAPS\513A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>514</id>
+        <image>BITMAPS\514.bmp</image>
+        <terrain>BITMAPS\514A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>515</id>
+        <image>BITMAPS\515.bmp</image>
+        <terrain>BITMAPS\515A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>516</id>
+        <image>BITMAPS\516.bmp</image>
+        <terrain>BITMAPS\516A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>517</id>
+        <image>BITMAPS\517.bmp</image>
+        <terrain>BITMAPS\517A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>518</id>
+        <image>BITMAPS\518.bmp</image>
+        <terrain>BITMAPS\518A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>519</id>
+        <image>BITMAPS\519.bmp</image>
+        <terrain>BITMAPS\519A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>520</id>
+        <image>BITMAPS\520.bmp</image>
+        <terrain>BITMAPS\520A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>521</id>
+        <image>BITMAPS\521.bmp</image>
+        <terrain>BITMAPS\521A.bmp</terrain>
+        <world>fire</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>522</id>
+        <image>BITMAPS\522.bmp</image>
+        <terrain>BITMAPS\522A.bmp</terrain>
+        <world>fire</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>523</id>
+        <image>BITMAPS\523.bmp</image>
+        <terrain>BITMAPS\523A.bmp</terrain>
+        <world>fire</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>524</id>
+        <image>BITMAPS\524.bmp</image>
+        <terrain>BITMAPS\524A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>525</id>
+        <image>BITMAPS\525.bmp</image>
+        <terrain>BITMAPS\525A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>526</id>
+        <image>BITMAPS\526.bmp</image>
+        <terrain>BITMAPS\526A.bmp</terrain>
+        <world>fire</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>527</id>
+        <image>BITMAPS\527.bmp</image>
+        <terrain>BITMAPS\527A.bmp</terrain>
+        <world>fire</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>528</id>
+        <image>BITMAPS\528.bmp</image>
+        <terrain>BITMAPS\528A.bmp</terrain>
+        <world>fire</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>531</id>
+        <image>BITMAPS\531.bmp</image>
+        <terrain>BITMAPS\531A.bmp</terrain>
+        <world>grey</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>532</id>
+        <image>BITMAPS\532.bmp</image>
+        <terrain>BITMAPS\532A.bmp</terrain>
+        <world>red</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>541</id>
+        <image>BITMAPS\541.bmp</image>
+        <terrain>BITMAPS\541A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>542</id>
+        <image>BITMAPS\542.bmp</image>
+        <terrain>BITMAPS\542A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>543</id>
+        <image>BITMAPS\543.bmp</image>
+        <terrain>BITMAPS\543A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>544</id>
+        <image>BITMAPS\544.bmp</image>
+        <terrain>BITMAPS\544A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>545</id>
+        <image>BITMAPS\545.bmp</image>
+        <terrain>BITMAPS\545A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>546</id>
+        <image>BITMAPS\546.bmp</image>
+        <terrain>BITMAPS\546A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>547</id>
+        <image>BITMAPS\547.bmp</image>
+        <terrain>BITMAPS\547A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>548</id>
+        <image>BITMAPS\548.bmp</image>
+        <terrain>BITMAPS\548A.bmp</terrain>
+        <world>grey</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>549</id>
+        <image>BITMAPS\549.bmp</image>
+        <terrain>BITMAPS\549A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>550</id>
+        <image>BITMAPS\550.bmp</image>
+        <terrain>BITMAPS\550A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>551</id>
+        <image>BITMAPS\551.bmp</image>
+        <terrain>BITMAPS\551A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>552</id>
+        <image>BITMAPS\552.bmp</image>
+        <terrain>BITMAPS\552A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>553</id>
+        <image>BITMAPS\553.bmp</image>
+        <terrain>BITMAPS\553A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>554</id>
+        <image>BITMAPS\554.bmp</image>
+        <terrain>BITMAPS\554A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>555</id>
+        <image>BITMAPS\555.bmp</image>
+        <terrain>BITMAPS\555A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>556</id>
+        <image>BITMAPS\556.bmp</image>
+        <terrain>BITMAPS\556A.bmp</terrain>
+        <world>grey</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>557</id>
+        <image>BITMAPS\557.bmp</image>
+        <terrain>BITMAPS\557A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>558</id>
+        <image>BITMAPS\558.bmp</image>
+        <terrain>BITMAPS\558A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>559</id>
+        <image>BITMAPS\559.bmp</image>
+        <terrain>BITMAPS\559A.bmp</terrain>
+        <world>dust</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>560</id>
+        <image>BITMAPS\560.bmp</image>
+        <terrain>BITMAPS\560A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>561</id>
+        <image>BITMAPS\561.bmp</image>
+        <terrain>BITMAPS\561A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>562</id>
+        <image>BITMAPS\562.bmp</image>
+        <terrain>BITMAPS\562A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>563</id>
+        <image>BITMAPS\563.bmp</image>
+        <terrain>BITMAPS\563A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>564</id>
+        <image>BITMAPS\564.bmp</image>
+        <terrain>BITMAPS\564A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>565</id>
+        <image>BITMAPS\565.bmp</image>
+        <terrain>BITMAPS\565A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>566</id>
+        <image>BITMAPS\566.bmp</image>
+        <terrain>BITMAPS\566A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>567</id>
+        <image>BITMAPS\567.bmp</image>
+        <terrain>BITMAPS\567A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>568</id>
+        <image>BITMAPS\568.bmp</image>
+        <terrain>BITMAPS\568A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>569</id>
+        <image>BITMAPS\569.bmp</image>
+        <terrain>BITMAPS\569A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>570</id>
+        <image>BITMAPS\570.bmp</image>
+        <terrain>BITMAPS\570A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>571</id>
+        <image>BITMAPS\571.bmp</image>
+        <terrain>BITMAPS\571A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>572</id>
+        <image>BITMAPS\572.bmp</image>
+        <terrain>BITMAPS\572A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>573</id>
+        <image>BITMAPS\573.bmp</image>
+        <terrain>BITMAPS\573A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>574</id>
+        <image>BITMAPS\574.bmp</image>
+        <terrain>BITMAPS\574A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>575</id>
+        <image>BITMAPS\575.bmp</image>
+        <terrain>BITMAPS\575A.bmp</terrain>
+        <world>ice</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>576</id>
+        <image>BITMAPS\576.bmp</image>
+        <terrain>BITMAPS\576A.bmp</terrain>
+        <world>pink</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>577</id>
+        <image>BITMAPS\577.bmp</image>
+        <terrain>BITMAPS\577A.bmp</terrain>
+        <world>pink</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>578</id>
+        <image>BITMAPS\578.bmp</image>
+        <terrain>BITMAPS\578A.bmp</terrain>
+        <world>pink</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
+    <map>
+        <id>579</id>
+        <image>BITMAPS\579.bmp</image>
+        <terrain>BITMAPS\579A.bmp</terrain>
+        <world>pink</world>
+        <clear>128,0,0</clear>
+        <rough>0,0,0</rough>
+        <difficult>0,128,0</difficult>
+        <impassible>128,128,0</impassible>
+    </map>
+
 </maps>

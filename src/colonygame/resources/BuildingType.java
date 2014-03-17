@@ -1,17 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package colonygame.resources;
 
 import colonygame.Main;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,20 +22,83 @@ public class BuildingType {
 
     protected static final String ROOT_NODE = "buildings";
     protected static final String CHILD_NODE = "building";
-    int capacity;
-    char type;
+
+    /*
+     * <id>CONSTRUCTION</id>
+     <description>Construction in Progress</description>
+     <type>CONSTRUCTION</type>
+     <power>0</power>
+     <sprite>tile2</sprite>
+     <cellx>2</cellx>
+     <celly>2</celly>
+     <capacity>0</capacity>
+     <mindepth>-1</mindepth>
+     <maxdepth>-1</maxdepth>
+     <buildtime>0</buildtime>
+     * TYPES
+     TUBE
+     HOUSE
+     FACTORY
+     SCIENCE
+     MEDICAL
+     ENTERTAINMENT
+     POWER
+     POLITICAL
+     STORAGE
+     AGRICULTURE
+     Special Types
+     LANDER
+     CONSTRUCTION
+     */
+    String id;
     String decription;
+    int power;
+    int capacity;
+    int buildtime;
+    short type;
     Sprite sprite;
     int spriteX, spriteY;
-    public static final char TYPE_TUBE = 0;
-    public static final char TYPE_HOUSE = 1;
-    public static final char TYPE_FACTORY = 2;
-    public static final char TYPE_SCIENCE = 4;
-    public static final char TYPE_MEDICAL = 8;
-    public static final char TYPE_ENTERTAINMENT = 16;
-    public static final char TYPE_POWER = 32;
-    public static final char TYPE_POLITICAL = 64;
-    public static final char TYPE_storage = 128;
+    int minZ, maxZ;
+    public static final short TYPE_TUBE = 0;
+    public static final short TYPE_HOUSE = 1;
+    public static final short TYPE_FACTORY = 2;
+    public static final short TYPE_SCIENCE = 4;
+    public static final short TYPE_MEDICAL = 8;
+    public static final short TYPE_ENTERTAINMENT = 16;
+    public static final short TYPE_POWER = 32;
+    public static final short TYPE_POLITICAL = 64;
+    public static final short TYPE_STORAGE = 128;
+    public static final short TYPE_AGRICULTURE = 256;
+    public static final short TYPE_LANDER = 512;
+    public static final short TYPE_CONSTRUCTION = 1028;
+    protected static final String TYPE_TUBE_S = "TUBE";
+    protected static final String TYPE_HOUSE_S = "HOUSE";
+    protected static final String TYPE_FACTORY_S = "FACTORY";
+    protected static final String TYPE_SCIENCE_S = "SCIENCE";
+    protected static final String TYPE_MEDICAL_S = "MEDICAL";
+    protected static final String TYPE_ENTERTAINMENT_S = "ENTERTAINMENT";
+    protected static final String TYPE_POWER_S = "POWER";
+    protected static final String TYPE_POLITICAL_S = "POLITICAL";
+    protected static final String TYPE_STORAGE_S = "STORAGE";
+    protected static final String TYPE_AGRICULTURE_S = "AGRICULTURE";
+    protected static final String TYPE_LANDER_S = "LANDER";
+    protected static final String TYPE_CONSTRUCTION_S = "CONSTRUCTION";
+
+    public BuildingType(String id, String decription, int power, int capacity,
+            int buildtime, short type, Sprite sprite, int spriteX, int spriteY,
+            int minZ, int maxZ) {
+        this.id = id;
+        this.decription = decription;
+        this.power = power;
+        this.capacity = capacity;
+        this.buildtime = buildtime;
+        this.type = type;
+        this.sprite = sprite;
+        this.spriteX = spriteX;
+        this.spriteY = spriteY;
+        this.minZ = minZ;
+        this.maxZ = maxZ;
+    }
 
     public static boolean readXML(File pfSource) {
         try {
@@ -88,8 +145,8 @@ public class BuildingType {
                     }
                 }
 
-                Logger.getLogger(Sprite.class.getName()).log(
-                        Level.INFO, "Added {0} sprites to resources.", added);
+                Logger.getLogger(BuildingType.class.getName()).log(
+                        Level.INFO, "Added {0} "+ROOT_NODE+" to resources.", added);
             }
 
 
@@ -97,7 +154,7 @@ public class BuildingType {
             //we were successful
             return true;
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(Sprite.class.getName()).log(
+            Logger.getLogger(BuildingType.class.getName()).log(
                     Level.SEVERE, null, ex);
 
             return false;
@@ -115,36 +172,55 @@ public class BuildingType {
         //check for the types we want
 
         String tempId = null;
-        String tempFile = null;
-        int x = 0, y = 0, xOff = 0, yOff = 0, xDelta = 0, yDelta = 0, width = 0, height = 0;
-        boolean bid, bfile, bx, by, bxOff, byOff, bxDelta, byDelta, bwidth, bheight;
+        String tempDecription = null;
+        String[] tempType;
+        int tPower, tCapacity, tSpriteX, tSpriteY, tBuild, tMin, tMax;
+        short tType;
+        Sprite tSprite = null;
+
+        boolean bid, bDesc, bPower, bCap, bSprite, bSpriteX,
+                bSpriteY, bType, bBuild, bMin, bMax;
 
         //setall to false
         bid = false;
-        bfile = false;
-        bx = false;
-        by = false;
-        bxOff = false;
-        byOff = false;
-        bxDelta = false;
-        byDelta = false;
-        bwidth = false;
-        bheight = false;
+        bDesc = false;
+        bPower = false;
+        bCap = false;
+        bSprite = false;
+        bSpriteX = false;
+        bSpriteY = false;
+        bType = false;
+        bBuild = false;
+        bMin = false;
+        bMax = false;
+
+        //init all
+        tPower = 0;
+        tCapacity = 0;
+        tSpriteX = 0;
+        tSpriteY = 0;
+        tType = 0;
+        tBuild = 0;
+        tMin = 0;
+        tMax = 0;
+
+
 
         /*
          * Example
-         * <world>
-         * <id>red</id>
-         * <file>BITMAPS\260.bmp</file>
-         * <x>108</x>
-         * <y>46</y>
-         * <xOff>37</xOff>
-         * <yOff>163</yOff>
-         * <xDelta>7</xDelta>
-         * <yDelta>7</yDelta>
-         * <width>5</width>
-         * <height>2</height>
-         * </world>
+         * <building>
+         <id>CONSTRUCTION</id>
+         <description>Construction in Progress</description>
+         <type>CONSTRUCTION</type>
+         <power>0</power>
+         <sprite>tile2</sprite>
+         <cellx>2</cellx>
+         <celly>2</celly>
+         <capacity>0</capacity>
+         <mindepth>-1</mindepth>
+         <maxdepth>-1</maxdepth>
+         <buildtime>0</buildtime>
+         </building>
          */
         NodeList children2 = pNode.getChildNodes();
 
@@ -157,47 +233,112 @@ public class BuildingType {
                 tempId = tempChild.getTextContent();
 
                 bid = true;
-            } else if (tempChild.getNodeName().equalsIgnoreCase("file")) {
-                tempFile = tempChild.getTextContent();
+            } else if (tempChild.getNodeName().equalsIgnoreCase("description")) {
+                tempDecription = tempChild.getTextContent();
 
-                bfile = true;
+                bDesc = true;
 
-            } else if (tempChild.getNodeName().equalsIgnoreCase("x")) {
-                x = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+            } else if (tempChild.getNodeName().equalsIgnoreCase("capacity")) {
 
-                bx = true;
-            } else if (tempChild.getNodeName().equalsIgnoreCase("y")) {
-                y = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                tCapacity = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
-                by = true;
-            } else if (tempChild.getNodeName().equalsIgnoreCase("xOff")) {
-                xOff = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                bCap = true;
 
-                bxOff = true;
-            } else if (tempChild.getNodeName().equalsIgnoreCase("yOff")) {
-                yOff = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+            } else if (tempChild.getNodeName().equalsIgnoreCase("power")) {
 
-                byOff = true;
-            } else if (tempChild.getNodeName().equalsIgnoreCase("xDelta")) {
-                xDelta = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                tPower = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
-                bxDelta = true;
-            } else if (tempChild.getNodeName().equalsIgnoreCase("yDelta")) {
-                yDelta = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                bPower = true;
 
-                byDelta = true;
-            } else if (tempChild.getNodeName().equalsIgnoreCase("width")) {
-                width = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+            } else if (tempChild.getNodeName().equalsIgnoreCase("cellx")) {
 
-                bwidth = true;
-            } else if (tempChild.getNodeName().equalsIgnoreCase("height")) {
-                height = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                tSpriteX = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
-                bheight = true;
+                bSpriteX = true;
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("celly")) {
+
+                tSpriteY = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+                bSpriteY = true;
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("buildtime")) {
+
+                tBuild = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+                bBuild = true;
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("mindepth")) {
+
+                tMin = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+                bMin = true;
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("maxdepth")) {
+
+                tMax = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                if (tMax < 0) {
+                    tMax = Integer.MAX_VALUE;
+                }
+
+                bMax = true;
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("sprite")) {
+                //ask resorces for sprite set
+                tSprite = Main.resources.getSprite(tempChild.getTextContent());
+
+                bSprite = true;
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("type")) {
+                tempType = tempChild.getTextContent().split(",");
+
+                for (int i = 0; i < tempType.length; i++) {
+                    if (tempType[i].equalsIgnoreCase(TYPE_AGRICULTURE_S)) {
+                        tType = (short) (tType | TYPE_AGRICULTURE);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_CONSTRUCTION_S)) {
+                        tType = (short) (tType | TYPE_CONSTRUCTION);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_ENTERTAINMENT_S)) {
+                        tType = (short) (tType | TYPE_ENTERTAINMENT);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_FACTORY_S)) {
+                        tType = (short) (tType | TYPE_FACTORY);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_HOUSE_S)) {
+                        tType = (short) (tType | TYPE_HOUSE);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_LANDER_S)) {
+                        tType = (short) (tType | TYPE_LANDER);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_MEDICAL_S)) {
+                        tType = (short) (tType | TYPE_MEDICAL);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_POLITICAL_S)) {
+                        tType = (short) (tType | TYPE_POLITICAL);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_POWER_S)) {
+                        tType = (short) (tType | TYPE_POWER);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_SCIENCE_S)) {
+                        tType = (short) (tType | TYPE_SCIENCE);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_STORAGE_S)) {
+                        tType = (short) (tType | TYPE_STORAGE);
+
+                    } else if (tempType[i].equalsIgnoreCase(TYPE_TUBE_S)) {
+                        tType = (short) (tType | TYPE_TUBE);
+
+                    }
+
+                }
+
+                bType = true;
+
             } else if (tempChild.getNodeName().equalsIgnoreCase("#text")) {
                 //ignore whitespace  
             } else {
-                Logger.getLogger(Sprite.class.getName()).log(
+                Logger.getLogger(BuildingType.class.getName()).log(
                         Level.WARNING,
                         "Current Node type unexpedcted for " + CHILD_NODE
                         + ", {0}", tempChild.getNodeName());
@@ -206,29 +347,30 @@ public class BuildingType {
         }
 
         //all done with attributes
-        if (bid && bfile && bx && by && bxOff && byOff && bxDelta
-                && byDelta && bwidth && bheight) {
+        if (bid && bDesc && bPower && bCap && bSprite && bSpriteX
+                && bSpriteY && bType && bBuild && bMin && bMax) {
 
-            //read image
-            try {
-                File imagefile = new File(tempFile);
-                BufferedImage img = ImageIO.read(imagefile);
 
-                //add to resources
-                Main.resources.addSprite(tempId, new Sprite(img, x, y, xOff, yOff, xDelta, yDelta, width, height));
+            //add to resources
+            Main.resources.addBuilding(tempId,
+                    new BuildingType(tempId, tempDecription, tPower, tCapacity,
+                    tBuild, tType, tSprite, tSpriteX, tSpriteY, tMin, tMax));
 
-                return true;
-            } catch (IOException ex) {
-                Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            return true;
+
         } else {
 
             //uh oh
-            Logger.getLogger(Sprite.class.getName()).log(
-                    Level.WARNING, "current world node not well defined, missing attributes. {0}", pNode.getNodeValue());
+            Logger.getLogger(BuildingType.class.getName()).log(
+                    Level.WARNING, "current " + CHILD_NODE + " node not well defined, "
+                    + "missing attributes. {0}", pNode.getNodeValue());
         }
 
         //failed!
         return false;
+    }
+
+    boolean isType(short check) {
+        return (check&type)!=0;
     }
 }

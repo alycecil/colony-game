@@ -11,6 +11,10 @@ TYPES
     POWER
     POLITICAL
     STORAGE
+    AGRICULTURE
+Special Types
+    LANDER
+    CONSTRUCTION
 
 -->
 
@@ -18,12 +22,42 @@ TYPES
 <buildings>
 
     <building>
+        <id>CONSTRUCTION</id>
+        <description>Construction in Progress</description>
+        <type>CONSTRUCTION</type>
+        <power>0</power>
+        <sprite>tile2</sprite>
+        <cellx>2</cellx>
+        <celly>2</celly>
+        <capacity>0</capacity>
+        <mindepth>-1</mindepth>
+        <maxdepth>-1</maxdepth>
+        <buildtime>0</buildtime>
+    </building>
+    <building>
         <id>tube</id>
         <description>Generic Tube</description>
-        <type></type>
-        <sprite></sprite>
-        <cellx></cellx>
-        <celly></celly>
+        <type>tube</type>
+        <power>0</power>
+        <sprite>tile1</sprite>
+        <cellx>6</cellx>
+        <celly>5</celly>
         <capacity>10</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>4</maxdepth>
+        <buildtime>1</buildtime>
+    </building>
+    <building>
+        <id>Lander</id>
+        <description>The Colony's first housing module, brought from home</description>
+        <type>lander,house,storage</type>
+        <power>0</power>
+        <sprite>tile1</sprite>
+        <cellx>3</cellx>
+        <celly>4</celly>
+        <capacity>25</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>1</buildtime>
     </building>
 </buildings>

@@ -21,6 +21,84 @@ and open the template in the editor.
     </sprite>
     
     <sprite>
+        <id>blue</id>
+        <file>BITMAPS\264.bmp</file>
+        <x>107</x>
+        <y>46</y>
+        <xOff>37</xOff>
+        <yOff>163</yOff>
+        <xDelta>7</xDelta>
+        <yDelta>7</yDelta>
+        <width>5</width>
+        <height>2</height>
+    </sprite>
+    
+    <sprite>
+        <id>grey</id>
+        <file>BITMAPS\266.bmp</file>
+        <x>107</x>
+        <y>46</y>
+        <xOff>37</xOff>
+        <yOff>163</yOff>
+        <xDelta>7</xDelta>
+        <yDelta>7</yDelta>
+        <width>5</width>
+        <height>2</height>
+    </sprite>
+    
+    <sprite>
+        <id>fire</id>
+        <file>BITMAPS\268.bmp</file>
+        <x>107</x>
+        <y>46</y>
+        <xOff>37</xOff>
+        <yOff>163</yOff>
+        <xDelta>7</xDelta>
+        <yDelta>7</yDelta>
+        <width>5</width>
+        <height>2</height>
+    </sprite>
+    
+    <sprite>
+        <id>dust</id>
+        <file>BITMAPS\272.bmp</file>
+        <x>107</x>
+        <y>46</y>
+        <xOff>37</xOff>
+        <yOff>163</yOff>
+        <xDelta>7</xDelta>
+        <yDelta>7</yDelta>
+        <width>5</width>
+        <height>2</height>
+    </sprite>
+    
+    <sprite>
+        <id>ice</id>
+        <file>BITMAPS\274.bmp</file>
+        <x>107</x>
+        <y>46</y>
+        <xOff>37</xOff>
+        <yOff>163</yOff>
+        <xDelta>7</xDelta>
+        <yDelta>7</yDelta>
+        <width>5</width>
+        <height>2</height>
+    </sprite>
+    
+    <sprite>
+        <id>pink</id>
+        <file>BITMAPS\276.bmp</file>
+        <x>107</x>
+        <y>46</y>
+        <xOff>37</xOff>
+        <yOff>163</yOff>
+        <xDelta>7</xDelta>
+        <yDelta>7</yDelta>
+        <width>5</width>
+        <height>2</height>
+    </sprite>
+    
+    <sprite>
         <id>tile1</id>
         <file>BITMAPS\TILE1.bmp</file>
         <x>93</x>
@@ -32,8 +110,30 @@ and open the template in the editor.
         <width>6</width>
         <height>5</height>
     </sprite>
-            
-    
+    <sprite>
+        <id>tile2</id>
+        <file>BITMAPS\TILE2.bmp</file>
+        <x>93</x>
+        <y>74</y>
+        <xOff>17</xOff>
+        <yOff>15</yOff>
+        <xDelta>6</xDelta>
+        <yDelta>22</yDelta>
+        <width>6</width>
+        <height>5</height>
+    </sprite>
+    <sprite>
+        <id>tile3</id>
+        <file>BITMAPS\TILE3.bmp</file>
+        <x>93</x>
+        <y>74</y>
+        <xOff>17</xOff>
+        <yOff>15</yOff>
+        <xDelta>6</xDelta>
+        <yDelta>22</yDelta>
+        <width>6</width>
+        <height>5</height>
+    </sprite>    
 </sprites>
     
 

@@ -1,7 +1,6 @@
 package colonygame;
 
 import colonygame.resources.Resources;
-import colonygame.resources.WorldMap;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +32,7 @@ public class Main {
             resources.loadXML();
 
 
-            game = new Game(0);
+            game = new Game(3);
             
             /*
              * Start UI 
