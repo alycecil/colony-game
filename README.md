@@ -3,6 +3,10 @@ colony-game
 
 
 Libraries:
-JAMA 1.03
-SASLib
-ini4j
+===========
+
+
+SASLib (available at https://github.com/wcecil/SASLib)
+
+
+ini4j (available at http://ini4j.sourceforge.net/download.html)
