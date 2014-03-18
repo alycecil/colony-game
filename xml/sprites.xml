@@ -101,9 +101,9 @@ and open the template in the editor.
     <sprite>
         <id>tile1</id>
         <file>BITMAPS\TILE1.bmp</file>
-        <x>93</x>
+        <x>94</x>
         <y>73</y>
-        <xOff>19</xOff>
+        <xOff>17</xOff>
         <yOff>15</yOff>
         <xDelta>6</xDelta>
         <yDelta>22</yDelta>
@@ -113,9 +113,9 @@ and open the template in the editor.
     <sprite>
         <id>tile2</id>
         <file>BITMAPS\TILE2.bmp</file>
-        <x>93</x>
+        <x>94</x>
         <y>73</y>
-        <xOff>19</xOff>
+        <xOff>17</xOff>
         <yOff>15</yOff>
         <xDelta>6</xDelta>
         <yDelta>22</yDelta>

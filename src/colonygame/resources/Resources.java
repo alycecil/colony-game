@@ -131,6 +131,24 @@ public class Resources {
         
         return wanted;
     }
+    
+    public ArrayList<BuildingType> getBuildingsTech(short tech) {
+        ArrayList<BuildingType> wanted = new ArrayList<>();
+        Iterator<BuildingType> iter = buildings.values().iterator();
+        BuildingType temp;
+
+        while (iter.hasNext()) {
+            temp = iter.next();
+            
+            if(temp.getTech()==tech){
+                wanted.add(temp);
+            }
+        }
+        
+        
+        
+        return wanted;
+    }
 
     public BuildingType getContruction() {
         return contruction;

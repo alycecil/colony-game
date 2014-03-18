@@ -46,7 +46,7 @@ public class BuildEvent extends GameEvent{
 
     @Override
     public int compareTo(GameEvent o) {
-        return o.getTime()-getTime();
+        return getTime()-o.getTime();
     }
 
 

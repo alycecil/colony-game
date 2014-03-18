@@ -60,7 +60,7 @@ public class Build implements Tool{
 
     @Override
     public String toString() {
-        return "Build "+building.toString();
+        return "Build "+building.getId();
     }
 
 }

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,6 +29,7 @@ public class Game implements Runnable {
     WorldMap map;
     ArrayList<BuildingType> buildables;
     PriorityQueue<GameEvent> events;
+    ArrayList<Short> unlockedTech;
 
     public Game(long seed) {
         timeStamp = 0;
@@ -40,6 +43,9 @@ public class Game implements Runnable {
                 maps.toArray()[rnd.nextInt(maps.size())].toString());
 
 
+        unlockedTech = new ArrayList<>();
+        unlockedTech.add((short)0);
+
         buildables = new ArrayList<>();
 
         addInitialBuildings();
@@ -51,6 +57,15 @@ public class Game implements Runnable {
     @Override
     public void run() {
 
+        //
+        //Update Time
+        //
+        tick();
+        
+        //
+        // process event queue
+        //
+        processEvents();
 
         //
         //Update Population
@@ -70,10 +85,6 @@ public class Game implements Runnable {
         updateBuildings();
 
 
-        //
-        //Update Time
-        //
-        tick();
     }
 
     private void simulatePopulation() {
@@ -122,8 +133,8 @@ public class Game implements Runnable {
 
     public boolean build(BuildingType type, int x, int y, int z) {
 
-        if (map.getBuilding(x, y, z) == null && 
-                map.getTile(x, y, z)!=WorldMap.IMPASSIBLE) {
+        if (map.getBuilding(x, y, z) == null
+                && map.getTile(x, y, z) != WorldMap.IMPASSIBLE) {
 
             if (type.isType(BuildingType.TYPE_LANDER)) {
                 if (myLanderCount < NUM_LANDERS) {
@@ -151,6 +162,9 @@ public class Game implements Runnable {
         return buildables;
     }
 
+    /**
+     * Unlocks Tech One
+     */
     private void removeLanders() {
         //scan resources and remove all special type lander buildings
 
@@ -158,5 +172,42 @@ public class Game implements Runnable {
                 Main.resources.getBuildings(BuildingType.TYPE_LANDER);
 
         buildables.removeAll(buildings);
+
+        addTech((short)1);
     }
+
+    /**
+     * adds specified tech level to buildables ensures the level is only added
+     * once, by checking a List of Integers
+     *
+     * @param i
+     */
+    private void addTech(short tech) {
+        //ensure not unlocked
+        if (!unlockedTech.contains(tech)) {
+
+            //unlock add
+            unlockedTech.add(tech);
+            
+            //get tech from resources
+             ArrayList<BuildingType> buildings = 
+                     Main.resources.getBuildingsTech(tech);
+             
+             //add all
+             buildables.addAll(buildings);
+        }
+    }
+
+    private void processEvents() {
+        while(events.peek()!=null && events.peek().getTime()<=timeStamp){
+            GameEvent e =events.poll();
+            if(!e.doEvent()){
+                Logger.getLogger(Game.class.getName()).log(
+                    Level.WARNING, "Event Failed : {0}", e);
+            }
+        }
+        
+    }
+    
+    
 }

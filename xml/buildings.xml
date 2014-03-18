@@ -27,12 +27,14 @@ Special Types
         <type>CONSTRUCTION</type>
         <power>0</power>
         <sprite>tile2</sprite>
-        <cellx>2</cellx>
-        <celly>2</celly>
+        <cellx>1</cellx>
+        <celly>1</celly>
         <capacity>0</capacity>
         <mindepth>-1</mindepth>
         <maxdepth>-1</maxdepth>
         <buildtime>0</buildtime>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
     </building>
     <building>
         <id>Tube</id>
@@ -42,10 +44,29 @@ Special Types
         <sprite>tile1</sprite>
         <cellx>5</cellx>
         <celly>4</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
         <capacity>10</capacity>
         <mindepth>0</mindepth>
         <maxdepth>4</maxdepth>
         <buildtime>1</buildtime>
+        <tech>1</tech>
+    </building>
+    <building>
+        <id>Agridome</id>
+        <description>Space Farm!</description>
+        <type>AGRICULTURE</type>
+        <power>10</power>
+        <sprite>tile2</sprite>
+        <cellx>4</cellx>
+        <celly>0</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
+        <capacity>50</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>20</buildtime>
+        <tech>1</tech>
     </building>
     <building>
         <id>Lander</id>
@@ -55,6 +76,8 @@ Special Types
         <sprite>tile1</sprite>
         <cellx>2</cellx>
         <celly>3</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
         <capacity>25</capacity>
         <mindepth>0</mindepth>
         <maxdepth>0</maxdepth>

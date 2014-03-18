@@ -24,17 +24,6 @@ public class BuildingType {
     protected static final String CHILD_NODE = "building";
 
     /*
-     * <id>CONSTRUCTION</id>
-     <description>Construction in Progress</description>
-     <type>CONSTRUCTION</type>
-     <power>0</power>
-     <sprite>tile2</sprite>
-     <cellx>2</cellx>
-     <celly>2</celly>
-     <capacity>0</capacity>
-     <mindepth>-1</mindepth>
-     <maxdepth>-1</maxdepth>
-     <buildtime>0</buildtime>
      * TYPES
      TUBE
      HOUSE
@@ -49,6 +38,12 @@ public class BuildingType {
      Special Types
      LANDER
      CONSTRUCTION
+     * 
+     * resources
+     * food
+     * people
+     * power
+     * ore
      */
     String id;
     String decription;
@@ -60,6 +55,7 @@ public class BuildingType {
     int spriteX, spriteY;
     int minZ, maxZ;
     int deltaX, deltaY;
+    short tech;
     public static final short TYPE_TUBE = 0;
     public static final short TYPE_HOUSE = 1;
     public static final short TYPE_FACTORY = 2;
@@ -87,7 +83,7 @@ public class BuildingType {
 
     public BuildingType(String id, String decription, int power, int capacity,
             int buildtime, short type, Sprite sprite, int spriteX, int spriteY,
-            int spriteDX, int spriteDY, int minZ, int maxZ) {
+            int spriteDX, int spriteDY, int minZ, int maxZ, short tech) {
         this.id = id;
         this.decription = decription;
         this.power = power;
@@ -101,6 +97,7 @@ public class BuildingType {
         this.maxZ = maxZ;
         this.deltaX = spriteDX;
         this.deltaY = spriteDY;
+        this.tech = tech;
     }
 
     public static boolean readXML(File pfSource) {
@@ -179,7 +176,7 @@ public class BuildingType {
         String[] tempType;
         int tPower, tCapacity, tSpriteX, tSpriteY, tBuild, tMin, tMax;
         int tSpriteDX,tSpriteDY;
-        short tType;
+        short tType,tTech;
         Sprite tSprite = null;
 
         boolean bid, bDesc, bPower, bCap, bSprite, bSpriteX,
@@ -209,6 +206,7 @@ public class BuildingType {
         tMax = 0;
         tSpriteDX = 0;
         tSpriteDY = 0;
+        tTech= 0;
 
 
 
@@ -301,6 +299,11 @@ public class BuildingType {
 
                 bMax = true;
 
+            } else if (tempChild.getNodeName().equalsIgnoreCase("tech")) {
+
+                tTech = (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                
+
             } else if (tempChild.getNodeName().equalsIgnoreCase("sprite")) {
                 //ask resorces for sprite set
                 tSprite = Main.resources.getSprite(tempChild.getTextContent());
@@ -373,7 +376,7 @@ public class BuildingType {
             Main.resources.addBuilding(tempId,
                     new BuildingType(tempId, tempDecription, tPower, tCapacity,
                     tBuild, tType, tSprite, tSpriteX, tSpriteY,tSpriteDX,
-                    tSpriteDY, tMin, tMax));
+                    tSpriteDY, tMin, tMax, tTech));
 
             return true;
 
@@ -436,6 +439,9 @@ public class BuildingType {
     public int getMaxZ() {
         return maxZ;
     }
-    
+
+    public short getTech() {
+        return tech;
+    }
     
 }

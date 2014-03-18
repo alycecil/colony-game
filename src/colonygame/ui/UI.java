@@ -34,8 +34,8 @@ public class UI extends javax.swing.JFrame {
     public static int RENDER_HEIGHT = 4;
     public static int MARGIN_X = 40;
     public static int MARGIN_Y = 40;
-    public static int TEXT_AREA_WIDTH = 100;
-    public static int TEXT_AREA_HEIGHT = 100;
+    public static int TEXT_AREA_WIDTH = 180;
+    public static int TEXT_AREA_HEIGHT = 120;
     public static int MAP_COLOR = 0x00F00000;
     public static int BUTTON_COLOR = 0x00FF0000;
     private Vector touch = null;
@@ -51,6 +51,7 @@ public class UI extends javax.swing.JFrame {
     BuildMenu buildmenu;
     boolean bDebug = false;
 
+    // <editor-fold defaultstate="collapsed" desc=" Constructor ">   
     /**
      * Creates new form UI
      */
@@ -108,6 +109,7 @@ public class UI extends javax.swing.JFrame {
             }
         });
     }
+     // </editor-fold>   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -181,7 +183,11 @@ public class UI extends javax.swing.JFrame {
         renderFrame();
     }
 
+    // <editor-fold defaultstate="collapsed" desc=" Event Listeners ">   
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_F12){
+            Main.game.run();
+        }
         if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
 
 
@@ -285,7 +291,10 @@ public class UI extends javax.swing.JFrame {
 
         bResized = true;
     }//GEN-LAST:event_formComponentResized
-
+ // </editor-fold>   
+    
+    
+    //<editor-fold defaultstate="collapsed" desc=" Main ">
     /**
      * @param args the command line arguments
      */
@@ -321,13 +330,17 @@ public class UI extends javax.swing.JFrame {
             }
         });
     }
+    //</editor-fold>
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jpCanvas;
     // End of variables declaration//GEN-END:variables
 
-    void prep() {
-    }
 
+    
+    //<editor-fold defaultstate="collapsed" desc=" Main Render Block ">
     /**
      * get the current map cell and render it to the appropriate frame
      */
@@ -335,8 +348,8 @@ public class UI extends javax.swing.JFrame {
 
         //Sprite
         Sprite tile = Main.game.getMap().getWorld().getTile();
-        Sprite temp = null;
-        BuildingType tType = null;
+        Sprite temp;
+        BuildingType tType;
 
 
         //calc size to pull
@@ -527,13 +540,11 @@ public class UI extends javax.swing.JFrame {
 
 
     }
+    //</editor-fold>
+    
+    
 
-    void error(InterruptedException e) {
-        java.util.logging.Logger.getLogger(
-                UI.class.getName()).log(
-                java.util.logging.Level.SEVERE, null, e);
-    }
-
+    //<editor-fold defaultstate="collapsed" desc=" Utility Render Functions ">
     private void writeText(Graphics g, String string, int i) {
         g.drawString(string,
                 jpCanvas.getWidth() - TEXT_AREA_WIDTH + 5,
@@ -560,26 +571,7 @@ public class UI extends javax.swing.JFrame {
         g.fillRect(jpCanvas.getWidth() - img.getWidth(null) + x, y, RENDER_WIDTH, RENDER_HEIGHT);
 
     }
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @param w
-     * @param h
-     * @param txt
-     * @param bg
-     * @param cTxt
-     */
-    public UIButton addButton(int x, int y, int w, int h, String txt,
-            Color cBg, Color cTxt, ActionListener e) {
-
-        //make the button
-        UIButton b = new UIButton(x, y, w, h, txt, cBg, cTxt, e);
-
-        return addButton(b);
-    }
-
+    
     public void renderButtons(Graphics g) {
         Iterator<UIButton> iterButton = buttons.iterator();
 
@@ -616,15 +608,7 @@ public class UI extends javax.swing.JFrame {
         }
 
     }
-
-    public void setCurrentTool(Tool currentTool) {
-        this.currentTool = currentTool;
-    }
-
-    public Tool getCurrentTool() {
-        return currentTool;
-    }
-
+    
     private void drawInfoBox(Graphics g) {
         
 
@@ -636,25 +620,69 @@ public class UI extends javax.swing.JFrame {
 
         //write in it
 
+        g.setColor(Color.white);
+        writeText(g, "Tick::" + Main.game.getTimeStamp(), 0);
+        
         g.setColor(Color.red);
-        writeText(g, "Map::x:" + x + " y:" + y, 0);
+        writeText(g, "Map::x:" + x + " y:" + y, 1);
 
 
         writeText(g,
                 "Click::x:" + (int) touch.getX()
-                + " y:" + (int) touch.getY(), 1);
+                + " y:" + (int) touch.getY(), 2);
 
         g.setColor(Color.MAGENTA);
         if (currentTool != null) {
             writeText(g,
-                    "Tool::" + currentTool.toString(), 2);
+                    "Tool::" + currentTool.toString(), 3);
 
         } else {
             writeText(g,
-                    "No Tool", 2);
+                    "No Tool", 3);
         }
 
     }
+    
+    //</editor-fold>
+
+    
+    
+    //<editor-fold defaultstate="collapsed" desc=" Utility Functions ">
+    void error(InterruptedException e) {
+        java.util.logging.Logger.getLogger(
+                UI.class.getName()).log(
+                java.util.logging.Level.SEVERE, null, e);
+    }
+    /**
+     *
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param txt
+     * @param bg
+     * @param cTxt
+     */
+    public UIButton addButton(int x, int y, int w, int h, String txt,
+            Color cBg, Color cTxt, ActionListener e) {
+
+        //make the button
+        UIButton b = new UIButton(x, y, w, h, txt, cBg, cTxt, e);
+
+        return addButton(b);
+    }
+
+    
+
+    public void setCurrentTool(Tool currentTool) {
+        this.currentTool = currentTool;
+    }
+
+    public Tool getCurrentTool() {
+        return currentTool;
+    }
+
+    
 
     public void setBuildmenu(BuildMenu bldmenu) {
         this.buildmenu = bldmenu;
@@ -676,6 +704,7 @@ public class UI extends javax.swing.JFrame {
         return buttons;
     }
 
+    
     public synchronized void forceRepaint() {
         bResized = true;
     }
@@ -691,6 +720,7 @@ public class UI extends javax.swing.JFrame {
         return b;
     }
     
+    //</editor-fold>
     
     
 }
