@@ -62,25 +62,47 @@ Special Types
         <celly>0</celly>
         <celldx>7</celldx>
         <celldy>-24</celldy>
-        <capacity>50</capacity>
+        <capacity>1</capacity>
         <mindepth>0</mindepth>
         <maxdepth>0</maxdepth>
-        <buildtime>20</buildtime>
+        <buildtime>15</buildtime>
         <tech>1</tech>
+        <supply_food>25</supply_food>
+    </building>
+    <building>
+        <id>Tokamak</id>
+        <description>Thermonuclear fusion power plant.</description>
+        <type>power</type>
+        <power>0</power>
+        <sprite>tile1</sprite>
+        <cellx>3</cellx>
+        <celly>0</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
+        <capacity>3</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>40</buildtime>
+        <tech>1</tech>
+        <supply_power>100</supply_power>
     </building>
     <building>
         <id>Lander</id>
-        <description>The Colony's first housing module, brought from home</description>
-        <type>lander,house,storage</type>
+        <description>The Colony's first module, brought from home</description>
+        <type>lander,house,storage,power</type>
         <power>0</power>
         <sprite>tile1</sprite>
         <cellx>2</cellx>
         <celly>3</celly>
         <celldx>7</celldx>
         <celldy>-24</celldy>
-        <capacity>25</capacity>
+        <capacity>1</capacity>
         <mindepth>0</mindepth>
         <maxdepth>0</maxdepth>
         <buildtime>1</buildtime>
+        <supply_food>5</supply_food>
+        <supply_power>10</supply_power>
+        <supply_housing>25</supply_housing>
+        <supply_ore>0</supply_ore>
     </building>
 </buildings>

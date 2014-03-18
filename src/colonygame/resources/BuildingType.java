@@ -56,6 +56,7 @@ public class BuildingType {
     int minZ, maxZ;
     int deltaX, deltaY;
     short tech;
+    int supplyFood, supplyOre, supplyPower, supplyHousing;
     public static final short TYPE_TUBE = 0;
     public static final short TYPE_HOUSE = 1;
     public static final short TYPE_FACTORY = 2;
@@ -83,7 +84,8 @@ public class BuildingType {
 
     public BuildingType(String id, String decription, int power, int capacity,
             int buildtime, short type, Sprite sprite, int spriteX, int spriteY,
-            int spriteDX, int spriteDY, int minZ, int maxZ, short tech) {
+            int spriteDX, int spriteDY, int minZ, int maxZ, short tech,
+            int supplyFood, int supplyOre, int supplyPower, int supplyHousing) {
         this.id = id;
         this.decription = decription;
         this.power = power;
@@ -98,6 +100,10 @@ public class BuildingType {
         this.deltaX = spriteDX;
         this.deltaY = spriteDY;
         this.tech = tech;
+        this.supplyFood = supplyFood;
+        this.supplyHousing = supplyHousing;
+        this.supplyOre = supplyOre;
+        this.supplyPower = supplyPower;
     }
 
     public static boolean readXML(File pfSource) {
@@ -175,8 +181,9 @@ public class BuildingType {
         String tempDecription = null;
         String[] tempType;
         int tPower, tCapacity, tSpriteX, tSpriteY, tBuild, tMin, tMax;
-        int tSpriteDX,tSpriteDY;
-        short tType,tTech;
+        int tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing;
+        int tSpriteDX, tSpriteDY;
+        short tType, tTech;
         Sprite tSprite = null;
 
         boolean bid, bDesc, bPower, bCap, bSprite, bSpriteX,
@@ -206,7 +213,11 @@ public class BuildingType {
         tMax = 0;
         tSpriteDX = 0;
         tSpriteDY = 0;
-        tTech= 0;
+        tTech = 0;
+        tSupplyFood = 0;
+        tSupplyOre = 0;
+        tSupplyPower = 0;
+        tSupplyHousing = 0;
 
 
 
@@ -302,7 +313,34 @@ public class BuildingType {
             } else if (tempChild.getNodeName().equalsIgnoreCase("tech")) {
 
                 tTech = (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
-                
+
+
+            } else if (tempChild.getNodeName().
+                    equalsIgnoreCase("supply_food")) {
+
+                tSupplyFood = 
+                        (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+
+            } else if (tempChild.getNodeName().
+                    equalsIgnoreCase("supply_power")) {
+
+                tSupplyPower = 
+                        (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+
+            } else if (tempChild.getNodeName().
+                    equalsIgnoreCase("supply_housing")) {
+
+                tSupplyHousing = 
+                        (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("supply_ore")) {
+
+                tSupplyOre = 
+                        (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
 
             } else if (tempChild.getNodeName().equalsIgnoreCase("sprite")) {
                 //ask resorces for sprite set
@@ -375,8 +413,9 @@ public class BuildingType {
             //add to resources
             Main.resources.addBuilding(tempId,
                     new BuildingType(tempId, tempDecription, tPower, tCapacity,
-                    tBuild, tType, tSprite, tSpriteX, tSpriteY,tSpriteDX,
-                    tSpriteDY, tMin, tMax, tTech));
+                    tBuild, tType, tSprite, tSpriteX, tSpriteY, tSpriteDX,
+                    tSpriteDY, tMin, tMax, tTech,
+                    tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing));
 
             return true;
 
@@ -420,6 +459,10 @@ public class BuildingType {
         return deltaX;
     }
 
+    public int getPower() {
+        return power;
+    }
+
     public int getDeltaY() {
         return deltaY;
     }
@@ -443,5 +486,20 @@ public class BuildingType {
     public short getTech() {
         return tech;
     }
-    
+
+    public int getSupplyFood() {
+        return supplyFood;
+    }
+
+    public int getSupplyHousing() {
+        return supplyHousing;
+    }
+
+    public int getSupplyOre() {
+        return supplyOre;
+    }
+
+    public int getSupplyPower() {
+        return supplyPower;
+    }
 }

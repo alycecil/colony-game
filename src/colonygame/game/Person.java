@@ -13,27 +13,40 @@ import colonygame.resources.BuildingType;
  */
 public class Person {
 
-    char state;
+    public static int nextId = 0;
+
+    public static int getState(int age) {
+        if(age>MIN_ELDER) return STATE_ELDER;
+        else if(age>MIN_ADULT) return STATE_ADULT;
+        else if(age>MIN_TEEN) return STATE_TEEN;
+        else if(age>MIN_CHILD) return STATE_CHILD;
+        else if(age>MIN_BABY) return STATE_BABY;
+        return STATE_DEAD;
+    }
+    
+    int id;
+    int state;
     int DOB;
     boolean gender;
     boolean educated;
     Person mother;
+    Person mate;
     BuildingType home;
     BuildingType work;
     public static final boolean MALE = true;
     public static final boolean FEMALE = false;
-    public static final char STATE_BABY = 10;
-    public static final char STATE_CHILD = 20;
-    public static final char STATE_TEEN = 30;
-    public static final char STATE_ADULT = 40;
-    public static final char STATE_MARRIED = 50;
-    public static final char STATE_ELDER = 60;
-    public static final char STATE_DEAD = 70;
-    public static final char MIN_BABY = 0000;
-    public static final char MIN_CHILD = 0300;
-    public static final char MIN_TEEN = 1100;
-    public static final char MIN_ADULT = 1700;
-    public static final char MIN_ELDER = 6000;
+    public static final int STATE_BABY = 1<<1;
+    public static final int STATE_CHILD = 1<<2;
+    public static final int STATE_TEEN = 1<<3;
+    public static final int STATE_ADULT = 1<<4;
+    public static final int STATE_MARRIED = 1;
+    public static final int STATE_ELDER = 1<<5;
+    public static final int STATE_DEAD = -1;
+    public static final int MIN_BABY = 0000;
+    public static final int MIN_CHILD = 0300;
+    public static final int MIN_TEEN = 1100;
+    public static final int MIN_ADULT = 1700;
+    public static final int MIN_ELDER = 6000;
 
     public Person(boolean gender, Person mother) {
         this.state = STATE_BABY;
@@ -43,9 +56,12 @@ public class Person {
         this.mother = mother;
         this.home = null;
         this.work = null;
+        
+        id = nextId++;
     }
 
-    public Person(char state, int DOB, boolean gender, boolean educated, Person mother, BuildingType home, BuildingType work) {
+    public Person(int state, int DOB, boolean gender, boolean educated, 
+            Person mother, BuildingType home, BuildingType work) {
         this.state = state;
         this.DOB = DOB;
         this.gender = gender;
@@ -53,6 +69,8 @@ public class Person {
         this.mother = mother;
         this.home = home;
         this.work = work;
+        
+        id = nextId++;
     }
 
     public int getDOB() {
@@ -67,7 +85,7 @@ public class Person {
         return mother;
     }
 
-    public char getState() {
+    public int getState() {
         return state;
     }
 
@@ -95,7 +113,7 @@ public class Person {
         this.work = work;
     }
 
-    public void setState(char state) {
+    public void setState(int state) {
         this.state = state;
     }
 
@@ -115,5 +133,9 @@ public class Person {
             return null;
         }
 
+    }
+
+    public boolean isAlive() {
+        return (state&1)!=STATE_DEAD;
     }
 }

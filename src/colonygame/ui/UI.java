@@ -640,6 +640,10 @@ public class UI extends javax.swing.JFrame {
             writeText(g,
                     "No Tool", 3);
         }
+        
+        
+        g.setColor(Color.red);
+        writeText(g,"Population::"+Main.game.getPopulation(),4);
 
     }
     

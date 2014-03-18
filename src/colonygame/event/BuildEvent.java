@@ -2,22 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package colonygame.event;
 
 import colonygame.game.Building;
 import colonygame.Main;
 import colonygame.resources.BuildingType;
+import colonygame.resources.WorldMap;
 
 /**
  *
  * @author WilCecil
  */
-public class BuildEvent extends GameEvent{
+public class BuildEvent extends GameEvent {
 
     int time;
     BuildingType type;
-    int x,y,z;
+    int x, y, z;
 
     public BuildEvent(int time, BuildingType type, int x, int y, int z) {
         this.time = time;
@@ -31,23 +31,25 @@ public class BuildEvent extends GameEvent{
     public int getTime() {
         return time;
     }
-    
 
     @Override
     public boolean doEvent() {
-        try{
+        try {
+            if (z == 0) {
+                Main.game.getMap().setTile(x, y, z, WorldMap.DOZED);
+            } else {
+                Main.game.getMap().setTile(x, y, z, WorldMap.UNDERGROUND_DOZED);
+            }
             Main.game.getMap().setBuilding(x, y, z, new Building(type, 0));
-            
+
             return true;
-        }catch(IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
     }
 
     @Override
     public int compareTo(GameEvent o) {
-        return getTime()-o.getTime();
+        return getTime() - o.getTime();
     }
-
-
 }

@@ -383,7 +383,9 @@ public class Sprite {
     }
 
     public BufferedImage getCell(int i, int j) {
-        if(i>cellsWidth || j >cellsHeight){
+        if(i>=cellsWidth || j >=cellsHeight){
+            Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE,
+                    "Trying to request sprite cell outside valid ({0},{1)", new Object[]{i,j});
             return null;
         }
         

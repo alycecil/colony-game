@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -25,6 +26,7 @@ public class Resources {
     AbstractMap<String, WorldMap> maps;
     AbstractMap<String, BuildingType> buildings;
     BuildingType contruction;
+    Settings settings;
 
     /**
      * Creates the space for resources, loads nothing.
@@ -36,6 +38,7 @@ public class Resources {
         sprites = new HashMap<>();
         maps = new HashMap<>();
         buildings = new HashMap<>();
+        settings = new Settings();
     }
 
     /**
@@ -50,7 +53,9 @@ public class Resources {
         File spritesXML = new File(ini.get("resources", "sprites"));
         File mapsXML = new File(ini.get("resources", "maps"));
         File buildingsXML = new File(ini.get("resources", "buildings"));
+        File settingsXML = new File(ini.get("resources", "initial"));
 
+        
         //parseSprites
         Sprite.readXML(spritesXML);
 
@@ -64,6 +69,9 @@ public class Resources {
 
         //parse buildings
         BuildingType.readXML(buildingsXML);
+        
+        //parse initial settings xml
+        settings.readXML(settingsXML);
 
     }
 
@@ -110,8 +118,8 @@ public class Resources {
 
     }
 
-    public BuildingType[] getBuildings() {
-        return (BuildingType[]) buildings.values().toArray();
+    public Collection<BuildingType> getBuildings() {
+        return buildings.values();
     }
 
     public ArrayList<BuildingType> getBuildings(short type) {
@@ -152,6 +160,10 @@ public class Resources {
 
     public BuildingType getContruction() {
         return contruction;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
     
     

@@ -55,6 +55,7 @@ public class Main {
             /*
              * Start Game Loop
              */
+            new Timer(100, Main.game).start();
 
             
             

@@ -7,9 +7,14 @@ package colonygame;
 import colonygame.game.Building;
 import colonygame.event.BuildEvent;
 import colonygame.event.GameEvent;
+import colonygame.game.Person;
 import colonygame.resources.BuildingType;
 import colonygame.resources.WorldMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
@@ -20,20 +25,42 @@ import java.util.logging.Logger;
  *
  * @author WilCecil
  */
-public class Game implements Runnable {
+public class Game implements Runnable, ActionListener {
 
-    public static final int NUM_LANDERS = 1;
     int myLanderCount;
     int timeStamp;
+    //
+    //resources
+    //
+    int powerTotal;
+    int power;
+    int housingTotal;
+    int workerNeed;
+    int agriculture;
+    int agrigultureStored;
+    int ore;
     public Random rnd;
     WorldMap map;
     ArrayList<BuildingType> buildables;
     PriorityQueue<GameEvent> events;
     ArrayList<Short> unlockedTech;
+    /**
+     * we are detailed tracking individuals as for whatever reason I want to do
+     * it that way, if you hate it or its slow you can remove the person class
+     * and do a DES with simplified classes of people as ints.
+     */
+    ArrayList<Person> people;
+    ArrayList<Person> dead;
 
     public Game(long seed) {
         timeStamp = 0;
         myLanderCount = 0;
+        powerTotal = 0;
+        power = 0;
+        housingTotal = 0;
+        agriculture = 0;
+        agrigultureStored = 0;
+        ore = 0;
 
         rnd = new Random(seed);
 
@@ -44,7 +71,7 @@ public class Game implements Runnable {
 
 
         unlockedTech = new ArrayList<>();
-        unlockedTech.add((short)0);
+        unlockedTech.add((short) 0);
 
         buildables = new ArrayList<>();
 
@@ -52,6 +79,11 @@ public class Game implements Runnable {
 
         //init game queue
         events = new PriorityQueue<>();
+
+
+        //init people
+        people = new ArrayList<>();
+
     }
 
     @Override
@@ -61,38 +93,87 @@ public class Game implements Runnable {
         //Update Time
         //
         tick();
-        
+
         //
         // process event queue
         //
         processEvents();
 
         //
-        //Update Population
-        //
-        simulatePopulation();
-
-
-        //
         //Update Resources
         //
         updateResources();
-
 
         //
         // Update Buildings
         //
         updateBuildings();
 
+        //
+        //Update Population
+        //
+        simulatePopulation();
 
     }
 
     private void simulatePopulation() {
-        //
+
+        // move the dead
+        Person p;
+
+        for (int i = 0; i < people.size(); i++) {
+            p = people.get(i);
+
+            if (!p.isAlive()) {
+                dead.add(p);
+                people.remove(i);
+            }
+        }
+
+
     }
 
     private void updateResources() {
-        //
+        //Calculate Power
+        Collection<BuildingType> list;
+        Iterator<BuildingType> iter;
+        BuildingType temp;
+
+        list = Main.resources.getBuildings();
+
+        iter = list.iterator();
+
+        while (iter.hasNext()) {
+            temp = iter.next();
+
+            //
+            // update power //
+            //
+            powerTotal += temp.getSupplyPower();
+            power += temp.getPower();
+
+
+            //
+            // Update Housing/worker Resources //
+            //
+            housingTotal += temp.getSupplyHousing();
+            workerNeed += temp.getCapacity();
+
+
+            //
+            // update food
+            //
+            agriculture += temp.getSupplyFood();
+
+            //
+            // update ore
+            //
+            ore += temp.getSupplyOre();
+        }
+        
+        //food!
+        agrigultureStored+=agriculture;
+        agrigultureStored-=people.size();
     }
 
     private void updateBuildings() {
@@ -137,11 +218,13 @@ public class Game implements Runnable {
                 && map.getTile(x, y, z) != WorldMap.IMPASSIBLE) {
 
             if (type.isType(BuildingType.TYPE_LANDER)) {
-                if (myLanderCount < NUM_LANDERS) {
+                if (myLanderCount < Main.resources.getSettings().getLanders()) {
                     myLanderCount++;
 
-                    if (myLanderCount >= NUM_LANDERS) {
+                    if (myLanderCount >= Main.resources.getSettings().getLanders()) {
                         removeLanders();
+
+
                         Main.ui.getBuildmenu().update();
                         Main.ui.setCurrentTool(null);
                     }
@@ -173,7 +256,12 @@ public class Game implements Runnable {
 
         buildables.removeAll(buildings);
 
-        addTech((short)1);
+        //add tech
+        addTech((short) 1);
+
+
+        //seed people
+        seedPeople();
     }
 
     /**
@@ -188,26 +276,57 @@ public class Game implements Runnable {
 
             //unlock add
             unlockedTech.add(tech);
-            
+
             //get tech from resources
-             ArrayList<BuildingType> buildings = 
-                     Main.resources.getBuildingsTech(tech);
-             
-             //add all
-             buildables.addAll(buildings);
+            ArrayList<BuildingType> buildings =
+                    Main.resources.getBuildingsTech(tech);
+
+            //add all
+            buildables.addAll(buildings);
         }
     }
 
     private void processEvents() {
-        while(events.peek()!=null && events.peek().getTime()<=timeStamp){
-            GameEvent e =events.poll();
-            if(!e.doEvent()){
+        while (events.peek() != null && events.peek().getTime() <= timeStamp) {
+            GameEvent e = events.poll();
+            if (!e.doEvent()) {
                 Logger.getLogger(Game.class.getName()).log(
-                    Level.WARNING, "Event Failed : {0}", e);
+                        Level.WARNING, "Event Failed : {0}", e);
             }
         }
-        
+
     }
-    
-    
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        run();
+    }
+
+    private void seedPeople() {
+        //ensure no null pointer noise
+        if (people == null) {
+            people = new ArrayList<>();
+        }
+
+        //ensure not already seeded.
+        if (!people.isEmpty()) {
+            Logger.getLogger(Game.class.getName()).log(
+                    Level.WARNING, "Attempting to seed, a seeded colony.");
+
+            return;
+        }
+
+        //add em in
+        people.addAll(Main.resources.getSettings().getPeople());
+
+        agrigultureStored = 500;
+    }
+
+    public int getPopulation() {
+        if (people == null) {
+            return -1;
+        } else {
+            return people.size();
+        }
+    }
 }
