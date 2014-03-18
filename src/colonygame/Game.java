@@ -114,4 +114,11 @@ public class Game implements Runnable {
     public boolean build(BuildingType type, int x, int y, int z){
         return false;
     }
+
+    public ArrayList<BuildingType> getBuildables() {
+        return buildables;
+    }
+
+    
+    
 }

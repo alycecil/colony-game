@@ -38,11 +38,10 @@ public class Sprite {
     BufferedImage tileSet;
     BufferedImage tileSetTrans;
     //BufferedImage tileSetHit;
-    BufferedImage[] cells;
+    BufferedImage[][] cells;
     //BufferedImage[] cellsHit;
     int width, height, startX, startY, deltaX, deltaY;
     int cellsWidth, cellsHeight;
-    
 
     public Sprite(BufferedImage tileSet, int width, int height,
             int startX, int startY, int deltaX, int deltaY, int cellsWidth, int cellsHeight) {
@@ -80,7 +79,7 @@ public class Sprite {
 //        g2.dispose();
 //        
         //create cell storage
-        cells = new BufferedImage[cellsHeight * cellsWidth];
+        cells = new BufferedImage[cellsWidth][cellsHeight];
 //        cellsHit = new BufferedImage[cellsHeight * cellsWidth];
 
     }
@@ -96,24 +95,14 @@ public class Sprite {
             cell = 0;
         }
 
-        if (cells[cell] == null) {
+        int i, j;
 
-            int i, j;
+        i = cell % cellsWidth;
+        j = cell / cellsWidth;
 
-            i = cell % width;
-            j = cell / width;
-
-            i = i * (width + deltaX) + startX;
-            j = j * (height + deltaY) + startY;
-
-            cells[cell] = tileSetTrans.getSubimage(i, j, width, height);
-
-        }
-
-        return cells[cell];
+        return getCell(i, j);
     }
-    
-    
+
 //        public Image getCellBox(char cell) {
 //         if (cell >= cellsHeight * cellsWidth) {
 //            //what the hell guy?
@@ -140,7 +129,6 @@ public class Sprite {
 //
 //        return cellsHit[cell];
 //    }
-
     public static boolean readXML(File pfSource) {
         try {
             //parse as DOM
@@ -360,7 +348,7 @@ public class Sprite {
         final ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
         return Toolkit.getDefaultToolkit().createImage(ip);
     }
-    
+
 //    /**
 //     * Creates a box of the hit area for the cell
 //     * @param im
@@ -386,7 +374,6 @@ public class Sprite {
 //        final ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
 //        return Toolkit.getDefaultToolkit().createImage(ip);
 //    }
-
     public int getCellWidth() {
         return width;
     }
@@ -395,5 +382,21 @@ public class Sprite {
         return height;
     }
 
+    public BufferedImage getCell(int i, int j) {
+        if(i>cellsWidth || j >cellsHeight){
+            return null;
+        }
+        
+        if (cells[i][j] == null) {
+            
+            int _i, _j;
+            
+            _i = i * (width + deltaX) + startX;
+            _j = j * (height + deltaY) + startY;
 
+            cells[i][j] = tileSetTrans.getSubimage(_i, _j, width, height);
+        }
+
+        return cells[i][j];
+    }
 }

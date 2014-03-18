@@ -32,7 +32,7 @@ public class Main {
             resources.loadXML();
 
 
-            game = new Game(3);
+            game = new Game(System.currentTimeMillis());
             
             /*
              * Start UI 

@@ -102,8 +102,8 @@ and open the template in the editor.
         <id>tile1</id>
         <file>BITMAPS\TILE1.bmp</file>
         <x>93</x>
-        <y>74</y>
-        <xOff>17</xOff>
+        <y>73</y>
+        <xOff>19</xOff>
         <yOff>15</yOff>
         <xDelta>6</xDelta>
         <yDelta>22</yDelta>
@@ -114,26 +114,15 @@ and open the template in the editor.
         <id>tile2</id>
         <file>BITMAPS\TILE2.bmp</file>
         <x>93</x>
-        <y>74</y>
-        <xOff>17</xOff>
+        <y>73</y>
+        <xOff>19</xOff>
         <yOff>15</yOff>
         <xDelta>6</xDelta>
         <yDelta>22</yDelta>
         <width>6</width>
         <height>5</height>
     </sprite>
-    <sprite>
-        <id>tile3</id>
-        <file>BITMAPS\TILE3.bmp</file>
-        <x>93</x>
-        <y>74</y>
-        <xOff>17</xOff>
-        <yOff>15</yOff>
-        <xDelta>6</xDelta>
-        <yDelta>22</yDelta>
-        <width>6</width>
-        <height>5</height>
-    </sprite>    
+  
 </sprites>
     
 

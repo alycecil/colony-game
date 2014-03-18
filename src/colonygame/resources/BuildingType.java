@@ -373,4 +373,27 @@ public class BuildingType {
     boolean isType(short check) {
         return (check&type)!=0;
     }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public int getSpriteX() {
+        return spriteX;
+    }
+
+    public int getSpriteY() {
+        return spriteY;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDecription() {
+        return decription;
+    }
+    
+    
+    
 }

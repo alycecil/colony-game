@@ -35,13 +35,13 @@ Special Types
         <buildtime>0</buildtime>
     </building>
     <building>
-        <id>tube</id>
+        <id>Tube</id>
         <description>Generic Tube</description>
         <type>tube</type>
         <power>0</power>
         <sprite>tile1</sprite>
-        <cellx>6</cellx>
-        <celly>5</celly>
+        <cellx>5</cellx>
+        <celly>4</celly>
         <capacity>10</capacity>
         <mindepth>0</mindepth>
         <maxdepth>4</maxdepth>
@@ -53,8 +53,8 @@ Special Types
         <type>lander,house,storage</type>
         <power>0</power>
         <sprite>tile1</sprite>
-        <cellx>3</cellx>
-        <celly>4</celly>
+        <cellx>2</cellx>
+        <celly>3</celly>
         <capacity>25</capacity>
         <mindepth>0</mindepth>
         <maxdepth>0</maxdepth>

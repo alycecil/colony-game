@@ -45,6 +45,8 @@ public class UI extends javax.swing.JFrame {
     ArrayList<Color> buttonsColors;
     int nextButtonColor = BUTTON_COLOR;
     Tool currentTool;
+    BuildMenu buildmenu;
+    boolean bDebug = true;
 
     /**
      * Creates new form UI
@@ -68,6 +70,10 @@ public class UI extends javax.swing.JFrame {
         bResized = true;
 
 
+        //BUILD MENU
+        buildmenu = new BuildMenu(2, 55, 100, 100);
+
+
         //create buttons
 
         buttons = new ArrayList<>();
@@ -79,18 +85,25 @@ public class UI extends javax.swing.JFrame {
         final UIButton bull;
         bull = addButton(2, 2, 80, 25, "Bulldoze", Color.orange.darker(), Color.green,
                 null);
-        
+
         bull.setActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Main.ui.setCurrentTool(new Bulldoze(bull));
             }
         });
-        
-        
+
+        //add build button
         final UIButton build;
-        build = addButton(2, 2, 80, 25, "Bulldoze", Color.orange.darker(), Color.green,
-                null);
+        build = addButton(2, 30, 80, 25, "Build", Color.orange.darker(), Color.green,
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.ui.setCurrentTool(null);
+                Main.ui.setBuildmenuVisible(!Main.ui.getBuildmenuVisible());
+                Main.ui.getBuildmenu().update();
+            }
+        });
     }
 
     /**
@@ -231,7 +244,7 @@ public class UI extends javax.swing.JFrame {
                         UIButton b = buttons.get(i);
                         //found the button
                         b.click(null);
-                        
+
                         break;
                     }
                 }
@@ -241,12 +254,12 @@ public class UI extends javax.swing.JFrame {
                     for (int j = 0; j < hitBoxRef[0].length; j++) {
                         if (c == hitBoxRef[i][j]) {
                             touch = new Vector(i + x, j + y);
-                            
+
                             //CHECK IF A TOOL WAS USED
-                            if(currentTool!=null){
+                            if (currentTool != null) {
                                 currentTool.interact(
-                                        (int)touch.getX(), 
-                                        (int)touch.getY(), 
+                                        (int) touch.getX(),
+                                        (int) touch.getY(),
                                         z);
                             }
                         }
@@ -255,7 +268,7 @@ public class UI extends javax.swing.JFrame {
             }
         } else {
             //cancel current tool
-            if(currentTool!=null){
+            if (currentTool != null) {
                 currentTool.unselect();
                 currentTool = null;
             }
@@ -316,7 +329,7 @@ public class UI extends javax.swing.JFrame {
     /**
      * get the current map cell and render it to the appropriate frame
      */
-    void renderFrame() {
+    public synchronized void renderFrame() {
 
         //Sprite
         Sprite tile = Main.game.getMap().getWorld().getTile();
@@ -443,17 +456,15 @@ public class UI extends javax.swing.JFrame {
             }
         }
 
-        
-        
-        
 
-        
+
+
+
+
         drawInfoBox(g);
 
         //draw map
         drawMap(g, gHit);
-
-
 
         //draw buttons
         renderButtons(g);
@@ -463,6 +474,10 @@ public class UI extends javax.swing.JFrame {
             renderButtonsHit(gHit);
         }
 
+
+        if (bDebug) {
+            g.drawImage(hitBox, 0, 0, null);
+        }
 
         //resized repainting off
         bResized = false;
@@ -522,14 +537,7 @@ public class UI extends javax.swing.JFrame {
         //make the button
         UIButton b = new UIButton(x, y, w, h, txt, cBg, cTxt, e);
 
-        //add button to ref
-        buttons.add(b);
-        buttonsColors.add(new Color(nextButtonColor));
-
-        //add 2
-        nextButtonColor += 2;
-        
-        return b;
+        return addButton(b);
     }
 
     public void renderButtons(Graphics g) {
@@ -592,20 +600,55 @@ public class UI extends javax.swing.JFrame {
         g.setColor(Color.red);
         writeText(g, "Map::x:" + x + " y:" + y, 0);
 
-        
+
         writeText(g,
                 "Click::x:" + (int) touch.getX()
                 + " y:" + (int) touch.getY(), 1);
-        
+
         g.setColor(Color.MAGENTA);
-        if(currentTool!=null){
-        writeText(g,
-                "Tool::"+currentTool.toString(), 2);
-        
-        }else{
+        if (currentTool != null) {
             writeText(g,
-                "No Tool", 2);
+                    "Tool::" + currentTool.toString(), 2);
+
+        } else {
+            writeText(g,
+                    "No Tool", 2);
         }
 
+    }
+
+    public void setBuildmenu(BuildMenu bldmenu) {
+        this.buildmenu = bldmenu;
+    }
+
+    public BuildMenu getBuildmenu() {
+        return buildmenu;
+    }
+
+    public boolean getBuildmenuVisible() {
+        return buildmenu.isVisible();
+    }
+
+    public void setBuildmenuVisible(boolean b) {
+        buildmenu.setVisible(b);
+    }
+
+    ArrayList<UIButton> getButtons() {
+        return buttons;
+    }
+
+    public synchronized void forceRepaint() {
+        bResized = true;
+    }
+
+    public UIButton addButton(UIButton b) {
+        //add button to ref
+        buttons.add(b);
+        buttonsColors.add(new Color(nextButtonColor));
+
+        //add 2
+        nextButtonColor += 2;
+
+        return b;
     }
 }
