@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package UITools;
+package colonygame.uitool;
 
 import colonygame.Main;
-import colonygame.UIButton;
+import colonygame.ui.UIButton;
 import colonygame.resources.BuildingType;
 import java.awt.Cursor;
 

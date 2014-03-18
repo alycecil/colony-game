@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package colonygame;
+package colonygame.ui;
 
 import colonygame.resources.Sprite;
 import java.awt.Color;

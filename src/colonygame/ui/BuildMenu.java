@@ -2,10 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package colonygame;
+package colonygame.ui;
 
-import UITools.Build;
-import UITools.Bulldoze;
+import colonygame.Main;
+import colonygame.ui.UIButton;
+import colonygame.ui.UIButtonSprite;
+import colonygame.uitool.Build;
 import colonygame.resources.BuildingType;
 import colonygame.resources.Sprite;
 import java.awt.Color;
@@ -93,7 +95,13 @@ public class BuildMenu {
 
 
 
+                /*
+                 * add buttons using ui manager to also add hitbox color
+                 */
                 Main.ui.addButton(btn);
+                
+                //add to my references so i can delete it.s
+                myButtons.add(btn);
 
 
                 //change color

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package UITools;
+package colonygame.uitool;
 
 import java.awt.Cursor;
 

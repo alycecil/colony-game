@@ -4,7 +4,7 @@
  */
 package colonygame.resources;
 
-import colonygame.Building;
+import colonygame.game.Building;
 import colonygame.Main;
 import java.awt.Color;
 import java.awt.Image;

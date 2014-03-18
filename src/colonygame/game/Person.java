@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package colonygame;
+package colonygame.game;
 
+import colonygame.Main;
 import colonygame.resources.BuildingType;
 
 /**

@@ -59,6 +59,7 @@ public class BuildingType {
     Sprite sprite;
     int spriteX, spriteY;
     int minZ, maxZ;
+    int deltaX, deltaY;
     public static final short TYPE_TUBE = 0;
     public static final short TYPE_HOUSE = 1;
     public static final short TYPE_FACTORY = 2;
@@ -86,7 +87,7 @@ public class BuildingType {
 
     public BuildingType(String id, String decription, int power, int capacity,
             int buildtime, short type, Sprite sprite, int spriteX, int spriteY,
-            int minZ, int maxZ) {
+            int spriteDX, int spriteDY, int minZ, int maxZ) {
         this.id = id;
         this.decription = decription;
         this.power = power;
@@ -98,6 +99,8 @@ public class BuildingType {
         this.spriteY = spriteY;
         this.minZ = minZ;
         this.maxZ = maxZ;
+        this.deltaX = spriteDX;
+        this.deltaY = spriteDY;
     }
 
     public static boolean readXML(File pfSource) {
@@ -146,7 +149,7 @@ public class BuildingType {
                 }
 
                 Logger.getLogger(BuildingType.class.getName()).log(
-                        Level.INFO, "Added {0} "+ROOT_NODE+" to resources.", added);
+                        Level.INFO, "Added {0} " + ROOT_NODE + " to resources.", added);
             }
 
 
@@ -175,6 +178,7 @@ public class BuildingType {
         String tempDecription = null;
         String[] tempType;
         int tPower, tCapacity, tSpriteX, tSpriteY, tBuild, tMin, tMax;
+        int tSpriteDX,tSpriteDY;
         short tType;
         Sprite tSprite = null;
 
@@ -203,6 +207,8 @@ public class BuildingType {
         tBuild = 0;
         tMin = 0;
         tMax = 0;
+        tSpriteDX = 0;
+        tSpriteDY = 0;
 
 
 
@@ -261,6 +267,18 @@ public class BuildingType {
                 tSpriteY = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
                 bSpriteY = true;
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("celldx")) {
+
+                tSpriteDX = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+                //bSpriteDX = true;
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("celldy")) {
+
+                tSpriteDY = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+                //bSpriteDY = true;
 
             } else if (tempChild.getNodeName().equalsIgnoreCase("buildtime")) {
 
@@ -354,7 +372,8 @@ public class BuildingType {
             //add to resources
             Main.resources.addBuilding(tempId,
                     new BuildingType(tempId, tempDecription, tPower, tCapacity,
-                    tBuild, tType, tSprite, tSpriteX, tSpriteY, tMin, tMax));
+                    tBuild, tType, tSprite, tSpriteX, tSpriteY,tSpriteDX,
+                    tSpriteDY, tMin, tMax));
 
             return true;
 
@@ -370,8 +389,8 @@ public class BuildingType {
         return false;
     }
 
-    boolean isType(short check) {
-        return (check&type)!=0;
+    public boolean isType(short check) {
+        return (check & type) != 0;
     }
 
     public Sprite getSprite() {
@@ -393,7 +412,30 @@ public class BuildingType {
     public String getDecription() {
         return decription;
     }
-    
+
+    public int getDeltaX() {
+        return deltaX;
+    }
+
+    public int getDeltaY() {
+        return deltaY;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getBuildtime() {
+        return buildtime;
+    }
+
+    public int getMinZ() {
+        return minZ;
+    }
+
+    public int getMaxZ() {
+        return maxZ;
+    }
     
     
 }

@@ -1,5 +1,7 @@
 package colonygame;
 
+import colonygame.ui.UI;
+import colonygame.ui.UIManager;
 import colonygame.resources.Resources;
 import java.io.IOException;
 import java.util.logging.Level;

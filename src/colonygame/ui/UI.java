@@ -2,15 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package colonygame;
+package colonygame.ui;
 
 import colonygame.resources.Sprite;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 import SASLib.Geom.Vector;
-import UITools.Bulldoze;
-import UITools.Tool;
+import colonygame.game.Building;
+import colonygame.Main;
+import colonygame.uitool.Bulldoze;
+import colonygame.uitool.Tool;
+import colonygame.resources.BuildingType;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -46,7 +49,7 @@ public class UI extends javax.swing.JFrame {
     int nextButtonColor = BUTTON_COLOR;
     Tool currentTool;
     BuildMenu buildmenu;
-    boolean bDebug = true;
+    boolean bDebug = false;
 
     /**
      * Creates new form UI
@@ -119,7 +122,6 @@ public class UI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(620, 480));
-        setPreferredSize(new java.awt.Dimension(620, 480));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
@@ -333,6 +335,9 @@ public class UI extends javax.swing.JFrame {
 
         //Sprite
         Sprite tile = Main.game.getMap().getWorld().getTile();
+        Sprite temp = null;
+        BuildingType tType = null;
+
 
         //calc size to pull
         //    |margin y
@@ -350,6 +355,9 @@ public class UI extends javax.swing.JFrame {
         //get map subset to render
         char[][] mapBlock = Main.game.getMap().getBlock(x, y, z,
                 RENDER_WIDTH, RENDER_HEIGHT);
+
+        Building[][] buildingBlock = Main.game.getMap().getBlockBuildings(
+                x, y, z, RENDER_WIDTH, RENDER_HEIGHT);
 
 
 
@@ -403,6 +411,7 @@ public class UI extends javax.swing.JFrame {
         //http://stackoverflow.com/questions/892811/drawing-isometric-game-worlds
         int cellx, celly;
 
+        //draw tiles
         for (int i = 0; i < RENDER_WIDTH; i++) {
 
             for (int j = RENDER_HEIGHT - 1; j >= 0; j--) {
@@ -457,9 +466,40 @@ public class UI extends javax.swing.JFrame {
         }
 
 
+        //paint grid lines
+        g.drawImage(gridLines, 0, 0, null);
 
 
+        //draw buildings
+        for (int i = 0; i < RENDER_WIDTH; i++) {
 
+            for (int j = RENDER_HEIGHT - 1; j >= 0; j--) {
+                // Changed loop condition here.
+                cellx = (j * tile.getCellWidth() / 2)
+                        + (i * tile.getCellWidth() / 2)
+                        + MARGIN_X;
+                celly = (i * tile.getCellHeight() / 2)
+                        - (j * tile.getCellHeight() / 2)
+                        + jpCanvas.getHeight() / 2
+                        + MARGIN_Y;
+
+
+                if (buildingBlock[i][j] != null) {
+                    //get type
+                    tType = buildingBlock[i][j].getType();
+
+                    //get cell
+                    temp = tType.getSprite();
+
+                    //draw that spr
+                    g.drawImage(
+                            temp.getCell(tType.getSpriteX(), tType.getSpriteY()),
+                            cellx + tType.getDeltaX(),
+                            celly + tType.getDeltaY(),
+                            null);
+                }
+            }
+        }
 
         drawInfoBox(g);
 
@@ -586,8 +626,7 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void drawInfoBox(Graphics g) {
-        //paint cell lines
-        g.drawImage(gridLines, 0, 0, null);
+        
 
         //DRAW TEXT BOX
         g.setColor(Color.DARK_GRAY);
@@ -633,7 +672,7 @@ public class UI extends javax.swing.JFrame {
         buildmenu.setVisible(b);
     }
 
-    ArrayList<UIButton> getButtons() {
+    public ArrayList<UIButton> getButtons() {
         return buttons;
     }
 
@@ -651,4 +690,7 @@ public class UI extends javax.swing.JFrame {
 
         return b;
     }
+    
+    
+    
 }
