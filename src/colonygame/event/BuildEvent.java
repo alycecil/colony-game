@@ -35,12 +35,7 @@ public class BuildEvent extends GameEvent {
     @Override
     public boolean doEvent() {
         try {
-            if (z == 0) {
-                Main.game.getMap().setTile(x, y, z, WorldMap.DOZED);
-            } else {
-                Main.game.getMap().setTile(x, y, z, WorldMap.UNDERGROUND_DOZED);
-            }
-            Main.game.getMap().setBuilding(x, y, z, new Building(type, 0));
+            Main.game.finishBuilding(x,y,z,new Building(type, 0));
 
             return true;
         } catch (IndexOutOfBoundsException e) {
@@ -48,8 +43,5 @@ public class BuildEvent extends GameEvent {
         }
     }
 
-    @Override
-    public int compareTo(GameEvent o) {
-        return getTime() - o.getTime();
-    }
+    
 }

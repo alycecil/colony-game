@@ -18,7 +18,7 @@ import org.xml.sax.SAXException;
  *
  * @author WilCecil
  */
-public class BuildingType {
+public class BuildingType implements Comparable<BuildingType>{
 
     protected static final String ROOT_NODE = "buildings";
     protected static final String CHILD_NODE = "building";
@@ -501,5 +501,10 @@ public class BuildingType {
 
     public int getSupplyPower() {
         return supplyPower;
+    }
+
+    @Override
+    public int compareTo(BuildingType o) {
+        return getId().compareTo(o.getId());
     }
 }

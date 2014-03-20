@@ -18,6 +18,8 @@ public class Main {
     public static UI ui;
     public static Resources resources;
     public static Game game;
+    public static GameManager manager;
+    
 
     /**
      * @param args the command line arguments
@@ -55,7 +57,9 @@ public class Main {
             /*
              * Start Game Loop
              */
-            new Timer(100, Main.game).start();
+            manager = new GameManager();
+            manager.start();
+            
 
             
             

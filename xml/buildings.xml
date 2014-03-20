@@ -87,6 +87,56 @@ Special Types
         <supply_power>100</supply_power>
     </building>
     <building>
+        <id>Housing Module</id>
+        <description>Simple, unshielded housing module. Little more than 
+            tubing sections stacked</description>
+        <type>housing</type>
+        <power>10</power>
+        <sprite>tile1</sprite>
+        <cellx>5</cellx>
+        <celly>3</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
+        <capacity>1</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>15</buildtime>
+        <tech>1</tech>
+        <supply_housing>50</supply_housing>
+    </building>
+    <building>
+        <id>Command Center</id>
+        <description>Established the colony</description>
+        <type>political</type>
+        <power>10</power>
+        <sprite>tile1</sprite>
+        <cellx>4</cellx>
+        <celly>2</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
+        <capacity>3</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>15</buildtime>
+        <tech>1</tech>
+    </building>
+    <building>
+        <id>Control Tower</id>
+        <description>Obserrvation Post</description>
+        <type>political</type>
+        <power>10</power>
+        <sprite>tile3</sprite>
+        <cellx>3</cellx>
+        <celly>1</celly>
+        <celldx>0</celldx>
+        <celldy>-51</celldy>
+        <capacity>3</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>15</buildtime>
+        <tech>1</tech>
+    </building>
+    <building>
         <id>Lander</id>
         <description>The Colony's first module, brought from home</description>
         <type>lander,house,storage,power</type>

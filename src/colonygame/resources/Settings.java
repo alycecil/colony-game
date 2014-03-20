@@ -20,7 +20,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- *
  * @author WilCecil
  */
 public class Settings {
@@ -28,6 +27,80 @@ public class Settings {
     protected static final String ROOT_NODE = "initial";
     protected static final String CHILD_NODE_PEOPLE = "people";
     protected static final String CHILD_NODE_LANDERS = "landers";
+    protected static final String CHILD_NODE_RATES = "rates";
+    /**
+     * <p>
+     * Mortality Calculator for sample size = 50000
+     * <br>Added Medical false
+     * <p>
+     * Average Age 4896.61444
+     * <p>
+     * Death By Age Group Block<br>
+     * Infant = 8848<br>
+     * Block Child = 369<br>
+     * Block Teen = 235<br>
+     * Block Adult = 1764<br>
+     * Block Elder = 38784<br>
+     * Block Ancient = 0
+     * <p>
+     *
+     * Mortality Calculator for sample size = 50000<br>
+     * Added Medical true
+     * <p>
+     * Average Age 5551.92698
+     * <p>
+     * Death By Age Group Block<br>
+     * Infant = 4657<br>
+     * Block Child = 194 <br>
+     * Block Teen = 118<br>
+     * Block Adult = 976<br>
+     * Block Elder = 44055<br>
+     * Block Ancient = 0
+     *
+     * <p>
+     * Added Sick true
+     * <p>
+     * Average Age 2542.5799
+     *
+     */
+    public static final double DEFAULT_MORTALITY_INFANT = 1.0 / 1000;
+    public static final double DEFAULT_MORTALITY_CHILD = 1.0 / 100000;
+    public static final double DEFAULT_MORTALITY_TEEN = 1.0 / 100000;
+    public static final double DEFAULT_MORTALITY_ADULT = 1.0 / 100000;
+    public static final double DEFAULT_MORTALITY_ELDER = 1.0 / 100;
+    public static final double DEFAULT_MORTALITY_PREGNANT = 1.0 / 100;
+    public static final double DEFAULT_MORTALITY_SICK_MEDICAL = 1.0 / 100000;
+    public static final double DEFAULT_MORTALITY_PREGNANT_MEDICAL = 1.0 / 10000;
+    public static final double DEFAULT_MEDICAL_MODIFIER = 1.0 / 2;
+    public static final double DEFAULT_SICK_MODIFIER = 4.0;
+    public static final double DEFAULT_HUNGRY_MODIFIER = 10.0;
+    public static final double DEFAULT_STARVING_MODIFIER = 100.0;
+    /*
+     * Female 15-19 yr	2000-2005	 	Births per 1,000 women	43.7	 
+     * Female 20-24 yr	2000-2005	 	Births per 1,000 women	104.0	 
+     * Female 25-29 yr	2000-2005	 	Births per 1,000 women	114.5	 
+     * Female 30-34 yr	2000-2005	 	Births per 1,000 women	93.5	 
+     * Female 35-39 yr	2000-2005	 	Births per 1,000 women	42.8	 
+     * Female 40-44 yr	2000-2005	 	Births per 1,000 women	8.5	 
+     * Female 45-49 yr	2000-2005	 	Births per 1,000 women	0.5	 
+     */
+    
+    public static final double DEFAULT_PREGNANCY_EVENT_TEEN = 42.7/1000 / (1900-1500);
+    public static final double DEFAULT_PREGNANCY_EVENT_ADULT = 2040.0/1000 / (6500-1900);
+    public static final double DEFAULT_PREGNANCY_MARRIAGE_MOD = 8.0;
+    public static final double DEFAULT_PREGNANCY_FERTILE_MOD = 10;
+    public static final double DEFAULT_CHANCE_FERTILE = 1.0/1000;
+    
+    public static final double DEFAULT_MARRIAGE_CHANCE = .5 / (3500-1900);
+    
+    
+    
+    /**
+     * 3/4ths of a year
+     */
+    public static final int DEFAULT_PREGNANCY_LENGTH = 75;
+    
+    
     int landers;
     ArrayList<Person> people;
     public static final int DEFAULT_LANDERS = 1;
@@ -182,17 +255,17 @@ public class Settings {
                             + ", {0}", tempChild.getNodeName());
                 }
             }
-            
-            
+
+
             //make the people
-            for(int i = 0; i < tQuantity; i++){
-                tPerson = new Person(Person.getState(tAge), 
-                        -tAge, tGender, tEducated, null, 
+            for (int i = 0; i < tQuantity; i++) {
+                tPerson = new Person(Person.getState(tAge),
+                        -tAge, tGender, tEducated, null,
                         null, null);
-                
+
                 people.add(tPerson);
             }
-            
+
             return true;
 
         }

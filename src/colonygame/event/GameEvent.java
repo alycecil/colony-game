@@ -22,6 +22,18 @@ public abstract class GameEvent implements Comparable<GameEvent>{
      * @return boolean, true if the event processed successfully
      */
     public abstract boolean doEvent();
+
+    
+    
+    
+    @Override
+    /**
+     * compares by time for event queue
+     */
+    public int compareTo(GameEvent o) {
+        return getTime() - o.getTime();
+    }
+    
     
     
 }

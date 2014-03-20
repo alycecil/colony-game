@@ -122,6 +122,18 @@ and open the template in the editor.
         <width>6</width>
         <height>5</height>
     </sprite>
+    <sprite>
+        <id>tile3</id>
+        <file>BITMAPS\TILE3.bmp</file>
+        <x>113</x>
+        <y>100</y>
+        <xOff>9</xOff>
+        <yOff>14</yOff>
+        <xDelta>7</xDelta>
+        <yDelta>20</yDelta>
+        <width>5</width>
+        <height>4</height>
+    </sprite>
   
 </sprites>
     

@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 import SASLib.Geom.Vector;
+import colonygame.GameManager;
 import colonygame.game.Building;
 import colonygame.Main;
 import colonygame.uitool.Bulldoze;
@@ -30,14 +31,31 @@ import java.util.Iterator;
 public class UI extends javax.swing.JFrame {
 
     int x, y, z;
-    public static int RENDER_WIDTH = 4;
-    public static int RENDER_HEIGHT = 4;
-    public static int MARGIN_X = 40;
-    public static int MARGIN_Y = 40;
-    public static int TEXT_AREA_WIDTH = 180;
-    public static int TEXT_AREA_HEIGHT = 120;
-    public static int MAP_COLOR = 0x00F00000;
-    public static int BUTTON_COLOR = 0x00FF0000;
+    public int RENDER_WIDTH = 4;
+    public int RENDER_HEIGHT = 4;
+    public static final int MARGIN_X = 10;
+    public static final int MARGIN_Y = 35;
+    public static final int TEXT_AREA_WIDTH = 180;
+    public static final int TEXT_AREA_HEIGHT = 120;
+    public static final int MAP_COLOR = 0x00F00000;
+    public static final int MAP_COLOR_SELECTED = 0x99ff69b4;
+    public static final int BUTTON_COLOR = 0x00FF0000;
+    public static final int BUILDMENU_WIDTH = 120;
+    public static final int BUILDMENU_HEIGHT = 30;
+    public static final int BUTTON_COLOR_TEXT = 0x60c52f;
+    public static final int BUTTON_COLOR_BACKGROUND = 0x593104;
+    public static final int BACKGROUND_COLOR = 0x00000000;
+    public static final int GRIDLINE_COLOR = 0x00d3eec6;
+    public static final int POPULATION_COLOR = 0x00ffffff;
+    public static final int FOOD_COLOR = 0x429557;
+    public static final int POWER_COLOR = 0xfff80b;
+    public static final int ORE_COLOR = 0x593104;
+    public static final int INFO_BOX_COLOR = 0x6b6b6b;
+    public static final int RESOURCE_BOX_COLOR = INFO_BOX_COLOR;
+    public static final int BUTTON_HEIGHT = 25;
+    public static final int BUTTON_WIDTH_1 = 80;
+    public static final int BUTTON_WIDTH_2 = 50;
+    public static final int PADDING_DEFAULT = 2;
     private Vector touch = null;
     int[][] hitBoxRef;
     BufferedImage hitBox;
@@ -50,6 +68,7 @@ public class UI extends javax.swing.JFrame {
     Tool currentTool;
     BuildMenu buildmenu;
     boolean bDebug = false;
+    String desc;
 
     // <editor-fold defaultstate="collapsed" desc=" Constructor ">   
     /**
@@ -75,7 +94,13 @@ public class UI extends javax.swing.JFrame {
 
 
         //BUILD MENU
-        buildmenu = new BuildMenu(2, 55, 100, 100);
+        buildmenu = new BuildMenu(
+                PADDING_DEFAULT,
+                PADDING_DEFAULT * 3 + 2 * BUTTON_HEIGHT,
+                BUILDMENU_WIDTH, BUILDMENU_HEIGHT);
+
+
+        //speed controls
 
 
         //create buttons
@@ -87,7 +112,10 @@ public class UI extends javax.swing.JFrame {
 
         //make bulldoze button
         final UIButton bull;
-        bull = addButton(2, 2, 80, 25, "Bulldoze", Color.orange.darker(), Color.green,
+        bull = addButton(PADDING_DEFAULT, PADDING_DEFAULT,
+                BUTTON_WIDTH_1, BUTTON_HEIGHT, "Bulldoze",
+                new Color(BUTTON_COLOR_BACKGROUND),
+                new Color(BUTTON_COLOR_TEXT),
                 null);
 
         bull.setActionListener(new ActionListener() {
@@ -99,17 +127,71 @@ public class UI extends javax.swing.JFrame {
 
         //add build button
         final UIButton build;
-        build = addButton(2, 30, 80, 25, "Build", Color.orange.darker(), Color.green,
+        build = addButton(PADDING_DEFAULT, PADDING_DEFAULT * 2 + BUTTON_HEIGHT,
+                BUTTON_WIDTH_1, BUTTON_HEIGHT, "Build",
+                
+                new Color(BUTTON_COLOR_BACKGROUND),
+                new Color(BUTTON_COLOR_TEXT),
                 new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.ui.setCurrentTool(null);
                 Main.ui.setBuildmenuVisible(!Main.ui.getBuildmenuVisible());
                 Main.ui.getBuildmenu().update();
             }
         });
+
+        final UIButton pause;
+        pause = addButton(PADDING_DEFAULT * 2 + BUTTON_WIDTH_1, PADDING_DEFAULT,
+                BUTTON_WIDTH_2, BUTTON_HEIGHT, "Pause",
+                new Color(BUTTON_COLOR_BACKGROUND),
+                new Color(BUTTON_COLOR_TEXT),
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.manager.stop();
+            }
+        });
+
+        final UIButton norm;
+        norm = addButton(PADDING_DEFAULT * 3 + BUTTON_WIDTH_1 + BUTTON_WIDTH_2, PADDING_DEFAULT,
+                BUTTON_WIDTH_2, BUTTON_HEIGHT, "Normal",
+                new Color(BUTTON_COLOR_BACKGROUND),
+                new Color(BUTTON_COLOR_TEXT),
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.manager.setDelay(GameManager.normal);
+                Main.manager.start();
+            }
+        });
+
+        final UIButton x2;
+        x2 = addButton(PADDING_DEFAULT * 4 + BUTTON_WIDTH_1 + BUTTON_WIDTH_2 * 2, PADDING_DEFAULT,
+                BUTTON_WIDTH_2, BUTTON_HEIGHT, "Fast",
+                new Color(BUTTON_COLOR_BACKGROUND),
+                new Color(BUTTON_COLOR_TEXT),
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.manager.setDelay(GameManager.fast);
+                Main.manager.start();
+            }
+        });
+
+        final UIButton x3;
+        x3 = addButton(PADDING_DEFAULT * 5 + BUTTON_WIDTH_1 + BUTTON_WIDTH_2 * 3, PADDING_DEFAULT,
+                BUTTON_WIDTH_2, BUTTON_HEIGHT, "Fastest",
+                new Color(BUTTON_COLOR_BACKGROUND),
+                new Color(BUTTON_COLOR_TEXT),
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.manager.setDelay(GameManager.fastest);
+                Main.manager.start();
+            }
+        });
     }
-     // </editor-fold>   
+    // </editor-fold>   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -185,8 +267,15 @@ public class UI extends javax.swing.JFrame {
 
     // <editor-fold defaultstate="collapsed" desc=" Event Listeners ">   
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if(evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_F12){
+        if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_F12) {
             Main.game.run();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_PAUSE) {
+            Main.manager.toggle();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            
+            new ColonistTracker().setVisible(true);
         }
         if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
 
@@ -224,6 +313,9 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyPressed
 
     private void jCanvasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCanvasMouseClicked
+        //clean up last click
+        desc = null;
+
         //is left or right click?
 
         if (evt.getButton() == MouseEvent.BUTTON1) {
@@ -280,6 +372,29 @@ public class UI extends javax.swing.JFrame {
                 currentTool.unselect();
                 currentTool = null;
             }
+
+
+            //if we unselected on a tile
+
+            //\/\/\/\/\/\/\/\/\/\/\/\/\//
+            //   get clicked tile      //
+            //\/\/\/\/\/\/\/\/\/\/\/\/\//
+            int c = hitBox.getRGB(evt.getX(), evt.getY()) & 0x00ffffff;
+
+            for (int i = 0; i < hitBoxRef.length; i++) {
+                for (int j = 0; j < hitBoxRef[0].length; j++) {
+                    if (c == hitBoxRef[i][j]) {
+                        touch = new Vector(i + x, j + y);
+
+                        //add 
+                        desc = Main.game.getMap().toString(
+                                (int) touch.getX(),
+                                (int) touch.getY(),
+                                z);
+                    }
+                }
+            }
+
         }
     }//GEN-LAST:event_jCanvasMouseClicked
 
@@ -291,9 +406,8 @@ public class UI extends javax.swing.JFrame {
 
         bResized = true;
     }//GEN-LAST:event_formComponentResized
- // </editor-fold>   
-    
-    
+    // </editor-fold>   
+
     //<editor-fold defaultstate="collapsed" desc=" Main ">
     /**
      * @param args the command line arguments
@@ -331,15 +445,10 @@ public class UI extends javax.swing.JFrame {
         });
     }
     //</editor-fold>
-    
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jpCanvas;
     // End of variables declaration//GEN-END:variables
 
-
-    
     //<editor-fold defaultstate="collapsed" desc=" Main Render Block ">
     /**
      * get the current map cell and render it to the appropriate frame
@@ -393,7 +502,8 @@ public class UI extends javax.swing.JFrame {
         //gGrid for grid lines over tiles, update on resize
         Graphics gGrid = null;
 
-        g.setColor(Color.BLACK);
+        //
+        g.setColor(new Color(BACKGROUND_COLOR));
         g.fillRect(0, 0,
                 jpCanvas.getWidth(),
                 jpCanvas.getHeight());
@@ -416,8 +526,8 @@ public class UI extends javax.swing.JFrame {
 
 
         //clear box
-        g.setColor(Color.BLACK);
-        g.drawRect(0, 0, jpCanvas.getWidth(), jpCanvas.getHeight());
+        //g.setColor(Color.BLACK);
+        //g.drawRect(0, 0, jpCanvas.getWidth(), jpCanvas.getHeight());
 
 
         //the diamond approach
@@ -463,7 +573,7 @@ public class UI extends javax.swing.JFrame {
                         tile.getCellHeight() + celly};
 
                     //gridlines!
-                    gGrid.setColor(Color.white);
+                    gGrid.setColor(new Color(GRIDLINE_COLOR));
                     gGrid.drawPolygon(xPoints, yPoints, 4);
 
 
@@ -516,6 +626,8 @@ public class UI extends javax.swing.JFrame {
 
         drawInfoBox(g);
 
+        drawResourceBox(g);
+
         //draw map
         drawMap(g, gHit);
 
@@ -541,13 +653,15 @@ public class UI extends javax.swing.JFrame {
 
     }
     //</editor-fold>
-    
-    
 
     //<editor-fold defaultstate="collapsed" desc=" Utility Render Functions ">
-    private void writeText(Graphics g, String string, int i) {
+    private void writeText(Graphics g, String string, int i, boolean left) {
+        int x = 0;
+        if (left) {
+            x = jpCanvas.getWidth() - TEXT_AREA_WIDTH;
+        }
         g.drawString(string,
-                jpCanvas.getWidth() - TEXT_AREA_WIDTH + 5,
+                x + 5,
                 jpCanvas.getHeight() - TEXT_AREA_HEIGHT + 14 * (1 + i));
 
     }
@@ -567,11 +681,11 @@ public class UI extends javax.swing.JFrame {
 
         g.drawImage(img, jpCanvas.getWidth() - img.getWidth(null), 0, null);
 
-        g.setColor(Color.magenta);
-        g.fillRect(jpCanvas.getWidth() - img.getWidth(null) + x, y, RENDER_WIDTH, RENDER_HEIGHT);
+        g.setColor(new Color(MAP_COLOR_SELECTED));
+        g.drawRect(jpCanvas.getWidth() - img.getWidth(null) + x, y, RENDER_WIDTH, RENDER_HEIGHT);
 
     }
-    
+
     public void renderButtons(Graphics g) {
         Iterator<UIButton> iterButton = buttons.iterator();
 
@@ -608,12 +722,35 @@ public class UI extends javax.swing.JFrame {
         }
 
     }
-    
+
+    private void drawResourceBox(Graphics g) {
+        //DRAW TEXT BOX
+        g.setColor(new Color(RESOURCE_BOX_COLOR));
+        g.fillRect(0,
+                jpCanvas.getHeight() - TEXT_AREA_HEIGHT,
+                TEXT_AREA_WIDTH, TEXT_AREA_HEIGHT);
+
+        g.setColor(new Color(POPULATION_COLOR));
+        writeText(g, "Population::" + Main.game.getPopulation() + "/"
+                + Main.game.getHousingTotal(), 0, false);
+
+        g.setColor(new Color(FOOD_COLOR));
+        writeText(g, "Food::" + Main.game.getAgriculture() + "/"
+                + Main.game.getAgrigultureStored(), 1, false);
+
+        g.setColor(new Color(POWER_COLOR));
+        writeText(g, "Power::" + Main.game.getPower() + "/"
+                + Main.game.getPowerTotal(), 2, false);
+
+        g.setColor(new Color(ORE_COLOR));
+        writeText(g, "Ore::" + Main.game.getOre(), 3, false);
+    }
+
     private void drawInfoBox(Graphics g) {
-        
+
 
         //DRAW TEXT BOX
-        g.setColor(Color.DARK_GRAY);
+        g.setColor(new Color(INFO_BOX_COLOR));
         g.fillRect(jpCanvas.getWidth() - TEXT_AREA_WIDTH,
                 jpCanvas.getHeight() - TEXT_AREA_HEIGHT,
                 TEXT_AREA_WIDTH, TEXT_AREA_HEIGHT);
@@ -621,35 +758,40 @@ public class UI extends javax.swing.JFrame {
         //write in it
 
         g.setColor(Color.white);
-        writeText(g, "Tick::" + Main.game.getTimeStamp(), 0);
-        
+        writeText(g, "Tick::" + Main.game.getTimeStamp(), 0, true);
+
         g.setColor(Color.red);
-        writeText(g, "Map::x:" + x + " y:" + y, 1);
+        writeText(g, "Map::x:" + x + " y:" + y, 1, true);
 
 
         writeText(g,
                 "Click::x:" + (int) touch.getX()
-                + " y:" + (int) touch.getY(), 2);
+                + " y:" + (int) touch.getY(), 2, true);
 
         g.setColor(Color.MAGENTA);
         if (currentTool != null) {
             writeText(g,
-                    "Tool::" + currentTool.toString(), 3);
+                    "Tool::" + currentTool.toString(), 3, true);
 
         } else {
             writeText(g,
-                    "No Tool", 3);
+                    "No Tool", 3, true);
         }
-        
-        
-        g.setColor(Color.red);
-        writeText(g,"Population::"+Main.game.getPopulation(),4);
+
+        if (desc != null) {
+            int i = 4;
+            String[] s = desc.split("\n");
+            for (int j = 0; j < s.length; j++) {
+                g.setColor(Color.white);
+                writeText(g, s[j], i + j, true);
+            }
+        }
+
+
 
     }
-    
-    //</editor-fold>
 
-    
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc=" Utility Functions ">
     void error(InterruptedException e) {
@@ -657,6 +799,7 @@ public class UI extends javax.swing.JFrame {
                 UI.class.getName()).log(
                 java.util.logging.Level.SEVERE, null, e);
     }
+
     /**
      *
      * @param x
@@ -676,8 +819,6 @@ public class UI extends javax.swing.JFrame {
         return addButton(b);
     }
 
-    
-
     public void setCurrentTool(Tool currentTool) {
         this.currentTool = currentTool;
     }
@@ -685,8 +826,6 @@ public class UI extends javax.swing.JFrame {
     public Tool getCurrentTool() {
         return currentTool;
     }
-
-    
 
     public void setBuildmenu(BuildMenu bldmenu) {
         this.buildmenu = bldmenu;
@@ -708,7 +847,6 @@ public class UI extends javax.swing.JFrame {
         return buttons;
     }
 
-    
     public synchronized void forceRepaint() {
         bResized = true;
     }
@@ -723,8 +861,5 @@ public class UI extends javax.swing.JFrame {
 
         return b;
     }
-    
     //</editor-fold>
-    
-    
 }

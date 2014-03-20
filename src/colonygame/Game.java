@@ -9,11 +9,14 @@ import colonygame.event.BuildEvent;
 import colonygame.event.GameEvent;
 import colonygame.game.Person;
 import colonygame.resources.BuildingType;
+import colonygame.resources.Settings;
+
 import colonygame.resources.WorldMap;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collection;
+
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -44,6 +47,7 @@ public class Game implements Runnable, ActionListener {
     ArrayList<BuildingType> buildables;
     PriorityQueue<GameEvent> events;
     ArrayList<Short> unlockedTech;
+    ArrayList<Building> bld;
     /**
      * we are detailed tracking individuals as for whatever reason I want to do
      * it that way, if you hate it or its slow you can remove the person class
@@ -51,6 +55,8 @@ public class Game implements Runnable, ActionListener {
      */
     ArrayList<Person> people;
     ArrayList<Person> dead;
+    ArrayList<Person> maleMinglers;
+    ArrayList<Person> femaleMinglers;
 
     public Game(long seed) {
         timeStamp = 0;
@@ -83,6 +89,11 @@ public class Game implements Runnable, ActionListener {
 
         //init people
         people = new ArrayList<>();
+        dead = new ArrayList<>();
+
+
+        //init blding
+        bld = new ArrayList<>();
 
     }
 
@@ -100,14 +111,14 @@ public class Game implements Runnable, ActionListener {
         processEvents();
 
         //
-        //Update Resources
-        //
-        updateResources();
-
-        //
         // Update Buildings
         //
         updateBuildings();
+
+        //
+        //Update Resources
+        //
+        updateResources();
 
         //
         //Update Population
@@ -117,6 +128,67 @@ public class Game implements Runnable, ActionListener {
     }
 
     private void simulatePopulation() {
+
+        //iterate through our people
+        Iterator<Person> pIter = people.iterator();
+        Person focus;
+
+        maleMinglers = new ArrayList<>();
+        femaleMinglers = new ArrayList<>();
+
+        while (pIter.hasNext()) {
+            focus = pIter.next();
+
+            //if we are homeless, or our house is too full
+            if (focus.getHome() == null
+                    || focus.getHome().getCurrent() > focus.getHome().getType().getCapacity()) {
+                //move focus to a home
+                move(focus);
+            }
+
+            //get singles ready to mingle
+            if (!focus.isState(Person.STATE_MARRIED)
+                    && (focus.isState(Person.STATE_TEEN)
+                    || focus.isState(Person.STATE_ADULT))) {
+
+                if (focus.isMale()) {
+                    //add to male minglers
+                    maleMinglers.add(focus);
+                } else {
+                    //add to female minglers
+                    femaleMinglers.add(focus);
+                }
+
+
+            }
+        }
+
+        //roll for a marriage
+        if (!maleMinglers.isEmpty()
+                && !femaleMinglers.isEmpty()
+                && rnd.nextDouble() < Settings.DEFAULT_MARRIAGE_CHANCE*femaleMinglers.size()) {
+            
+            Person m = maleMinglers.remove(rnd.nextInt(maleMinglers.size()));
+            Person f = femaleMinglers.remove(rnd.nextInt(femaleMinglers.size()));
+            
+            f.addState(Person.STATE_MARRIED);
+            m.addState(Person.STATE_MARRIED);
+            
+            m.setMate(f);
+            f.setMate(m);
+        }
+
+        //simulation pass
+        pIter = people.iterator();
+        while (pIter.hasNext()) {
+
+            focus = pIter.next();
+
+            //simulate
+            focus.simulate();
+
+        }
+
 
         // move the dead
         Person p;
@@ -134,17 +206,22 @@ public class Game implements Runnable, ActionListener {
     }
 
     private void updateResources() {
-        //Calculate Power
-        Collection<BuildingType> list;
-        Iterator<BuildingType> iter;
+        //Calculate Resources
+        Iterator<Building> iter;
         BuildingType temp;
 
-        list = Main.resources.getBuildings();
+        //reset
+        powerTotal = 0;
+        power = 0;
+        housingTotal = 0;
+        agriculture = 0;
+        workerNeed = 0;
 
-        iter = list.iterator();
+
+        iter = bld.iterator();
 
         while (iter.hasNext()) {
-            temp = iter.next();
+            temp = iter.next().getType();
 
             //
             // update power //
@@ -170,10 +247,16 @@ public class Game implements Runnable, ActionListener {
             //
             ore += temp.getSupplyOre();
         }
-        
+
         //food!
-        agrigultureStored+=agriculture;
-        agrigultureStored-=people.size();
+
+
+        if (agriculture > 0 && agrigultureStored > agriculture * 100) {
+            agrigultureStored = agriculture * 100;
+        }
+
+        agriculture -= people.size();
+        agrigultureStored += agriculture;
     }
 
     private void updateBuildings() {
@@ -271,6 +354,8 @@ public class Game implements Runnable, ActionListener {
      * @param i
      */
     private void addTech(short tech) {
+
+
         //ensure not unlocked
         if (!unlockedTech.contains(tech)) {
 
@@ -283,6 +368,9 @@ public class Game implements Runnable, ActionListener {
 
             //add all
             buildables.addAll(buildings);
+
+            //sort
+            Collections.sort(buildables);
         }
     }
 
@@ -328,5 +416,73 @@ public class Game implements Runnable, ActionListener {
         } else {
             return people.size();
         }
+    }
+
+    public int getAgriculture() {
+        return agriculture;
+    }
+
+    public int getAgrigultureStored() {
+        return agrigultureStored;
+    }
+
+    public int getHousingTotal() {
+        return housingTotal;
+    }
+
+    public int getOre() {
+        return ore;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public int getPowerTotal() {
+        return powerTotal;
+    }
+
+    public void finishBuilding(int x, int y, int z, Building b) {
+        bld.add(b);
+        if (z == 0) {
+            map.setTile(x, y, z, WorldMap.DOZED);
+        } else {
+            map.setTile(x, y, z, WorldMap.UNDERGROUND_DOZED);
+        }
+        map.setBuilding(x, y, z, b);
+    }
+
+    private void move(Person focus) {
+        //@todo
+    }
+
+    public boolean isMedicalAvailable() {
+        //@todo
+        return false;
+    }
+
+    public boolean addPerson(Person person) {
+        return people.add(person);
+    }
+
+    public int getBuildingCount() {
+        return bld.size();
+    }
+
+    public boolean offerEvent(GameEvent e) {
+        return events.offer(e);
+    }
+
+    public Person getBreedableMale() {
+        return maleMinglers.remove(rnd.nextInt(maleMinglers.size()));
+    }
+
+    public ArrayList<Person> getPeople() {
+        ArrayList<Person> colo = new ArrayList<Person>();
+        
+        colo.addAll(dead);
+        colo.addAll(people);
+        
+        return colo;
     }
 }

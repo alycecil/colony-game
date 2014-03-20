@@ -7,6 +7,7 @@ package colonygame.resources;
 import colonygame.game.Building;
 import colonygame.Main;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -320,8 +321,8 @@ public class WorldMap {
             } catch (IOException ex) {
                 Logger.getLogger(WorldMap.class.getName()).log(Level.SEVERE,
                         null, ex);
-                Logger.getLogger(WorldMap.class.getName()).log(Level.SEVERE, 
-                        "File names:{0}, and {1}", 
+                Logger.getLogger(WorldMap.class.getName()).log(Level.SEVERE,
+                        "File names:{0}, and {1}",
                         new Object[]{tempTerrain, tempImage});
             }
         } else {
@@ -455,7 +456,38 @@ public class WorldMap {
     }
 
     public Image getImage() {
-        return image;
+
+        //make space
+        BufferedImage img = new BufferedImage(map[0].length,
+                map[0][0].length, BufferedImage.TYPE_INT_RGB);
+
+
+        Graphics g = img.createGraphics();
+
+        if (image != null) {
+            g.drawImage(image, 0, 0, null);
+        }
+
+        //\/\/\/\/\/\/\/\
+        //--  render!  --
+        //\/\/\/\/\/\/\/\
+
+        for (int i = 0; i < buildings[0].length; i++) {
+            for (int j = 0; j < buildings[0][0].length; j++) {
+
+                if (buildings[0][i][j] != null) {
+                    g.setColor(Color.GREEN);
+                    g.fillRect(i, j, 1, 1);
+                }
+                else if (map[0][i][j] == DOZED) {
+                    g.setColor(Color.white);
+                    g.fillRect(i, j, 1, 1);
+                }
+            }
+        }
+
+
+        return img;
     }
 
     public char getTile(int x, int y, int z) {
@@ -518,5 +550,36 @@ public class WorldMap {
             return false;
         }
 
+    }
+
+    public String toString(int x, int y, int z) {
+        String s = "Tile::";
+
+        if (map[z][x][y] == CLEAR) {
+            s += "Clear";
+        } else if (map[z][x][y] == DIFFICULT) {
+            s += "Difficult";
+        } else if (map[z][x][y] == DISCOVERED) {
+            s += "Discovered";
+        } else if (map[z][x][y] == DOZED) {
+            s += "Bulldozed";
+        } else if (map[z][x][y] == IMPASSIBLE) {
+            s += "Impassible";
+        } else if (map[z][x][y] == ROUGH) {
+            s += "Rough";
+        } else if (map[z][x][y] == UNDERGROUND_DOZED) {
+            s += "Dozed";
+        } else if (map[z][x][y] == UNDISCOVERED) {
+            s += "Unknown";
+        }
+
+
+
+        if (buildings[z][x][y] != null) {
+            s += "\nBuilding::" + buildings[z][x][y].getType().getId();
+        }
+
+
+        return s;
     }
 }

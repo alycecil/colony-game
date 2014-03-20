@@ -5,8 +5,6 @@
 package colonygame.ui;
 
 import colonygame.Main;
-import colonygame.ui.UIButton;
-import colonygame.ui.UIButtonSprite;
 import colonygame.uitool.Build;
 import colonygame.resources.BuildingType;
 import colonygame.resources.Sprite;
@@ -45,7 +43,7 @@ public class BuildMenu {
     }
 
     public void update() {
-        //int _x;
+        int _x;
         int _y;
 
 
@@ -60,7 +58,7 @@ public class BuildMenu {
 
         if (isVisible()) {
 
-            //_x = 0;
+            _x = 0;
             _y = 0;
 
 
@@ -83,13 +81,18 @@ public class BuildMenu {
 
 
                 //
-                btn = new UIButtonSprite(x, y + _y, temp.getId(), c,
+                btn = new UIButtonSprite(x+_x, y + _y,width,height, temp.getId(), c,
                         Color.red, img, null);
 
+                //btn = new UIButton(x+_x,y+_y, width, height, temp.getId(), c, 
+                //        Color.RED, null);
+                
                 btn.setActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         Main.ui.setCurrentTool(new Build(btn, temp));
+                        Main.ui.setBuildmenuVisible(false);
+                        Main.ui.getBuildmenu().update();
                     }
                 });
 
@@ -112,7 +115,12 @@ public class BuildMenu {
                 }
 
 
-                _y += img.getHeight(null);
+                _y += height;
+                
+                if(_y+y+height>Main.ui.getHeight()){
+                    _y = 0;
+                    _x += width;
+                }
 
             }
 
