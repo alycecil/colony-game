@@ -6,15 +6,15 @@ package colonygame.game;
 
 import colonygame.Main;
 import colonygame.event.PregnancyEvent;
-import colonygame.resources.BuildingType;
 import colonygame.resources.Settings;
 import java.util.ArrayList;
+import javax.annotation.Resource;
 
 /**
  *
  * @author WilCecil
  */
-public class Person {
+public class Person implements Comparable<Person> {
 
     public static int nextId = 0;
 
@@ -42,6 +42,8 @@ public class Person {
     Person mate;
     Building home;
     Building work;
+    String firstName;
+    String lastName;
     ArrayList<Person> children;
     public static final boolean MALE = true;
     public static final boolean FEMALE = !MALE;
@@ -62,8 +64,8 @@ public class Person {
     public static final int STATE_BLANK = 0;
     public static final int MIN_BABY = 0000;
     public static final int MIN_CHILD = 0300;
-    public static final int MIN_TEEN = 1100;
-    public static final int MIN_ADULT = 1700;
+    public static final int MIN_TEEN = 1300;
+    public static final int MIN_ADULT = 1800;
     public static final int MIN_ELDER = 6000;
 
     public Person(boolean gender, Person mother) {
@@ -76,8 +78,13 @@ public class Person {
         this.work = null;
 
         id = nextId++;
-        
-        DOD=-1;
+
+        DOD = -1;
+
+        nameMe();
+
+
+
     }
 
     public Person(boolean gender, Person mother, Person father) {
@@ -90,12 +97,20 @@ public class Person {
         this.work = null;
 
 
+
+        nameMe();
         if (mother != null) {
             this.home = mother.home;
 
             //if our mother is married add a boost
             if (mother.isState(STATE_MARRIED)) {
                 addState(STATE_FERTILE);
+
+                //special case get fathers last name!
+                if (father != null && father.lastName != null) {
+                    lastName = father.lastName;
+                }
+
             }
 
             //if our parents have the same mother 
@@ -104,10 +119,12 @@ public class Person {
                     && father != null && father.mother != null
                     && mother.mother.id == father.mother.id) {
                 addState(STATE_SICK);
+
             }
 
+
             //add me to my mothers children
-            if(mother.children==null){
+            if (mother.children == null) {
                 mother.children = new ArrayList<>();
             }
             mother.children.add(this);
@@ -115,7 +132,8 @@ public class Person {
         }
 
         id = nextId++;
-        DOD=-1;
+        DOD = -1;
+
     }
 
     public Person(int state, int DOB, boolean gender, boolean educated,
@@ -129,8 +147,10 @@ public class Person {
         this.work = work;
 
         id = nextId++;
-        
-        DOD=-1;
+
+        DOD = -1;
+
+        nameMe();
     }
 
     public int getDOB() {
@@ -140,8 +160,6 @@ public class Person {
     public int getDOD() {
         return DOD;
     }
-    
-    
 
     public Building getHome() {
         return home;
@@ -154,7 +172,7 @@ public class Person {
     public int getState() {
         return state;
     }
-    
+
     public Building getWork() {
         return work;
     }
@@ -187,8 +205,8 @@ public class Person {
     }
 
     public void addState(int newState) {
-        if(DOD==-1 && newState==STATE_DEAD){
-            DOD=Main.game.getTimeStamp();
+        if (DOD == -1 && newState == STATE_DEAD) {
+            DOD = Main.game.getTimeStamp();
         }
         state = state | newState;
     }
@@ -208,8 +226,6 @@ public class Person {
     public void setMate(Person mate) {
         this.mate = mate;
     }
-    
-    
 
     public void simulate() {
         double rate = 0;
@@ -299,7 +315,7 @@ public class Person {
                     if (isState(STATE_FERTILE)) {
                         rate *= Settings.DEFAULT_PREGNANCY_FERTILE_MOD;
                     }
-                    if(isState(STATE_MARRIED)){
+                    if (isState(STATE_MARRIED)) {
                         rate *= Settings.DEFAULT_PREGNANCY_MARRIAGE_MOD;
                     }
 
@@ -307,9 +323,10 @@ public class Person {
                         //happily we get pregnant!
                         //add a birthevent
                         //are we married?
-                        if(isState(STATE_MARRIED)&&mate!=null){
+                        addState(STATE_PREGNANT);
+                        if (isState(STATE_MARRIED) && mate != null) {
                             Main.game.offerEvent(new PregnancyEvent(this, mate));
-                        }else{
+                        } else {
                             Main.game.offerEvent(new PregnancyEvent(this,
                                     Main.game.getBreedableMale()));
                         }
@@ -325,36 +342,54 @@ public class Person {
 
     @Override
     public String toString() {
-        String desc = ""+id+" ";
-        if(isMale()){
-            desc+="male ";
-        }else
-            desc+="female ";
-        
-        if(isState(STATE_PREGNANT)){
-            desc+="~pregnant~ ";
+        String desc = lastName+", "+firstName+ " " + id + " ";
+        if (isMale()) {
+            desc += "male ";
+        } else {
+            desc += "female ";
         }
-        if(isState(STATE_MARRIED)){
-            desc+="married ";
+
+        if (isState(STATE_PREGNANT)) {
+            desc += "pregnant ";
         }
-        if(!isState(STATE_ELDER)&&(isState(STATE_TEEN)||isState(STATE_ADULT))){
-            desc+="of age ";
+        if (isState(STATE_MARRIED)) {
+            desc += "married ";
         }
-        if(isState(STATE_FERTILE)){
-            desc+="fertile ";
+        if (!isState(STATE_ELDER) && (isState(STATE_TEEN) || isState(STATE_ADULT))) {
+            desc += "of age ";
         }
-        if(isState(STATE_SICK)){
-            desc+="sick ";
+        if (isState(STATE_FERTILE)) {
+            desc += "fertile ";
         }
-        if(!isAlive()){
-            desc+="dead "+(getDOD()-getDOB());
-        }else{
-            desc+=Main.game.getTimeStamp()-getDOB();
+        if (isState(STATE_SICK)) {
+            desc += "sick ";
+        }
+        if (!isAlive()) {
+            desc += "dead " + (getDOD() - getDOB());
+        } else {
+            desc += Main.game.getTimeStamp() - getDOB();
         }
         return desc;
     }
 
-    
-    
-    
+    @Override
+    public int compareTo(Person o) {
+        return this.getId() - o.getId();
+    }
+
+    public ArrayList<Person> getChildren() {
+        return children;
+    }
+
+    private void nameMe() {
+        firstName = Main.resources.getNameManager().getFirstName(
+                Main.game.rnd, this.gender);
+
+        if (mother != null && mother.lastName != null) {
+            lastName = mother.lastName;
+        } else {
+            lastName = Main.resources.getNameManager().getSurname(
+                    Main.game.rnd);
+        }
+    }
 }

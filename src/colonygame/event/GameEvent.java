@@ -34,6 +34,7 @@ public abstract class GameEvent implements Comparable<GameEvent>{
         return getTime() - o.getTime();
     }
     
+    public abstract String logEvent();
     
     
 }

@@ -4,6 +4,7 @@ import colonygame.ui.UI;
 import colonygame.ui.UIManager;
 import colonygame.resources.Resources;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
@@ -36,7 +37,7 @@ public class Main {
             resources.loadXML();
 
 
-            game = new Game(System.currentTimeMillis());
+            game = new Game();
             
             /*
              * Start UI 

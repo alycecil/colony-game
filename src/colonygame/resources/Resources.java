@@ -27,6 +27,7 @@ public class Resources {
     AbstractMap<String, BuildingType> buildings;
     BuildingType contruction;
     Settings settings;
+    NameManager names;
 
     /**
      * Creates the space for resources, loads nothing.
@@ -54,7 +55,9 @@ public class Resources {
         File mapsXML = new File(ini.get("resources", "maps"));
         File buildingsXML = new File(ini.get("resources", "buildings"));
         File settingsXML = new File(ini.get("resources", "initial"));
-
+        File surnamesTXT = new File(ini.get("resources", "surnames"));
+        File maleTXT = new File(ini.get("resources", "malenames"));
+        File femaleTXT = new File(ini.get("resources", "femalenames"));
         
         //parseSprites
         Sprite.readXML(spritesXML);
@@ -70,8 +73,13 @@ public class Resources {
         //parse buildings
         BuildingType.readXML(buildingsXML);
         
+        //read names
+        names = NameManager.readNames(surnamesTXT,maleTXT,femaleTXT);
+        
         //parse initial settings xml
         settings.readXML(settingsXML);
+        
+        
 
     }
 
@@ -165,6 +173,11 @@ public class Resources {
     public Settings getSettings() {
         return settings;
     }
+
+    public NameManager getNameManager() {
+        return names;
+    }
+    
     
     
 }

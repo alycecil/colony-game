@@ -69,6 +69,7 @@ public class UI extends javax.swing.JFrame {
     BuildMenu buildmenu;
     boolean bDebug = false;
     String desc;
+    ColonistTracker cTracker;
 
     // <editor-fold defaultstate="collapsed" desc=" Constructor ">   
     /**
@@ -129,7 +130,6 @@ public class UI extends javax.swing.JFrame {
         final UIButton build;
         build = addButton(PADDING_DEFAULT, PADDING_DEFAULT * 2 + BUTTON_HEIGHT,
                 BUTTON_WIDTH_1, BUTTON_HEIGHT, "Build",
-                
                 new Color(BUTTON_COLOR_BACKGROUND),
                 new Color(BUTTON_COLOR_TEXT),
                 new ActionListener() {
@@ -274,8 +274,8 @@ public class UI extends javax.swing.JFrame {
             Main.manager.toggle();
         }
         if (evt.getKeyCode() == KeyEvent.VK_F2) {
-            
-            new ColonistTracker().setVisible(true);
+            cTracker = new ColonistTracker();
+            cTracker.setVisible(true);
         }
         if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
 
@@ -455,6 +455,8 @@ public class UI extends javax.swing.JFrame {
      */
     public synchronized void renderFrame() {
 
+        if(cTracker!=null)
+            cTracker.renderFrame();
         //Sprite
         Sprite tile = Main.game.getMap().getWorld().getTile();
         Sprite temp;
@@ -551,7 +553,7 @@ public class UI extends javax.swing.JFrame {
                 g.drawImage(tile.getCell(mapBlock[i][j]),
                         cellx,
                         celly, null);
-
+                
 
 
 
@@ -620,6 +622,19 @@ public class UI extends javax.swing.JFrame {
                             cellx + tType.getDeltaX(),
                             celly + tType.getDeltaY(),
                             null);
+                    
+                    //are we online?
+                    if(!buildingBlock[i][j].isOnline()){
+                        //if not put a red dot over the building
+                        g.setColor(Color.red);
+                        g.fillOval(cellx+tile.getCellWidth()/ 2-3, celly+tile.getCellHeight() / 2-3, 5, 5);
+                    }
+                    
+                    else if(!buildingBlock[i][j].isConected()){
+                        //if not connected put a yellow dot over the building
+                        g.setColor(Color.yellow);
+                        g.fillOval(cellx+tile.getCellWidth()/ 2-3, celly+tile.getCellHeight() / 2-3, 5, 5);
+                    }
                 }
             }
         }
@@ -724,6 +739,7 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void drawResourceBox(Graphics g) {
+        int i = 0;
         //DRAW TEXT BOX
         g.setColor(new Color(RESOURCE_BOX_COLOR));
         g.fillRect(0,
@@ -732,18 +748,20 @@ public class UI extends javax.swing.JFrame {
 
         g.setColor(new Color(POPULATION_COLOR));
         writeText(g, "Population::" + Main.game.getPopulation() + "/"
-                + Main.game.getHousingTotal(), 0, false);
+                + Main.game.getHousingTotal(), i++, false);
 
+        writeText(g, "Workers::" + Main.game.getWorkers(), i++,false);
+        
         g.setColor(new Color(FOOD_COLOR));
         writeText(g, "Food::" + Main.game.getAgriculture() + "/"
-                + Main.game.getAgrigultureStored(), 1, false);
+                + Main.game.getAgrigultureStored(), i++, false);
 
         g.setColor(new Color(POWER_COLOR));
         writeText(g, "Power::" + Main.game.getPower() + "/"
-                + Main.game.getPowerTotal(), 2, false);
+                + Main.game.getPowerTotal(), i++, false);
 
         g.setColor(new Color(ORE_COLOR));
-        writeText(g, "Ore::" + Main.game.getOre(), 3, false);
+        writeText(g, "Ore::" + Main.game.getOre(), i++, false);
     }
 
     private void drawInfoBox(Graphics g) {

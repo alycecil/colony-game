@@ -39,6 +39,7 @@ public class ColonistTracker extends javax.swing.JFrame {
         lblBirth = new javax.swing.JLabel();
         lblDeath = new javax.swing.JLabel();
         lblState = new javax.swing.JLabel();
+        lblChildren = new javax.swing.JLabel();
 
         jLabel2.setForeground(new java.awt.Color(102, 255, 102));
         jLabel2.setText("DoB");
@@ -83,19 +84,23 @@ public class ColonistTracker extends javax.swing.JFrame {
         lblState.setForeground(new java.awt.Color(102, 255, 102));
         lblState.setText("state");
 
+        lblChildren.setForeground(new java.awt.Color(102, 255, 102));
+        lblChildren.setText("Children");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblId, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblGender, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDeath, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblState, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblGender, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblBirth, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblDeath, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblState, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblChildren, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                    .addComponent(lblId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -112,6 +117,8 @@ public class ColonistTracker extends javax.swing.JFrame {
                 .addComponent(lblDeath)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblState)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblChildren)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -131,42 +138,12 @@ public class ColonistTracker extends javax.swing.JFrame {
 
     private void lstColonistsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstColonistsMouseClicked
         // TODO add your handling code here:
-        String id = lstColonists.getModel().getElementAt(lstColonists.getSelectedIndex()).toString();
-
-        if (!id.equalsIgnoreCase("No Colonists")) {
-            Person p = (Person) lstColonists.getModel().getElementAt(lstColonists.getSelectedIndex());
-
-            lblId.setText("id: " + p.getId());
-            lblGender.setText("Male: " + p.isMale());
-            lblBirth.setText("Birth: " + p.getDOB());
-            lblDeath.setText("Death: " + p.getDOD());
-            lblState.setText("State: " + p.getState());
-        }
-
-
-
-        //get the colonist then update the model
-        lstColonists.setModel(new javax.swing.AbstractListModel() {
-            ArrayList<Person> peps = Main.game.getPeople();
-
-            @Override
-            public int getSize() {
-                return peps.size();
-            }
-
-            @Override
-            public Object getElementAt(int i) {
-                if(i>=getSize()||i<0){
-                    return "No Colonists";
-                }
-                return peps.get(i);
-            }
-        });
+        renderFrame();
     }//GEN-LAST:event_lstColonistsMouseClicked
 
     private void lstColonistsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstColonistsKeyPressed
         // TODO add your handling code here:
-        lstColonistsMouseClicked(null);
+        renderFrame();
     }//GEN-LAST:event_lstColonistsKeyPressed
 
     /**
@@ -208,10 +185,62 @@ public class ColonistTracker extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBirth;
+    private javax.swing.JLabel lblChildren;
     private javax.swing.JLabel lblDeath;
     private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblState;
     private javax.swing.JList lstColonists;
     // End of variables declaration//GEN-END:variables
+
+    public void renderFrame() {
+        if (lstColonists.getSelectedIndex() >= 0) {
+
+
+            String id = lstColonists.getModel().getElementAt(lstColonists.getSelectedIndex()).toString();
+
+            if (!id.equalsIgnoreCase("No Colonists")) {
+                Person p = (Person) lstColonists.getModel().getElementAt(lstColonists.getSelectedIndex());
+
+                lblId.setText("id: " + p.getId());
+                lblGender.setText("Male: " + p.isMale());
+                lblBirth.setText("Birth: " + p.getDOB());
+                lblDeath.setText("Death: " + p.getDOD());
+                lblState.setText("State: " + p.getState());
+
+                String child = "";
+
+                ArrayList<Person> children = p.getChildren();
+
+                if (children == null || children.isEmpty()) {
+                    child = "No Children";
+                } else {
+                    for (int i = 0; i < children.size(); i++) {
+                        child += children.get(i).getId()+ ", \n";
+                    }
+                }
+
+                lblChildren.setText(child);
+            }
+        }
+
+
+        //get the colonist then update the model
+        lstColonists.setModel(new javax.swing.AbstractListModel() {
+            ArrayList<Person> peps = Main.game.getPeople();
+
+            @Override
+            public int getSize() {
+                return peps.size();
+            }
+
+            @Override
+            public Object getElementAt(int i) {
+                if (i >= getSize() || i < 0) {
+                    return "No Colonists";
+                }
+                return peps.get(i);
+            }
+        });
+    }
 }

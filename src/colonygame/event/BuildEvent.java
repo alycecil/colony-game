@@ -7,7 +7,6 @@ package colonygame.event;
 import colonygame.game.Building;
 import colonygame.Main;
 import colonygame.resources.BuildingType;
-import colonygame.resources.WorldMap;
 
 /**
  *
@@ -35,12 +34,17 @@ public class BuildEvent extends GameEvent {
     @Override
     public boolean doEvent() {
         try {
-            Main.game.finishBuilding(x,y,z,new Building(type, 0));
+            Main.game.finishBuilding(x,y,z,new Building(type, 0,x,y,z));
 
             return true;
         } catch (IndexOutOfBoundsException e) {
             return false;
         }
+    }
+
+    @Override
+    public String logEvent() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

@@ -57,4 +57,9 @@ public class PregnancyEvent extends GameEvent {
         //give birth
         return Main.game.addPerson(new Person(Main.game.rnd.nextBoolean(), mother, father));
     }
+
+    @Override
+    public String logEvent() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -38,11 +38,13 @@ public class Game implements Runnable, ActionListener {
     int powerTotal;
     int power;
     int housingTotal;
-    int workerNeed;
+    //int workerNeed;
     int agriculture;
     int agrigultureStored;
     int ore;
-    public Random rnd;
+    int workerCount;
+    public static final long seed = System.currentTimeMillis();
+    public static Random rnd = new Random(seed);
     WorldMap map;
     ArrayList<BuildingType> buildables;
     PriorityQueue<GameEvent> events;
@@ -58,7 +60,7 @@ public class Game implements Runnable, ActionListener {
     ArrayList<Person> maleMinglers;
     ArrayList<Person> femaleMinglers;
 
-    public Game(long seed) {
+    public Game() {
         timeStamp = 0;
         myLanderCount = 0;
         powerTotal = 0;
@@ -67,8 +69,7 @@ public class Game implements Runnable, ActionListener {
         agriculture = 0;
         agrigultureStored = 0;
         ore = 0;
-
-        rnd = new Random(seed);
+        workerCount = 0;
 
         Set<String> maps = Main.resources.getMaps();
 
@@ -128,6 +129,8 @@ public class Game implements Runnable, ActionListener {
     }
 
     private void simulatePopulation() {
+        
+        workerCount=0;
 
         //iterate through our people
         Iterator<Person> pIter = people.iterator();
@@ -161,19 +164,25 @@ public class Game implements Runnable, ActionListener {
 
 
             }
+
+
+            //do we have available workers?
+            if (focus.isState(Person.STATE_ADULT)) {
+                workerCount++;
+            }
         }
 
         //roll for a marriage
         if (!maleMinglers.isEmpty()
                 && !femaleMinglers.isEmpty()
-                && rnd.nextDouble() < Settings.DEFAULT_MARRIAGE_CHANCE*femaleMinglers.size()) {
-            
+                && rnd.nextDouble() < Settings.DEFAULT_MARRIAGE_CHANCE * femaleMinglers.size()) {
+
             Person m = maleMinglers.remove(rnd.nextInt(maleMinglers.size()));
             Person f = femaleMinglers.remove(rnd.nextInt(femaleMinglers.size()));
-            
+
             f.addState(Person.STATE_MARRIED);
             m.addState(Person.STATE_MARRIED);
-            
+
             m.setMate(f);
             f.setMate(m);
         }
@@ -209,19 +218,30 @@ public class Game implements Runnable, ActionListener {
         //Calculate Resources
         Iterator<Building> iter;
         BuildingType temp;
+        Building temp_bld;
 
         //reset
         powerTotal = 0;
         power = 0;
         housingTotal = 0;
         agriculture = 0;
-        workerNeed = 0;
+        
 
 
         iter = bld.iterator();
 
         while (iter.hasNext()) {
-            temp = iter.next().getType();
+            temp_bld = iter.next();
+
+            //am i onlone?
+            if (!temp_bld.isOnline()) {
+                continue;
+            }
+
+
+            temp = temp_bld.getType();
+
+
 
             //
             // update power //
@@ -234,7 +254,7 @@ public class Game implements Runnable, ActionListener {
             // Update Housing/worker Resources //
             //
             housingTotal += temp.getSupplyHousing();
-            workerNeed += temp.getCapacity();
+            
 
 
             //
@@ -260,8 +280,74 @@ public class Game implements Runnable, ActionListener {
     }
 
     private void updateBuildings() {
-        //update construction
         //update current buildings
+        Iterator<Building> iter;
+        BuildingType temp;
+        Building temp_bld;
+        
+        Building neighbor;
+
+        //workerNeed = 0;
+        iter = bld.iterator();
+
+
+        while (iter.hasNext()) {
+            temp_bld = iter.next();
+            temp = temp_bld.getType();
+            
+            //try and connect this building
+            if(!temp_bld.isConected()){
+                //get neighbors
+                //if a neighboris connected so am i
+                
+
+                //1
+                neighbor = map.getBuilding(temp_bld.getX(),temp_bld.getY()-1,temp_bld.getZ());
+
+                if(neighbor!=null && neighbor.isConected()){
+                    temp_bld.setConected(true);
+                }
+
+                //2
+                neighbor = map.getBuilding(temp_bld.getX()+1,temp_bld.getY(),temp_bld.getZ());
+                
+                if(neighbor!=null && neighbor.isConected()){
+                    temp_bld.setConected(true);
+                }
+
+                //3
+                neighbor = map.getBuilding(temp_bld.getX(),temp_bld.getY()+1,temp_bld.getZ());
+                
+                if(neighbor!=null && neighbor.isConected()){
+                    temp_bld.setConected(true);
+                }
+
+                //4
+                neighbor = map.getBuilding(temp_bld.getX()-1,temp_bld.getY(),temp_bld.getZ());
+                
+                if(neighbor!=null && neighbor.isConected()){
+                    temp_bld.setConected(true);
+                }
+                        
+            }
+
+            if (powerTotal >= temp.getPower() && 
+                    workerCount >= temp.getCapacity()) {
+                
+                temp_bld.setOnline(true);
+                
+                powerTotal-=temp.getPower();
+                workerCount-=temp.getCapacity();
+            }else{
+                temp_bld.setOnline(false);
+                
+//                workerNeed += temp.getCapacity();
+            }
+        }
+
+
+
+
     }
 
     private void tick() {
@@ -312,12 +398,12 @@ public class Game implements Runnable, ActionListener {
                         Main.ui.setCurrentTool(null);
                     }
 
-                    map.setBuilding(x, y, z, new Building(Main.resources.getContruction(), 0));
+                    map.setBuilding(x, y, z, new Building(Main.resources.getContruction(), 0,x,y,z));
                     return events.offer(new BuildEvent(timeStamp + type.getBuildtime(), type, x, y, z));
                 }
                 return false;
             } else {
-                map.setBuilding(x, y, z, new Building(Main.resources.getContruction(), 0));
+                map.setBuilding(x, y, z, new Building(Main.resources.getContruction(), 0,x,y,z));
                 return events.offer(new BuildEvent(timeStamp + type.getBuildtime(), type, x, y, z));
             }
         }
@@ -478,11 +564,17 @@ public class Game implements Runnable, ActionListener {
     }
 
     public ArrayList<Person> getPeople() {
-        ArrayList<Person> colo = new ArrayList<Person>();
-        
+        ArrayList<Person> colo = new ArrayList<>();
+
         colo.addAll(dead);
         colo.addAll(people);
         
         return colo;
     }
+
+    public int getWorkers() {
+        return workerCount;
+    }
+    
+    
 }

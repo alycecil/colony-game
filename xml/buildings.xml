@@ -46,7 +46,7 @@ Special Types
         <celly>4</celly>
         <celldx>7</celldx>
         <celldy>-24</celldy>
-        <capacity>10</capacity>
+        <capacity>0</capacity>
         <mindepth>0</mindepth>
         <maxdepth>4</maxdepth>
         <buildtime>1</buildtime>

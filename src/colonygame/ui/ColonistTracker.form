@@ -57,14 +57,15 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jScrollPane1" pref="311" max="32767" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lblId" alignment="0" min="-2" pref="296" max="-2" attributes="0"/>
-                      <Component id="lblGender" min="-2" pref="296" max="-2" attributes="0"/>
-                      <Component id="lblBirth" min="-2" pref="296" max="-2" attributes="0"/>
-                      <Component id="lblDeath" min="-2" pref="296" max="-2" attributes="0"/>
-                      <Component id="lblState" min="-2" pref="296" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" pref="462" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="lblGender" alignment="1" max="32767" attributes="0"/>
+                      <Component id="lblBirth" alignment="1" max="32767" attributes="0"/>
+                      <Component id="lblDeath" alignment="1" max="32767" attributes="0"/>
+                      <Component id="lblState" alignment="1" max="32767" attributes="0"/>
+                      <Component id="lblChildren" alignment="1" pref="156" max="32767" attributes="0"/>
+                      <Component id="lblId" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -84,6 +85,8 @@
                   <Component id="lblDeath" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblState" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblChildren" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -157,6 +160,14 @@
               <Color blue="66" green="ff" red="66" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="state"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblChildren">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="66" green="ff" red="66" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Children"/>
           </Properties>
         </Component>
       </SubComponents>
