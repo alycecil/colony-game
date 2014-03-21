@@ -28,7 +28,7 @@ and open the template in the editor.
         <int>Modified Gravity Agriculture</int>
         <long>Agricultural improvements for nonstandard gravity.</long>
         <tech>3</tech>
-        <requires>1</requires>
+        <requires>2</requires>
         <cost>1000</cost>
         <image>BITMAPS\590.BMP</image>
     </research>
@@ -37,7 +37,7 @@ and open the template in the editor.
         <int>Nano-Agriculture</int>
         <long>Agricultural improvements never before dreamed of!</long>
         <tech>4</tech>
-        <requires>2</requires>
+        <requires>3,8</requires>
         <cost>6000</cost>
         <image>BITMAPS\590.BMP</image>
     </research>

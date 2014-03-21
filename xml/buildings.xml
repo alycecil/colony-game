@@ -68,6 +68,7 @@ Special Types
         <buildtime>15</buildtime>
         <tech>1</tech>
         <supply_food>20</supply_food>
+        <priority>2</priority>
     </building>
     <building>
         <id>Agridome MK II</id>
@@ -85,6 +86,7 @@ Special Types
         <buildtime>15</buildtime>
         <tech>2</tech>
         <supply_food>50</supply_food>
+        <priority>2</priority>
     </building>
     <building>
         <id>Agridome MK III</id>
@@ -102,6 +104,7 @@ Special Types
         <buildtime>20</buildtime>
         <tech>3</tech>
         <supply_food>100</supply_food>
+        <priority>2</priority>
     </building>
     <building>
         <id>Agridome MK IV</id>
@@ -109,8 +112,8 @@ Special Types
         <type>AGRICULTURE</type>
         <power>20</power>
         <sprite>tile3</sprite>
-        <cellx>3</cellx>
-        <celly>1</celly>
+        <cellx>4</cellx>
+        <celly>0</celly>
         <celldx>0</celldx>
         <celldy>-51</celldy>
         <capacity>2</capacity>
@@ -119,6 +122,7 @@ Special Types
         <buildtime>25</buildtime>
         <tech>4</tech>
         <supply_food>400</supply_food>
+        <priority>2</priority>
     </building>
     <building>
         <id>Tokamak</id>
@@ -136,6 +140,7 @@ Special Types
         <buildtime>40</buildtime>
         <tech>1</tech>
         <supply_power>100</supply_power>
+        <priority>1</priority>
     </building>
     <building>
         <id>Housing Module</id>
@@ -201,6 +206,7 @@ Special Types
         <mindepth>0</mindepth>
         <maxdepth>0</maxdepth>
         <buildtime>1</buildtime>
+        <priority>0</priority>
         <supply_food>5</supply_food>
         <supply_power>10</supply_power>
         <supply_housing>20</supply_housing>

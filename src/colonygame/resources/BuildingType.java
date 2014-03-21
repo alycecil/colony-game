@@ -60,19 +60,18 @@ public class BuildingType implements Comparable<BuildingType> {
     int supplyFood, supplyOre, supplyPower, supplyHousing;
     int supplyMedical, supplyScience;
     int priority;
-    
     public static final int TYPE_TUBE = 0;
     public static final int TYPE_HOUSE = 1;
-    public static final int TYPE_FACTORY = 1<<1;
-    public static final int TYPE_SCIENCE = 1<<2;
-    public static final int TYPE_MEDICAL = 1<<3;
-    public static final int TYPE_ENTERTAINMENT = 1<<4;
-    public static final int TYPE_POWER = 1<<5;
-    public static final int TYPE_POLITICAL = 1<<6;
-    public static final int TYPE_STORAGE = 1<<7;
-    public static final int TYPE_AGRICULTURE = 1<<8;
-    public static final int TYPE_LANDER = 1<<9;
-    public static final int TYPE_CONSTRUCTION = 1<<10;
+    public static final int TYPE_FACTORY = 1 << 1;
+    public static final int TYPE_SCIENCE = 1 << 2;
+    public static final int TYPE_MEDICAL = 1 << 3;
+    public static final int TYPE_ENTERTAINMENT = 1 << 4;
+    public static final int TYPE_POWER = 1 << 5;
+    public static final int TYPE_POLITICAL = 1 << 6;
+    public static final int TYPE_STORAGE = 1 << 7;
+    public static final int TYPE_AGRICULTURE = 1 << 8;
+    public static final int TYPE_LANDER = 1 << 9;
+    public static final int TYPE_CONSTRUCTION = 1 << 10;
     protected static final String TYPE_TUBE_S = "TUBE";
     protected static final String TYPE_HOUSE_S = "HOUSE";
     protected static final String TYPE_FACTORY_S = "FACTORY";
@@ -229,7 +228,7 @@ public class BuildingType implements Comparable<BuildingType> {
         tSupplyHousing = 0;
         tSupplyMedical = 0;
         tSupplyScience = 0;
-        tPriority =BuildingType.DEFAULT_PRIORITY;
+        tPriority = BuildingType.DEFAULT_PRIORITY;
 
 
 
@@ -354,15 +353,21 @@ public class BuildingType implements Comparable<BuildingType> {
                         (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
-            }  else if (tempChild.getNodeName().equalsIgnoreCase("supply_medical")) {
+            } else if (tempChild.getNodeName().equalsIgnoreCase("supply_medical")) {
 
                 tSupplyMedical =
                         (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
-            }  else if (tempChild.getNodeName().equalsIgnoreCase("supply_science")) {
+            } else if (tempChild.getNodeName().equalsIgnoreCase("supply_science")) {
 
                 tSupplyScience =
+                        (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+
+            } else if (tempChild.getNodeName().equalsIgnoreCase("priority")) {
+
+                tPriority =
                         (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
@@ -521,7 +526,6 @@ public class BuildingType implements Comparable<BuildingType> {
         return supplyMedical;
     }
 
-    
     public int getSupplyFood() {
         return supplyFood;
     }
@@ -538,8 +542,16 @@ public class BuildingType implements Comparable<BuildingType> {
         return supplyPower;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
     @Override
     public int compareTo(BuildingType o) {
-        return getId().compareTo(o.getId());
+        int one = getPriority() - o.getPriority();
+        if (one == 0) {
+            return getId().compareTo(o.getId());
+        }
+        return one;
     }
 }

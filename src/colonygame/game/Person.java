@@ -66,7 +66,7 @@ public class Person implements Comparable<Person> {
     public static final int MIN_CHILD = 0300;
     public static final int MIN_TEEN = 1300;
     public static final int MIN_ADULT = 1800;
-    public static final int MIN_ELDER = 6000;
+    public static final int MIN_ELDER = 6300;
 
     public Person(boolean gender, Person mother) {
         this.state = STATE_BABY;

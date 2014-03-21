@@ -243,6 +243,7 @@ public class Game implements Runnable, ActionListener {
         scienceProduced = 0;
         medicineProduced = 0;
 
+        Collections.sort(bld);
 
 
         iter = bld.iterator();

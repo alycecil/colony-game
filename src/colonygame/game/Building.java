@@ -11,7 +11,7 @@ import colonygame.resources.BuildingType;
  *
  * @author WilCecil
  */
-public class Building {
+public class Building implements Comparable<Building>{
 
     BuildingType type;
     int current;
@@ -70,6 +70,11 @@ public class Building {
 
     public int getZ() {
         return z;
+    }
+
+    @Override
+    public int compareTo(Building o) {
+        return this.getType().compareTo(o.getType());
     }
 }
     
