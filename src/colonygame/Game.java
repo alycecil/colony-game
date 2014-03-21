@@ -7,8 +7,10 @@ package colonygame;
 import colonygame.game.Building;
 import colonygame.event.BuildEvent;
 import colonygame.event.GameEvent;
+import colonygame.event.MarriageEvent;
 import colonygame.game.Person;
 import colonygame.resources.BuildingType;
+import colonygame.resources.Science;
 import colonygame.resources.Settings;
 
 import colonygame.resources.WorldMap;
@@ -38,9 +40,11 @@ public class Game implements Runnable, ActionListener {
     int powerTotal;
     int power;
     int housingTotal;
-    //int workerNeed;
+    int workerNeed;
     int agriculture;
     int agrigultureStored;
+    int scienceProduced;
+    int medicineProduced;
     int ore;
     int workerCount;
     public static final long seed = System.currentTimeMillis();
@@ -48,8 +52,11 @@ public class Game implements Runnable, ActionListener {
     WorldMap map;
     ArrayList<BuildingType> buildables;
     PriorityQueue<GameEvent> events;
-    ArrayList<Short> unlockedTech;
+    ArrayList<Integer> unlockedTech;
     ArrayList<Building> bld;
+    ArrayList<Science> researched;
+    Science currentGoal;
+    ArrayList<String> log;
     /**
      * we are detailed tracking individuals as for whatever reason I want to do
      * it that way, if you hate it or its slow you can remove the person class
@@ -70,6 +77,7 @@ public class Game implements Runnable, ActionListener {
         agrigultureStored = 0;
         ore = 0;
         workerCount = 0;
+        scienceProduced = 0;
 
         Set<String> maps = Main.resources.getMaps();
 
@@ -78,7 +86,7 @@ public class Game implements Runnable, ActionListener {
 
 
         unlockedTech = new ArrayList<>();
-        unlockedTech.add((short) 0);
+        unlockedTech.add((int) 0);
 
         buildables = new ArrayList<>();
 
@@ -96,6 +104,12 @@ public class Game implements Runnable, ActionListener {
         //init blding
         bld = new ArrayList<>();
 
+
+        //init science
+        researched = new ArrayList<>();
+
+        //init event log
+        log = new ArrayList<>();
     }
 
     @Override
@@ -126,11 +140,15 @@ public class Game implements Runnable, ActionListener {
         //
         simulatePopulation();
 
+        //
+        //Update Science
+        //
+        updateScience();
     }
 
     private void simulatePopulation() {
-        
-        workerCount=0;
+
+        workerCount = 0;
 
         //iterate through our people
         Iterator<Person> pIter = people.iterator();
@@ -180,11 +198,7 @@ public class Game implements Runnable, ActionListener {
             Person m = maleMinglers.remove(rnd.nextInt(maleMinglers.size()));
             Person f = femaleMinglers.remove(rnd.nextInt(femaleMinglers.size()));
 
-            f.addState(Person.STATE_MARRIED);
-            m.addState(Person.STATE_MARRIED);
-
-            m.setMate(f);
-            f.setMate(m);
+            offerEvent(new MarriageEvent(m,f));
         }
 
         //simulation pass
@@ -225,7 +239,9 @@ public class Game implements Runnable, ActionListener {
         power = 0;
         housingTotal = 0;
         agriculture = 0;
-        
+        scienceProduced = 0;
+        medicineProduced = 0;
+
 
 
         iter = bld.iterator();
@@ -254,7 +270,7 @@ public class Game implements Runnable, ActionListener {
             // Update Housing/worker Resources //
             //
             housingTotal += temp.getSupplyHousing();
-            
+
 
 
             //
@@ -266,6 +282,14 @@ public class Game implements Runnable, ActionListener {
             // update ore
             //
             ore += temp.getSupplyOre();
+
+
+            //update science
+            scienceProduced += temp.getSupplyScience();
+
+            //update medicine
+            medicineProduced += temp.getSupplyScience();
+
         }
 
         //food!
@@ -284,7 +308,7 @@ public class Game implements Runnable, ActionListener {
         Iterator<Building> iter;
         BuildingType temp;
         Building temp_bld;
-        
+
         Building neighbor;
 
         //workerNeed = 0;
@@ -294,53 +318,53 @@ public class Game implements Runnable, ActionListener {
         while (iter.hasNext()) {
             temp_bld = iter.next();
             temp = temp_bld.getType();
-            
+
             //try and connect this building
-            if(!temp_bld.isConected()){
+            if (!temp_bld.isConected()) {
                 //get neighbors
                 //if a neighboris connected so am i
-                
+
 
                 //1
-                neighbor = map.getBuilding(temp_bld.getX(),temp_bld.getY()-1,temp_bld.getZ());
+                neighbor = map.getBuilding(temp_bld.getX(), temp_bld.getY() - 1, temp_bld.getZ());
 
-                if(neighbor!=null && neighbor.isConected()){
+                if (neighbor != null && neighbor.isConected()) {
                     temp_bld.setConected(true);
                 }
 
                 //2
-                neighbor = map.getBuilding(temp_bld.getX()+1,temp_bld.getY(),temp_bld.getZ());
-                
-                if(neighbor!=null && neighbor.isConected()){
+                neighbor = map.getBuilding(temp_bld.getX() + 1, temp_bld.getY(), temp_bld.getZ());
+
+                if (neighbor != null && neighbor.isConected()) {
                     temp_bld.setConected(true);
                 }
 
                 //3
-                neighbor = map.getBuilding(temp_bld.getX(),temp_bld.getY()+1,temp_bld.getZ());
-                
-                if(neighbor!=null && neighbor.isConected()){
+                neighbor = map.getBuilding(temp_bld.getX(), temp_bld.getY() + 1, temp_bld.getZ());
+
+                if (neighbor != null && neighbor.isConected()) {
                     temp_bld.setConected(true);
                 }
 
                 //4
-                neighbor = map.getBuilding(temp_bld.getX()-1,temp_bld.getY(),temp_bld.getZ());
-                
-                if(neighbor!=null && neighbor.isConected()){
+                neighbor = map.getBuilding(temp_bld.getX() - 1, temp_bld.getY(), temp_bld.getZ());
+
+                if (neighbor != null && neighbor.isConected()) {
                     temp_bld.setConected(true);
                 }
-                        
+
             }
 
-            if (powerTotal >= temp.getPower() && 
-                    workerCount >= temp.getCapacity()) {
-                
+            if (powerTotal >= temp.getPower()
+                    && workerCount >= temp.getCapacity()) {
+
                 temp_bld.setOnline(true);
-                
-                powerTotal-=temp.getPower();
-                workerCount-=temp.getCapacity();
-            }else{
+
+                powerTotal -= temp.getPower();
+                workerCount -= temp.getCapacity();
+            } else {
                 temp_bld.setOnline(false);
-                
+
 //                workerNeed += temp.getCapacity();
             }
         }
@@ -398,12 +422,12 @@ public class Game implements Runnable, ActionListener {
                         Main.ui.setCurrentTool(null);
                     }
 
-                    map.setBuilding(x, y, z, new Building(Main.resources.getContruction(), 0,x,y,z));
+                    map.setBuilding(x, y, z, new Building(Main.resources.getContruction(), 0, x, y, z));
                     return events.offer(new BuildEvent(timeStamp + type.getBuildtime(), type, x, y, z));
                 }
                 return false;
             } else {
-                map.setBuilding(x, y, z, new Building(Main.resources.getContruction(), 0,x,y,z));
+                map.setBuilding(x, y, z, new Building(Main.resources.getContruction(), 0, x, y, z));
                 return events.offer(new BuildEvent(timeStamp + type.getBuildtime(), type, x, y, z));
             }
         }
@@ -426,7 +450,7 @@ public class Game implements Runnable, ActionListener {
         buildables.removeAll(buildings);
 
         //add tech
-        addTech((short) 1);
+        addTech((int) 1);
 
 
         //seed people
@@ -439,7 +463,7 @@ public class Game implements Runnable, ActionListener {
      *
      * @param i
      */
-    private void addTech(short tech) {
+    private void addTech(int tech) {
 
 
         //ensure not unlocked
@@ -466,6 +490,8 @@ public class Game implements Runnable, ActionListener {
             if (!e.doEvent()) {
                 Logger.getLogger(Game.class.getName()).log(
                         Level.WARNING, "Event Failed : {0}", e);
+            }else{
+                log.add(e.logEvent());
             }
         }
 
@@ -568,13 +594,37 @@ public class Game implements Runnable, ActionListener {
 
         colo.addAll(dead);
         colo.addAll(people);
-        
+
         return colo;
     }
 
     public int getWorkers() {
         return workerCount;
     }
-    
-    
+
+    private void updateScience() {
+        if (currentGoal == null) {
+            ArrayList<Science> avail =
+                    Main.resources.getAvailableScience(researched);
+
+            Collections.sort(avail);
+
+            if (!avail.isEmpty()) {
+                currentGoal = avail.get(0);
+            }
+        } else {
+            //update current goal by payinginto it
+            if (currentGoal.pay(scienceProduced)) {
+                //we finished paying so add to finished
+                researched.add(currentGoal);
+
+                //set no goal
+                currentGoal = null;
+            }
+        }
+    }
+
+    public ArrayList<String> getEventLog() {
+        return log;
+    }
 }

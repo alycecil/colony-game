@@ -26,15 +26,15 @@ Special Types
         <description>Construction in Progress</description>
         <type>CONSTRUCTION</type>
         <power>0</power>
-        <sprite>tile2</sprite>
-        <cellx>1</cellx>
-        <celly>1</celly>
+        <sprite>tile6</sprite>
+        <cellx>4</cellx>
+        <celly>0</celly>
+        <celldx>0</celldx>
+        <celldy>-51</celldy>
         <capacity>0</capacity>
         <mindepth>-1</mindepth>
         <maxdepth>-1</maxdepth>
         <buildtime>0</buildtime>
-        <celldx>7</celldx>
-        <celldy>-24</celldy>
     </building>
     <building>
         <id>Tube</id>
@@ -67,7 +67,58 @@ Special Types
         <maxdepth>0</maxdepth>
         <buildtime>15</buildtime>
         <tech>1</tech>
-        <supply_food>25</supply_food>
+        <supply_food>20</supply_food>
+    </building>
+    <building>
+        <id>Agridome MK II</id>
+        <description>Upgraded Space Farm!</description>
+        <type>AGRICULTURE</type>
+        <power>10</power>
+        <sprite>tile2</sprite>
+        <cellx>5</cellx>
+        <celly>0</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
+        <capacity>1</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>15</buildtime>
+        <tech>2</tech>
+        <supply_food>50</supply_food>
+    </building>
+    <building>
+        <id>Agridome MK III</id>
+        <description>Super Upgraded Space Farm!</description>
+        <type>AGRICULTURE</type>
+        <power>10</power>
+        <sprite>tile2</sprite>
+        <cellx>0</cellx>
+        <celly>1</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
+        <capacity>1</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>20</buildtime>
+        <tech>3</tech>
+        <supply_food>100</supply_food>
+    </building>
+    <building>
+        <id>Agridome MK IV</id>
+        <description>Ultimate Space Farm!</description>
+        <type>AGRICULTURE</type>
+        <power>20</power>
+        <sprite>tile3</sprite>
+        <cellx>3</cellx>
+        <celly>1</celly>
+        <celldx>0</celldx>
+        <celldy>-51</celldy>
+        <capacity>2</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>25</buildtime>
+        <tech>4</tech>
+        <supply_food>400</supply_food>
     </building>
     <building>
         <id>Tokamak</id>
@@ -102,7 +153,7 @@ Special Types
         <maxdepth>0</maxdepth>
         <buildtime>15</buildtime>
         <tech>1</tech>
-        <supply_housing>50</supply_housing>
+        <supply_housing>25</supply_housing>
     </building>
     <building>
         <id>Command Center</id>
@@ -152,7 +203,59 @@ Special Types
         <buildtime>1</buildtime>
         <supply_food>5</supply_food>
         <supply_power>10</supply_power>
-        <supply_housing>25</supply_housing>
+        <supply_housing>20</supply_housing>
         <supply_ore>0</supply_ore>
     </building>
+    <building>
+        <id>Medical Center</id>
+        <description>A medical center, provides care for minor injuries and pregnancies</description>
+        <type>medical</type>
+        <power>20</power>
+        <sprite>tile1</sprite>
+        <cellx>0</cellx>
+        <celly>1</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
+        <capacity>2</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>25</buildtime>
+        <supply_medical>50</supply_medical>
+        <tech>5</tech>
+    </building>
+    <building>
+        <id>Trauma Center</id>
+        <description>A trauma medical center, provides care for all injuries and pregnancies</description>
+        <type>medical</type>
+        <power>30</power>
+        <sprite>tile6</sprite>
+        <cellx>3</cellx>
+        <celly>2</celly>
+        <celldx>0</celldx>
+        <celldy>-51</celldy>
+        <capacity>2</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>25</buildtime>
+        <supply_medical>150</supply_medical>
+        <tech>6</tech>
+    </building>
+    <building>
+        <id>Basic Laboratory</id>
+        <description>An early extra-terran laboritory</description>
+        <type>science</type>
+        <power>10</power>
+        <sprite>tile2</sprite>
+        <cellx>2</cellx>
+        <celly>1</celly>
+        <celldx>7</celldx>
+        <celldy>-24</celldy>
+        <capacity>2</capacity>
+        <mindepth>0</mindepth>
+        <maxdepth>0</maxdepth>
+        <buildtime>15</buildtime>
+        <supply_science>1</supply_science>
+        <tech>1</tech>
+    </building>
+    
 </buildings>

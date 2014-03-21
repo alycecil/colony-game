@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<science>
+    <research>
+        <id>0</id>
+        <int>Brave New World</int>
+        <long>All works of man must have a basis, even here.</long>
+        <tech>-1</tech>
+        <cost>0</cost>
+        <image>BITMAPS\580.BMP</image>
+    </research>
+    <research>
+        <id>2</id>
+        <int>New Home Agriculture</int>
+        <long>Essential agricultural improvements</long>
+        <tech>2</tech>
+        <requires>0</requires>
+        <cost>300</cost>
+        <image>BITMAPS\590.BMP</image>
+    </research>
+    <research>
+        <id>3</id>
+        <int>Modified Gravity Agriculture</int>
+        <long>Agricultural improvements for nonstandard gravity.</long>
+        <tech>3</tech>
+        <requires>1</requires>
+        <cost>1000</cost>
+        <image>BITMAPS\590.BMP</image>
+    </research>
+    <research>
+        <id>4</id>
+        <int>Nano-Agriculture</int>
+        <long>Agricultural improvements never before dreamed of!</long>
+        <tech>4</tech>
+        <requires>2</requires>
+        <cost>6000</cost>
+        <image>BITMAPS\590.BMP</image>
+    </research>
+    <research>
+        <id>5</id>
+        <int>Essential Medicine</int>
+        <long>Essental medical technologies for the survival of the colony.</long>
+        <tech>5</tech>
+        <requires>0</requires>
+        <cost>500</cost>
+        <image>BITMAPS\593.BMP</image>
+    </research>
+    <research>
+        <id>6</id>
+        <int>Trauma Medicine</int>
+        <long>Essental traumatic medical technologies.</long>
+        <tech>6</tech>
+        <requires>5</requires>
+        <cost>6000</cost>
+        <image>BITMAPS\593.BMP</image>
+    </research>
+    <research>
+        <id>7</id>
+        <int>Embryology</int>
+        <long>The science of the development of an embryo from the fertilization of the ovum to the fetus stage.</long>
+        <tech>6</tech>
+        <requires>5</requires>
+        <cost>6000</cost>
+        <image>BITMAPS\594.BMP</image>
+    </research>
+    <research>
+        <id>8</id>
+        <int>Physics</int>
+        <long>Physics is the natural science that involves the study of matter and its motion through space and time, along with related concepts such as energy and force.</long>
+        <tech>-1</tech>
+        <requires>0</requires>
+        <cost>500</cost>
+        <image>BITMAPS\594.BMP</image>
+    </research>
+</science>

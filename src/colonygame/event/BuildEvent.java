@@ -44,7 +44,7 @@ public class BuildEvent extends GameEvent {
 
     @Override
     public String logEvent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Build a "+type.getId()+" at ("+x+", "+y+", "+z+").";
     }
 
     

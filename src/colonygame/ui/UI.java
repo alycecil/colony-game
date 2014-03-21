@@ -70,6 +70,7 @@ public class UI extends javax.swing.JFrame {
     boolean bDebug = false;
     String desc;
     ColonistTracker cTracker;
+    EventLog eLog;
 
     // <editor-fold defaultstate="collapsed" desc=" Constructor ">   
     /**
@@ -233,11 +234,11 @@ public class UI extends javax.swing.JFrame {
         jpCanvas.setLayout(jpCanvasLayout);
         jpCanvasLayout.setHorizontalGroup(
             jpCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
+            .addGap(0, 655, Integer.MAX_VALUE)
         );
         jpCanvasLayout.setVerticalGroup(
             jpCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 457, Short.MAX_VALUE)
+            .addGap(0, 457, Integer.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -245,13 +246,13 @@ public class UI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Integer.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Integer.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -277,6 +278,11 @@ public class UI extends javax.swing.JFrame {
             cTracker = new ColonistTracker();
             cTracker.setVisible(true);
         }
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            eLog = new EventLog();
+            eLog.setVisible(true);
+        }
+        
         if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
 
 
@@ -455,8 +461,15 @@ public class UI extends javax.swing.JFrame {
      */
     public synchronized void renderFrame() {
 
+        //
         if(cTracker!=null)
             cTracker.renderFrame();
+        
+        //
+        if(eLog!=null){
+            eLog.renderFrame();
+        }
+        
         //Sprite
         Sprite tile = Main.game.getMap().getWorld().getTile();
         Sprite temp;

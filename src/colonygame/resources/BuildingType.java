@@ -18,7 +18,7 @@ import org.xml.sax.SAXException;
  *
  * @author WilCecil
  */
-public class BuildingType implements Comparable<BuildingType>{
+public class BuildingType implements Comparable<BuildingType> {
 
     protected static final String ROOT_NODE = "buildings";
     protected static final String CHILD_NODE = "building";
@@ -50,25 +50,26 @@ public class BuildingType implements Comparable<BuildingType>{
     int power;
     int capacity;
     int buildtime;
-    short type;
+    int type;
     Sprite sprite;
     int spriteX, spriteY;
     int minZ, maxZ;
     int deltaX, deltaY;
-    short tech;
+    int tech;
     int supplyFood, supplyOre, supplyPower, supplyHousing;
-    public static final short TYPE_TUBE = 0;
-    public static final short TYPE_HOUSE = 1;
-    public static final short TYPE_FACTORY = 2;
-    public static final short TYPE_SCIENCE = 4;
-    public static final short TYPE_MEDICAL = 8;
-    public static final short TYPE_ENTERTAINMENT = 16;
-    public static final short TYPE_POWER = 32;
-    public static final short TYPE_POLITICAL = 64;
-    public static final short TYPE_STORAGE = 128;
-    public static final short TYPE_AGRICULTURE = 256;
-    public static final short TYPE_LANDER = 512;
-    public static final short TYPE_CONSTRUCTION = 1028;
+    int supplyMedical, supplyScience;
+    public static final int TYPE_TUBE = 0;
+    public static final int TYPE_HOUSE = 1;
+    public static final int TYPE_FACTORY = 1<<1;
+    public static final int TYPE_SCIENCE = 1<<2;
+    public static final int TYPE_MEDICAL = 1<<3;
+    public static final int TYPE_ENTERTAINMENT = 1<<4;
+    public static final int TYPE_POWER = 1<<5;
+    public static final int TYPE_POLITICAL = 1<<6;
+    public static final int TYPE_STORAGE = 1<<7;
+    public static final int TYPE_AGRICULTURE = 1<<8;
+    public static final int TYPE_LANDER = 1<<9;
+    public static final int TYPE_CONSTRUCTION = 1<<10;
     protected static final String TYPE_TUBE_S = "TUBE";
     protected static final String TYPE_HOUSE_S = "HOUSE";
     protected static final String TYPE_FACTORY_S = "FACTORY";
@@ -83,9 +84,10 @@ public class BuildingType implements Comparable<BuildingType>{
     protected static final String TYPE_CONSTRUCTION_S = "CONSTRUCTION";
 
     public BuildingType(String id, String decription, int power, int capacity,
-            int buildtime, short type, Sprite sprite, int spriteX, int spriteY,
-            int spriteDX, int spriteDY, int minZ, int maxZ, short tech,
-            int supplyFood, int supplyOre, int supplyPower, int supplyHousing) {
+            int buildtime, int type, Sprite sprite, int spriteX, int spriteY,
+            int spriteDX, int spriteDY, int minZ, int maxZ, int tech,
+            int supplyFood, int supplyOre, int supplyPower, int supplyHousing,
+            int supplyMedical, int supplyScience) {
         this.id = id;
         this.decription = decription;
         this.power = power;
@@ -104,6 +106,8 @@ public class BuildingType implements Comparable<BuildingType>{
         this.supplyHousing = supplyHousing;
         this.supplyOre = supplyOre;
         this.supplyPower = supplyPower;
+        this.supplyMedical = supplyMedical;
+        this.supplyScience = supplyScience;
     }
 
     public static boolean readXML(File pfSource) {
@@ -181,9 +185,10 @@ public class BuildingType implements Comparable<BuildingType>{
         String tempDecription = null;
         String[] tempType;
         int tPower, tCapacity, tSpriteX, tSpriteY, tBuild, tMin, tMax;
-        int tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing;
+        int tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing,
+                tSupplyMedical, tSupplyScience;
         int tSpriteDX, tSpriteDY;
-        short tType, tTech;
+        int tType, tTech;
         Sprite tSprite = null;
 
         boolean bid, bDesc, bPower, bCap, bSprite, bSpriteX,
@@ -218,6 +223,8 @@ public class BuildingType implements Comparable<BuildingType>{
         tSupplyOre = 0;
         tSupplyPower = 0;
         tSupplyHousing = 0;
+        tSupplyMedical = 0;
+        tSupplyScience = 0;
 
 
 
@@ -312,34 +319,46 @@ public class BuildingType implements Comparable<BuildingType>{
 
             } else if (tempChild.getNodeName().equalsIgnoreCase("tech")) {
 
-                tTech = (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                tTech = (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
             } else if (tempChild.getNodeName().
                     equalsIgnoreCase("supply_food")) {
 
-                tSupplyFood = 
-                        (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                tSupplyFood =
+                        (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
             } else if (tempChild.getNodeName().
                     equalsIgnoreCase("supply_power")) {
 
-                tSupplyPower = 
-                        (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                tSupplyPower =
+                        (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
             } else if (tempChild.getNodeName().
                     equalsIgnoreCase("supply_housing")) {
 
-                tSupplyHousing = 
-                        (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                tSupplyHousing =
+                        (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
             } else if (tempChild.getNodeName().equalsIgnoreCase("supply_ore")) {
 
-                tSupplyOre = 
-                        (short) SASLib.Util.Val.VAL(tempChild.getTextContent());
+                tSupplyOre =
+                        (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+
+            }  else if (tempChild.getNodeName().equalsIgnoreCase("supply_medical")) {
+
+                tSupplyMedical =
+                        (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+
+            }  else if (tempChild.getNodeName().equalsIgnoreCase("supply_science")) {
+
+                tSupplyScience =
+                        (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
             } else if (tempChild.getNodeName().equalsIgnoreCase("sprite")) {
@@ -353,40 +372,40 @@ public class BuildingType implements Comparable<BuildingType>{
 
                 for (int i = 0; i < tempType.length; i++) {
                     if (tempType[i].equalsIgnoreCase(TYPE_AGRICULTURE_S)) {
-                        tType = (short) (tType | TYPE_AGRICULTURE);
+                        tType = (int) (tType | TYPE_AGRICULTURE);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_CONSTRUCTION_S)) {
-                        tType = (short) (tType | TYPE_CONSTRUCTION);
+                        tType = (int) (tType | TYPE_CONSTRUCTION);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_ENTERTAINMENT_S)) {
-                        tType = (short) (tType | TYPE_ENTERTAINMENT);
+                        tType = (int) (tType | TYPE_ENTERTAINMENT);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_FACTORY_S)) {
-                        tType = (short) (tType | TYPE_FACTORY);
+                        tType = (int) (tType | TYPE_FACTORY);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_HOUSE_S)) {
-                        tType = (short) (tType | TYPE_HOUSE);
+                        tType = (int) (tType | TYPE_HOUSE);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_LANDER_S)) {
-                        tType = (short) (tType | TYPE_LANDER);
+                        tType = (int) (tType | TYPE_LANDER);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_MEDICAL_S)) {
-                        tType = (short) (tType | TYPE_MEDICAL);
+                        tType = (int) (tType | TYPE_MEDICAL);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_POLITICAL_S)) {
-                        tType = (short) (tType | TYPE_POLITICAL);
+                        tType = (int) (tType | TYPE_POLITICAL);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_POWER_S)) {
-                        tType = (short) (tType | TYPE_POWER);
+                        tType = (int) (tType | TYPE_POWER);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_SCIENCE_S)) {
-                        tType = (short) (tType | TYPE_SCIENCE);
+                        tType = (int) (tType | TYPE_SCIENCE);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_STORAGE_S)) {
-                        tType = (short) (tType | TYPE_STORAGE);
+                        tType = (int) (tType | TYPE_STORAGE);
 
                     } else if (tempType[i].equalsIgnoreCase(TYPE_TUBE_S)) {
-                        tType = (short) (tType | TYPE_TUBE);
+                        tType = (int) (tType | TYPE_TUBE);
 
                     }
 
@@ -415,7 +434,8 @@ public class BuildingType implements Comparable<BuildingType>{
                     new BuildingType(tempId, tempDecription, tPower, tCapacity,
                     tBuild, tType, tSprite, tSpriteX, tSpriteY, tSpriteDX,
                     tSpriteDY, tMin, tMax, tTech,
-                    tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing));
+                    tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing,
+                    tSupplyMedical, tSupplyScience));
 
             return true;
 
@@ -431,7 +451,7 @@ public class BuildingType implements Comparable<BuildingType>{
         return false;
     }
 
-    public boolean isType(short check) {
+    public boolean isType(int check) {
         return (check & type) != 0;
     }
 
@@ -483,10 +503,19 @@ public class BuildingType implements Comparable<BuildingType>{
         return maxZ;
     }
 
-    public short getTech() {
+    public int getTech() {
         return tech;
     }
 
+    public int getSupplyScience() {
+        return supplyScience;
+    }
+
+    public int getSupplyMedical() {
+        return supplyMedical;
+    }
+
+    
     public int getSupplyFood() {
         return supplyFood;
     }

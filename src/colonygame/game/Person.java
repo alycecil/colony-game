@@ -5,10 +5,10 @@
 package colonygame.game;
 
 import colonygame.Main;
+import colonygame.event.DeathEvent;
 import colonygame.event.PregnancyEvent;
 import colonygame.resources.Settings;
 import java.util.ArrayList;
-import javax.annotation.Resource;
 
 /**
  *
@@ -295,7 +295,8 @@ public class Person implements Comparable<Person> {
 
         if (roll < rate) {
             //sadly we die here
-            addState(STATE_DEAD);
+            //addState(STATE_DEAD);
+            Main.game.offerEvent(new DeathEvent(this));
         } else {
 
 
@@ -392,4 +393,14 @@ public class Person implements Comparable<Person> {
                     Main.game.rnd);
         }
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+    
+    
 }

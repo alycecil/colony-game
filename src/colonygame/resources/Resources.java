@@ -28,6 +28,7 @@ public class Resources {
     BuildingType contruction;
     Settings settings;
     NameManager names;
+    AbstractMap<String, Science> sciences;
 
     /**
      * Creates the space for resources, loads nothing.
@@ -40,6 +41,7 @@ public class Resources {
         maps = new HashMap<>();
         buildings = new HashMap<>();
         settings = new Settings();
+        sciences = new HashMap<>();
     }
 
     /**
@@ -55,10 +57,12 @@ public class Resources {
         File mapsXML = new File(ini.get("resources", "maps"));
         File buildingsXML = new File(ini.get("resources", "buildings"));
         File settingsXML = new File(ini.get("resources", "initial"));
+        File sciencesXML = new File(ini.get("resources", "science"));
+
         File surnamesTXT = new File(ini.get("resources", "surnames"));
         File maleTXT = new File(ini.get("resources", "malenames"));
         File femaleTXT = new File(ini.get("resources", "femalenames"));
-        
+
         //parseSprites
         Sprite.readXML(spritesXML);
 
@@ -72,14 +76,15 @@ public class Resources {
 
         //parse buildings
         BuildingType.readXML(buildingsXML);
-        
+
         //read names
-        names = NameManager.readNames(surnamesTXT,maleTXT,femaleTXT);
-        
+        names = NameManager.readNames(surnamesTXT, maleTXT, femaleTXT);
+
         //parse initial settings xml
         settings.readXML(settingsXML);
-        
-        
+
+        //add sciences
+        Science.readXML(sciencesXML);
 
     }
 
@@ -94,9 +99,13 @@ public class Resources {
     public Sprite getSprite(String keyId) {
         return sprites.get(keyId);
     }
-    
+
     public BuildingType getBuilding(String keyId) {
         return buildings.get(keyId);
+    }
+
+    public Science getScience(String keyId) {
+        return sciences.get(keyId);
     }
 
     public Set<String> getMaps() {
@@ -115,13 +124,17 @@ public class Resources {
         sprites.put(keyId, sprite);
     }
 
-    void addBuilding(String tempId, BuildingType buildingType) {
+    public void addScience(String tempId, Science scnce) {
+        sciences.put(tempId, scnce);
+    }
 
-        if(buildingType.isType(BuildingType.TYPE_CONSTRUCTION)){
+    public void addBuilding(String tempId, BuildingType buildingType) {
+
+        if (buildingType.isType(BuildingType.TYPE_CONSTRUCTION)) {
             contruction = buildingType;
         }
-        
-        
+
+
         buildings.put(tempId, buildingType);
 
     }
@@ -130,39 +143,39 @@ public class Resources {
         return buildings.values();
     }
 
-    public ArrayList<BuildingType> getBuildings(short type) {
+    public ArrayList<BuildingType> getBuildings(int type) {
         ArrayList<BuildingType> wanted = new ArrayList<>();
         Iterator<BuildingType> iter = buildings.values().iterator();
         BuildingType temp;
 
         while (iter.hasNext()) {
             temp = iter.next();
-            
-            if(temp.isType(type)){
+
+            if (temp.isType(type)) {
                 wanted.add(temp);
             }
         }
-        
-        
-        
+
+
+
         return wanted;
     }
-    
-    public ArrayList<BuildingType> getBuildingsTech(short tech) {
+
+    public ArrayList<BuildingType> getBuildingsTech(int tech) {
         ArrayList<BuildingType> wanted = new ArrayList<>();
         Iterator<BuildingType> iter = buildings.values().iterator();
         BuildingType temp;
 
         while (iter.hasNext()) {
             temp = iter.next();
-            
-            if(temp.getTech()==tech){
+
+            if (temp.getTech() == tech) {
                 wanted.add(temp);
             }
         }
-        
-        
-        
+
+
+
         return wanted;
     }
 
@@ -179,5 +192,25 @@ public class Resources {
     }
     
     
-    
+    public ArrayList<Science> getAvailableScience(ArrayList<Science> done){
+        ArrayList<Science> avail = new ArrayList<>();
+        Collection<Science> all = sciences.values();
+        Iterator<Science> iter;
+        Science temp;
+        //remove all we have done
+        all.removeAll(done);
+        
+        //get available
+        iter = all.iterator();
+        
+        while(iter.hasNext()){
+            temp = iter.next();
+            
+            if(temp.isAvailable(done)){
+                avail.add(temp);
+            }
+        }
+        
+        return avail;
+    }
 }

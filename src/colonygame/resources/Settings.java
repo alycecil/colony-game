@@ -155,7 +155,7 @@ public class Settings {
                 }
 
                 Logger.getLogger(BuildingType.class.getName()).log(
-                        Level.INFO, "Laoded {0} settings.", added);
+                        Level.INFO, "Loaded {0} settings.", added);
             }
 
 

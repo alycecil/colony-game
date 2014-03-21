@@ -16,6 +16,42 @@ public class LifeTimeExpectation {
 
     public static int sampleSize = 10000;
 
+    public static void main(String[] args) {
+        double age = 0;
+        
+        int min = Integer.MAX_VALUE;
+        int max = 0;
+        Random r = new Random(1000);
+        
+        double chance = 1.0/15000;
+        boolean alive;
+        int life;
+        
+        for (int i = 0; i < sampleSize; i++) {
+            alive = true;
+            life = 0;
+            while(alive){
+                life++;
+                if(r.nextDouble()<chance){
+                    age+=life;
+                    alive=false;
+                    
+                    if(min>life){
+                        min = life;
+                    }
+                    if(max<life){
+                        max = life;
+                    }
+                }
+            }
+        }
+        
+        System.out.println("Avg:"+age/sampleSize);
+        System.out.println("Min:"+min);
+        System.out.println("Max:"+max);
+        
+    }
+
     /**
      * does a simulation on a sample of people to get expected life from
      * settings
@@ -58,7 +94,7 @@ public class LifeTimeExpectation {
             for (int tAge = 1; alive; tAge++) {
                 double rate = 0;
                 int block = 0;
-                
+
                 roll = r.nextDouble();
 
                 //catch eternal life
@@ -102,7 +138,7 @@ public class LifeTimeExpectation {
                 //check if we're giving birth
                 if (tAge == pregnant) {
                     births++;
-                    
+
                     block = 6;
 
                     //roll for pregnancy death
@@ -140,9 +176,9 @@ public class LifeTimeExpectation {
                     }
 
                     if (r.nextDouble() < rate) {
-                        pregnant=tAge+Settings.DEFAULT_PREGNANCY_LENGTH;
-                        
-                        if(teen){
+                        pregnant = tAge + Settings.DEFAULT_PREGNANCY_LENGTH;
+
+                        if (teen) {
                             teenPregnancy++;
                         }
                     }
@@ -170,11 +206,11 @@ public class LifeTimeExpectation {
         System.out.println();
 
         System.out.println(
-                "Average Births " + births / women+", total "+births);
+                "Average Births " + births / women + ", total " + births);
         System.out.println();
-        
+
         System.out.println(
-                "Average Teen Births " + teenPregnancy / women+", total "+teenPregnancy);
+                "Average Teen Births " + teenPregnancy / women + ", total " + teenPregnancy);
         System.out.println();
 
         System.out.println(

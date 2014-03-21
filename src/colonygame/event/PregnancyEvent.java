@@ -16,10 +16,12 @@ public class PregnancyEvent extends GameEvent {
 
     Person mother;
     Person father;
+    Person child;
     int time;
 
     public PregnancyEvent(Person mother, Person father) {
         this.mother = mother;
+        this.father = father;
         time = Main.game.getTimeStamp() + Settings.DEFAULT_PREGNANCY_LENGTH;
     }
 
@@ -55,11 +57,15 @@ public class PregnancyEvent extends GameEvent {
         }
 
         //give birth
-        return Main.game.addPerson(new Person(Main.game.rnd.nextBoolean(), mother, father));
+        child = new Person(Main.game.rnd.nextBoolean(), mother, father);
+        return Main.game.addPerson(child);
     }
 
     @Override
     public String logEvent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "On "+getTime()+" "+mother.getFirstName()+" "+
+                mother.getLastName()+" with the help of "+
+                father.getFirstName()+" "+father.getLastName()+" gave birth to "
+                + child.getFirstName()+ " " + child.getLastName() +".";
     }
 }
