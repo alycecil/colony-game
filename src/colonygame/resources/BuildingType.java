@@ -22,6 +22,7 @@ public class BuildingType implements Comparable<BuildingType> {
 
     protected static final String ROOT_NODE = "buildings";
     protected static final String CHILD_NODE = "building";
+    protected static final int DEFAULT_PRIORITY = 6;
 
     /*
      * TYPES
@@ -58,6 +59,8 @@ public class BuildingType implements Comparable<BuildingType> {
     int tech;
     int supplyFood, supplyOre, supplyPower, supplyHousing;
     int supplyMedical, supplyScience;
+    int priority;
+    
     public static final int TYPE_TUBE = 0;
     public static final int TYPE_HOUSE = 1;
     public static final int TYPE_FACTORY = 1<<1;
@@ -87,7 +90,7 @@ public class BuildingType implements Comparable<BuildingType> {
             int buildtime, int type, Sprite sprite, int spriteX, int spriteY,
             int spriteDX, int spriteDY, int minZ, int maxZ, int tech,
             int supplyFood, int supplyOre, int supplyPower, int supplyHousing,
-            int supplyMedical, int supplyScience) {
+            int supplyMedical, int supplyScience, int priority) {
         this.id = id;
         this.decription = decription;
         this.power = power;
@@ -108,6 +111,7 @@ public class BuildingType implements Comparable<BuildingType> {
         this.supplyPower = supplyPower;
         this.supplyMedical = supplyMedical;
         this.supplyScience = supplyScience;
+        this.priority = priority;
     }
 
     public static boolean readXML(File pfSource) {
@@ -188,7 +192,7 @@ public class BuildingType implements Comparable<BuildingType> {
         int tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing,
                 tSupplyMedical, tSupplyScience;
         int tSpriteDX, tSpriteDY;
-        int tType, tTech;
+        int tType, tTech, tPriority;
         Sprite tSprite = null;
 
         boolean bid, bDesc, bPower, bCap, bSprite, bSpriteX,
@@ -225,6 +229,7 @@ public class BuildingType implements Comparable<BuildingType> {
         tSupplyHousing = 0;
         tSupplyMedical = 0;
         tSupplyScience = 0;
+        tPriority =BuildingType.DEFAULT_PRIORITY;
 
 
 
@@ -435,7 +440,8 @@ public class BuildingType implements Comparable<BuildingType> {
                     tBuild, tType, tSprite, tSpriteX, tSpriteY, tSpriteDX,
                     tSpriteDY, tMin, tMax, tTech,
                     tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing,
-                    tSupplyMedical, tSupplyScience));
+                    tSupplyMedical, tSupplyScience,
+                    tPriority));
 
             return true;
 

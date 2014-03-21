@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<initial>
+    <landers>
+        <quantity>1</quantity>
+    </landers>
+    <people>
+        <gender>Male</gender>
+        <educated>true</educated>
+        <age>2500</age>
+        <quantity>10</quantity>
+    </people>
+    <people>
+        <gender>Female</gender>
+        <educated>true</educated>
+        <age>2500</age>
+        <quantity>10</quantity>
+    </people>     
+    
+</initial>

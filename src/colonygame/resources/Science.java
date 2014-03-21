@@ -31,19 +31,19 @@ public class Science implements Comparable<Science>{
 
     protected static final String ROOT_NODE = "science";
     protected static final String CHILD_NODE = "research";
-    protected static final int NO_UNLOCK = -1;
+    public static final int NO_UNLOCK = -1;
     int tech, cost;
-    String id, intDesc, longDesc;
+    String id, shortDesc, longDesc;
     ArrayList<String> requires;
     boolean available = false;
     Image img;
-    int paid;
+    double paid;
 
-    public Science(String id, int tech, int cost, String intDesc, String longDesc, ArrayList<String> requires, Image i) {
+    public Science(String id, int tech, int cost, String shortDesc, String longDesc, ArrayList<String> requires, Image i) {
         this.tech = tech;
         this.cost = cost;
         this.id = id;
-        this.intDesc = intDesc;
+        this.shortDesc = shortDesc;
         this.longDesc = longDesc;
         this.requires = requires;
         img = i;
@@ -71,15 +71,15 @@ public class Science implements Comparable<Science>{
         return tech;
     }
 
-    public String getIntegerDesc() {
-        return intDesc;
+    public String getShortDesc() {
+        return shortDesc;
     }
 
     public Image getImage() {
         return img;
     }
     
-    public boolean pay(int pay){
+    public boolean pay(double pay){
         paid+=pay;
         
         return paid>=cost;
@@ -191,7 +191,7 @@ public class Science implements Comparable<Science>{
 
         String tempId = null;
         int tech = NO_UNLOCK, cost = 0;
-        String intDesc = null, longDesc = null;
+        String shortDesc = null, longDesc = null;
         ArrayList<String> requires = new ArrayList<>();
         String imgName = null;
         String[] temp;
@@ -210,7 +210,7 @@ public class Science implements Comparable<Science>{
 
             } else if (tempChild.getNodeName().equalsIgnoreCase("int")) {
                 //getstring and set
-                intDesc = tempChild.getTextContent();
+                shortDesc = tempChild.getTextContent();
 
             } else if (tempChild.getNodeName().equalsIgnoreCase("long")) {
                 //getstring and set
@@ -243,7 +243,7 @@ public class Science implements Comparable<Science>{
         }
 
         //all done with attributes
-        if (longDesc == null || intDesc == null || tempId == null) {
+        if (longDesc == null || shortDesc == null || tempId == null) {
             //uh oh
             Logger.getLogger(Science.class.getName()).log(
                     Level.INFO, "current " + CHILD_NODE + " node not well defined, "
@@ -264,7 +264,7 @@ public class Science implements Comparable<Science>{
             
             //add to resources
             Main.resources.addScience(tempId, new Science(tempId, tech, cost,
-                    intDesc, longDesc, requires, img));
+                    shortDesc, longDesc, requires, img));
 
 
             //return success

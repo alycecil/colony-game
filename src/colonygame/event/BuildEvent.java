@@ -44,7 +44,7 @@ public class BuildEvent extends GameEvent {
 
     @Override
     public String logEvent() {
-        return "Build a "+type.getId()+" at ("+x+", "+y+", "+z+").";
+        return "On "+getTime()+" built a "+type.getId()+" at ("+x+", "+y+", "+z+").";
     }
 
     

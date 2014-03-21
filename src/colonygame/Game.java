@@ -8,6 +8,7 @@ import colonygame.game.Building;
 import colonygame.event.BuildEvent;
 import colonygame.event.GameEvent;
 import colonygame.event.MarriageEvent;
+import colonygame.event.ScienceEvent;
 import colonygame.game.Person;
 import colonygame.resources.BuildingType;
 import colonygame.resources.Science;
@@ -463,7 +464,7 @@ public class Game implements Runnable, ActionListener {
      *
      * @param i
      */
-    private void addTech(int tech) {
+    public void addTech(int tech) {
 
 
         //ensure not unlocked
@@ -614,11 +615,17 @@ public class Game implements Runnable, ActionListener {
             }
         } else {
             //update current goal by payinginto it
-            if (currentGoal.pay(scienceProduced)) {
-                //we finished paying so add to finished
-                researched.add(currentGoal);
+            if (currentGoal.pay(
+                    Math.pow(scienceProduced,
+                    Settings.DEFAULT_SCIENCE_DIMINISH))) {
 
+                //enque research event
+                offerEvent(new ScienceEvent(currentGoal));
+                
+                
+                
                 //set no goal
+                researched.add(currentGoal);
                 currentGoal = null;
             }
         }
@@ -627,4 +634,9 @@ public class Game implements Runnable, ActionListener {
     public ArrayList<String> getEventLog() {
         return log;
     }
+
+    public ArrayList<Science> getResearched() {
+        return researched;
+    }
+    
 }
