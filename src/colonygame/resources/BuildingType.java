@@ -60,7 +60,7 @@ public class BuildingType implements Comparable<BuildingType> {
     int supplyFood, supplyOre, supplyPower, supplyHousing;
     int supplyMedical, supplyScience;
     int priority;
-    public static final int TYPE_TUBE = 0;
+    int cost;
     public static final int TYPE_HOUSE = 1;
     public static final int TYPE_FACTORY = 1 << 1;
     public static final int TYPE_SCIENCE = 1 << 2;
@@ -72,6 +72,7 @@ public class BuildingType implements Comparable<BuildingType> {
     public static final int TYPE_AGRICULTURE = 1 << 8;
     public static final int TYPE_LANDER = 1 << 9;
     public static final int TYPE_CONSTRUCTION = 1 << 10;
+    public static final int TYPE_TUBE = 1 << 11;
     protected static final String TYPE_TUBE_S = "TUBE";
     protected static final String TYPE_HOUSE_S = "HOUSE";
     protected static final String TYPE_FACTORY_S = "FACTORY";
@@ -89,7 +90,7 @@ public class BuildingType implements Comparable<BuildingType> {
             int buildtime, int type, Sprite sprite, int spriteX, int spriteY,
             int spriteDX, int spriteDY, int minZ, int maxZ, int tech,
             int supplyFood, int supplyOre, int supplyPower, int supplyHousing,
-            int supplyMedical, int supplyScience, int priority) {
+            int supplyMedical, int supplyScience, int priority, int cost) {
         this.id = id;
         this.decription = decription;
         this.power = power;
@@ -111,6 +112,7 @@ public class BuildingType implements Comparable<BuildingType> {
         this.supplyMedical = supplyMedical;
         this.supplyScience = supplyScience;
         this.priority = priority;
+        this.cost = cost;
     }
 
     public static boolean readXML(File pfSource) {
@@ -192,6 +194,7 @@ public class BuildingType implements Comparable<BuildingType> {
                 tSupplyMedical, tSupplyScience;
         int tSpriteDX, tSpriteDY;
         int tType, tTech, tPriority;
+        int tCost;
         Sprite tSprite = null;
 
         boolean bid, bDesc, bPower, bCap, bSprite, bSpriteX,
@@ -228,6 +231,7 @@ public class BuildingType implements Comparable<BuildingType> {
         tSupplyHousing = 0;
         tSupplyMedical = 0;
         tSupplyScience = 0;
+        tCost = 0;
         tPriority = BuildingType.DEFAULT_PRIORITY;
 
 
@@ -371,6 +375,12 @@ public class BuildingType implements Comparable<BuildingType> {
                         (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
 
 
+            } else if (tempChild.getNodeName().equalsIgnoreCase("cost")) {
+
+                tCost =
+                        (int) SASLib.Util.Val.VAL(tempChild.getTextContent());
+
+
             } else if (tempChild.getNodeName().equalsIgnoreCase("sprite")) {
                 //ask resorces for sprite set
                 tSprite = Main.resources.getSprite(tempChild.getTextContent());
@@ -446,7 +456,7 @@ public class BuildingType implements Comparable<BuildingType> {
                     tSpriteDY, tMin, tMax, tTech,
                     tSupplyFood, tSupplyOre, tSupplyPower, tSupplyHousing,
                     tSupplyMedical, tSupplyScience,
-                    tPriority));
+                    tPriority, tCost));
 
             return true;
 

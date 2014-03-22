@@ -37,7 +37,4 @@ public class UIButtonBuilding extends UIButton{
             
             return "Enabled";
     }
-    
- 
-    
 }

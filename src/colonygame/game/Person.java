@@ -4,6 +4,7 @@
  */
 package colonygame.game;
 
+import colonygame.Game;
 import colonygame.Main;
 import colonygame.event.DeathEvent;
 import colonygame.event.PregnancyEvent;
@@ -38,9 +39,11 @@ public class Person implements Comparable<Person> {
     int DOD;
     boolean gender;
     boolean educated;
+    boolean hasHousing;
+    boolean hasMedical;
     Person mother;
     Person mate;
-    Building home;
+    //Building home;
     Building work;
     String firstName;
     String lastName;
@@ -74,7 +77,7 @@ public class Person implements Comparable<Person> {
         this.gender = gender;
         this.educated = false;
         this.mother = mother;
-        this.home = null;
+//        this.home = null;
         this.work = null;
 
         id = nextId++;
@@ -83,7 +86,8 @@ public class Person implements Comparable<Person> {
 
         nameMe();
 
-
+        hasHousing = false;
+        hasMedical = false;
 
     }
 
@@ -95,12 +99,14 @@ public class Person implements Comparable<Person> {
         this.mother = mother;
 
         this.work = null;
+        hasHousing = false;
+        hasMedical = false;
 
 
 
         nameMe();
         if (mother != null) {
-            this.home = mother.home;
+//            this.home = mother.home;
 
             //if our mother is married add a boost
             if (mother.isState(STATE_MARRIED)) {
@@ -143,10 +149,13 @@ public class Person implements Comparable<Person> {
         this.gender = gender;
         this.educated = educated;
         this.mother = mother;
-        this.home = home;
+//        this.home = home;
         this.work = work;
 
         id = nextId++;
+
+        hasHousing = false;
+        hasMedical = false;
 
         DOD = -1;
 
@@ -161,10 +170,9 @@ public class Person implements Comparable<Person> {
         return DOD;
     }
 
-    public Building getHome() {
-        return home;
-    }
-
+//    public Building getHome() {
+//        return home;
+//    }
     public Person getMother() {
         return mother;
     }
@@ -189,10 +197,9 @@ public class Person implements Comparable<Person> {
         this.educated = educated;
     }
 
-    public void setHome(Building home) {
-        this.home = home;
-    }
-
+//    public void setHome(Building home) {
+//        this.home = home;
+//    }
     public void setWork(Building work) {
         this.work = work;
     }
@@ -228,11 +235,13 @@ public class Person implements Comparable<Person> {
     }
 
     public void simulate() {
-        double rate = 0;
+        double rate;
         boolean fertile = false;
-        boolean hasMedical = Main.game.isMedicalAvailable();
 
-        double roll = Main.game.rnd.nextDouble();
+        hasMedical = Main.game.isMedicalAvailable();
+        hasHousing = Main.game.hasHousing();
+
+        double roll = Game.rnd.nextDouble();
 
         //only simulate the living!
         if (!isAlive()) {
@@ -281,6 +290,9 @@ public class Person implements Comparable<Person> {
         if (isState(STATE_SICK)) {
             rate *= Settings.DEFAULT_SICK_MODIFIER;
         }
+        if (!hasHousing) {
+            rate *= Settings.DEFAULT_HOMELESS_MODIFIER;
+        }
 
         //are people starving?
         if (Main.game.getAgrigultureStored() < 0) {
@@ -304,6 +316,8 @@ public class Person implements Comparable<Person> {
             //since we didnt die lets see if we get pregnant instead
             //check if housing is available and if food is available
             if (Main.game.getAgriculture() > 0) {
+
+
 
                 if (fertile && !isMale() && !isState(STATE_PREGNANT)) {
                     //role for pregnany
@@ -343,7 +357,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public String toString() {
-        String desc = lastName+", "+firstName+ " " + id + " ";
+        String desc = lastName + ", " + firstName + " " + id + " ";
         if (isMale()) {
             desc += "male ";
         } else {
@@ -384,13 +398,13 @@ public class Person implements Comparable<Person> {
 
     private void nameMe() {
         firstName = Main.resources.getNameManager().getFirstName(
-                Main.game.rnd, this.gender);
+                Game.rnd, this.gender);
 
         if (mother != null && mother.lastName != null) {
             lastName = mother.lastName;
         } else {
             lastName = Main.resources.getNameManager().getSurname(
-                    Main.game.rnd);
+                    Game.rnd);
         }
     }
 
@@ -401,6 +415,4 @@ public class Person implements Comparable<Person> {
     public String getLastName() {
         return lastName;
     }
-    
-    
 }

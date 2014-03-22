@@ -28,7 +28,7 @@ and open the template in the editor.
         <int>Modified Gravity Agriculture</int>
         <long>Agricultural improvements for nonstandard gravity.</long>
         <tech>3</tech>
-        <requires>2</requires>
+        <requires>2,10</requires>
         <cost>3000</cost>
         <image>BITMAPS\590.BMP</image>
     </research>
@@ -37,7 +37,7 @@ and open the template in the editor.
         <int>Nano-Agriculture</int>
         <long>Agricultural improvements never before dreamed of!</long>
         <tech>4</tech>
-        <requires>3,8</requires>
+        <requires>3,8,9,11</requires>
         <cost>8000</cost>
         <image>BITMAPS\590.BMP</image>
     </research>
@@ -55,7 +55,7 @@ and open the template in the editor.
         <int>Trauma Medicine</int>
         <long>Essental traumatic medical technologies.</long>
         <tech>6</tech>
-        <requires>5</requires>
+        <requires>5,11</requires>
         <cost>10000</cost>
         <image>BITMAPS\593.BMP</image>
     </research>
@@ -75,6 +75,33 @@ and open the template in the editor.
         <tech>-1</tech>
         <requires>0</requires>
         <cost>500</cost>
-        <image>BITMAPS\594.BMP</image>
+        <image>BITMAPS\616.BMP</image>
+    </research>
+    <research>
+        <id>9</id>
+        <int>Chemistry</int>
+        <long>Chemistry, a branch of physical science, is the study of the composition, structure, properties and change of matter.</long>
+        <tech>-1</tech>
+        <requires>0</requires>
+        <cost>500</cost>
+        <image>BITMAPS\602.BMP</image>
+    </research>
+    <research>
+        <id>10</id>
+        <int>Biology</int>
+        <long>Biology is a natural science concerned with the study of life and living organisms, including their structure, function, growth, evolution, distribution, and taxonomy.</long>
+        <tech>-1</tech>
+        <requires>0</requires>
+        <cost>500</cost>
+        <image>BITMAPS\586.BMP</image>
+    </research>
+    <research>
+        <id>11</id>
+        <int>Exobiology</int>
+        <long>Astrobiology is the study of the origin, evolution, distribution, and future of life in the universe: extraterrestrial life and life on Earth.</long>
+        <tech>-1</tech>
+        <requires>10</requires>
+        <cost>1500</cost>
+        <image>BITMAPS\589.BMP</image>
     </research>
 </science>

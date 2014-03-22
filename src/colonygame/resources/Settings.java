@@ -75,6 +75,7 @@ public class Settings {
     public static final double DEFAULT_SICK_MODIFIER = 4.0;
     public static final double DEFAULT_HUNGRY_MODIFIER = 10.0;
     public static final double DEFAULT_STARVING_MODIFIER = 100.0;
+    public static final double DEFAULT_HOMELESS_MODIFIER = 2.0;
     /*
      * Female 15-19 yr	2000-2005	 	Births per 1,000 women	43.7	 
      * Female 20-24 yr	2000-2005	 	Births per 1,000 women	104.0	 

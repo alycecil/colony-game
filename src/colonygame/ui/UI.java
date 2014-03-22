@@ -28,7 +28,7 @@ import java.util.Iterator;
  *
  * @author TOM
  */
-public class UI extends javax.swing.JFrame {
+public final class UI extends javax.swing.JFrame {
 
     int x, y, z;
     public int RENDER_WIDTH = 4;
@@ -42,6 +42,8 @@ public class UI extends javax.swing.JFrame {
     public static final int BUTTON_COLOR = 0x00FF0000;
     public static final int BUILDMENU_WIDTH = 120;
     public static final int BUILDMENU_HEIGHT = 30;
+    public static final int SCIENCE_MENU_WIDTH = 120;
+    public static final int SCIENCE_MENU_HEIGHT = 30;
     public static final int BUTTON_COLOR_TEXT = 0x60c52f;
     public static final int BUTTON_COLOR_BACKGROUND = 0x593104;
     public static final int BACKGROUND_COLOR = 0x00000000;
@@ -57,7 +59,7 @@ public class UI extends javax.swing.JFrame {
     public static final int BUTTON_WIDTH_1 = 80;
     public static final int BUTTON_WIDTH_2 = 50;
     public static final int PADDING_DEFAULT = 2;
-    public static final int RIGHT_CLICK_WIDTH= 100;
+    public static final int RIGHT_CLICK_WIDTH = 100;
     public static final int RIGHT_CLICK_HEIGHT = 120;
     public static final int RIGHT_CLICK_BACKGROUND = INFO_BOX_COLOR;
     public static final int RIGHT_CLICK_TEXT = 0x56f84c;
@@ -77,6 +79,7 @@ public class UI extends javax.swing.JFrame {
     ColonistTracker cTracker;
     EventLog eLog;
     BuildingRightClick rightClick;
+    ScienceMenu scncMenu;
 
     // <editor-fold defaultstate="collapsed" desc=" Constructor ">   
     /**
@@ -106,6 +109,13 @@ public class UI extends javax.swing.JFrame {
                 PADDING_DEFAULT,
                 PADDING_DEFAULT * 3 + 2 * BUTTON_HEIGHT,
                 BUILDMENU_WIDTH, BUILDMENU_HEIGHT);
+
+
+        //SCIENCE MENU
+        scncMenu = new ScienceMenu(
+                PADDING_DEFAULT * 2 + BUTTON_WIDTH_1,
+                PADDING_DEFAULT * 3 + 2 * BUTTON_HEIGHT,
+                SCIENCE_MENU_WIDTH, SCIENCE_MENU_HEIGHT);
 
 
         //right click
@@ -145,6 +155,28 @@ public class UI extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 Main.ui.setBuildmenuVisible(!Main.ui.getBuildmenuVisible());
                 Main.ui.getBuildmenu().update();
+
+                Main.ui.getScienceMenu().setVisible(false);
+                Main.ui.getScienceMenu().update();
+            }
+        });
+
+        //add science button
+        final UIButton science;
+        science = addButton(
+                PADDING_DEFAULT * 2 + BUTTON_WIDTH_1,
+                PADDING_DEFAULT * 2 + BUTTON_HEIGHT,
+                BUTTON_WIDTH_1, BUTTON_HEIGHT, "Science",
+                new Color(BUTTON_COLOR_BACKGROUND),
+                new Color(BUTTON_COLOR_TEXT),
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.ui.setBuildmenuVisible(false);
+                Main.ui.getBuildmenu().update();
+
+                Main.ui.getScienceMenu().setVisible(!Main.ui.getScienceMenu().isVisible());
+                Main.ui.getScienceMenu().update();
             }
         });
 
@@ -305,7 +337,7 @@ public class UI extends javax.swing.JFrame {
             }
 
         }
-        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
 
 
             if (y < Main.game.getMap().getHeight() - 1 - RENDER_HEIGHT) {
@@ -313,7 +345,7 @@ public class UI extends javax.swing.JFrame {
             }
 
         }
-        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
 
             if (y > 0) {
                 y--;
@@ -328,9 +360,9 @@ public class UI extends javax.swing.JFrame {
     private void jCanvasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCanvasMouseClicked
         //clean up last click
         desc = null;
-        
-        if(rightClick != null){
-            if(!rightClick.isInside(evt.getX(), evt.getY())){
+
+        if (rightClick != null) {
+            if (!rightClick.isInside(evt.getX(), evt.getY())) {
                 rightClick.setVisible(false);
                 rightClick = null;
             }
@@ -412,12 +444,13 @@ public class UI extends javax.swing.JFrame {
                                 (int) touch.getY(),
                                 z);
 
-                        Building b = Main.game.getMap().getBuilding((int) touch.getX(), (int) touch.getY(), z);
+                        Building b = Main.game.getMap().getBuilding(
+                                (int) touch.getX(), (int) touch.getY(), z);
                         if (b != null) {
                             rightClick = new BuildingRightClick(
                                     evt.getX(), evt.getY(),
-                                    RIGHT_CLICK_WIDTH, RIGHT_CLICK_HEIGHT, 
-                                    b, new Color(RIGHT_CLICK_BACKGROUND), 
+                                    RIGHT_CLICK_WIDTH, RIGHT_CLICK_HEIGHT,
+                                    b, new Color(RIGHT_CLICK_BACKGROUND),
                                     new Color(RIGHT_CLICK_TEXT));
                             rightClick.setVisible(true);
                         }
@@ -455,13 +488,7 @@ public class UI extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(UI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -475,7 +502,6 @@ public class UI extends javax.swing.JFrame {
         });
     }
     //</editor-fold>
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jpCanvas;
     // End of variables declaration//GEN-END:variables
@@ -496,8 +522,8 @@ public class UI extends javax.swing.JFrame {
             eLog.renderFrame();
         }
 
-        
-        
+
+
         //Sprite
         Sprite tile = Main.game.getMap().getWorld().getTile();
         Sprite temp;
@@ -580,15 +606,10 @@ public class UI extends javax.swing.JFrame {
         //draw tiles
         for (int i = 0; i < RENDER_WIDTH; i++) {
 
-            for (int j = RENDER_HEIGHT - 1; j >= 0; j--) {
+            for (int j = 0; j < RENDER_HEIGHT; j++) {
                 // Changed loop condition here.
-                cellx = (j * tile.getCellWidth() / 2)
-                        + (i * tile.getCellWidth() / 2)
-                        + MARGIN_X;
-                celly = (i * tile.getCellHeight() / 2)
-                        - (j * tile.getCellHeight() / 2)
-                        + jpCanvas.getHeight() / 2
-                        + MARGIN_Y;
+                cellx = getCellX(i, j, tile);
+                celly = getCellY(i, j, tile);
 
 
                 g.drawImage(tile.getCell(mapBlock[i][j]),
@@ -639,15 +660,10 @@ public class UI extends javax.swing.JFrame {
         //draw buildings
         for (int i = 0; i < RENDER_WIDTH; i++) {
 
-            for (int j = RENDER_HEIGHT - 1; j >= 0; j--) {
+            for (int j = 0; j < RENDER_HEIGHT; j++) {
                 // Changed loop condition here.
-                cellx = (j * tile.getCellWidth() / 2)
-                        + (i * tile.getCellWidth() / 2)
-                        + MARGIN_X;
-                celly = (i * tile.getCellHeight() / 2)
-                        - (j * tile.getCellHeight() / 2)
-                        + jpCanvas.getHeight() / 2
-                        + MARGIN_Y;
+                cellx = getCellX(i, j, tile);
+                celly = getCellY(i, j, tile);
 
 
                 if (buildingBlock[i][j] != null) {
@@ -665,18 +681,23 @@ public class UI extends javax.swing.JFrame {
                             null);
 
                     //are we online?
-                    if(buildingBlock[i][j].isDisabled()){
+                    if (buildingBlock[i][j].isDisabled()) {
                         g.setColor(Color.black);
-                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3, celly + tile.getCellHeight() / 2 - 3, 5, 5);
-                        
-                    }else if (!buildingBlock[i][j].isOnline()) {
+                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3,
+                                celly + tile.getCellHeight() / 2 - 3, 5, 5);
+
+                    } else if (!buildingBlock[i][j].isOnline()) {
                         //if not put a red dot over the building
                         g.setColor(Color.red);
-                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3, celly + tile.getCellHeight() / 2 - 3, 5, 5);
-                    } else if (!buildingBlock[i][j].isConected()) {
+                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3,
+                                celly + tile.getCellHeight() / 2 - 3, 5, 5);
+                    } else if (!buildingBlock[i][j].isConected()
+                            && !buildingBlock[i][j].getType().isType(
+                            BuildingType.TYPE_LANDER)) {
                         //if not connected put a yellow dot over the building
                         g.setColor(Color.yellow);
-                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3, celly + tile.getCellHeight() / 2 - 3, 5, 5);
+                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3,
+                                celly + tile.getCellHeight() / 2 - 3, 5, 5);
                     }
                 }
             }
@@ -690,15 +711,15 @@ public class UI extends javax.swing.JFrame {
         drawMap(g, gHit);
 
         //draw right click
-        if(rightClick!=null){
+        if (rightClick != null) {
             rightClick.render(g);
         }
-        
+
         //draw buttons
         renderButtons(g);
 
         //if i need to draw bnutton boxes
-        if (bResized && gHit!=null) {
+        if (bResized && gHit != null) {
             renderButtonsHit(gHit);
         }
 
@@ -708,8 +729,9 @@ public class UI extends javax.swing.JFrame {
         }
 
         //resized repainting off
-        if(gHit!=null)
+        if (gHit != null) {
             bResized = false;
+        }
 
         //and draw buffer to panel
         gFinal.drawImage(tempImg, 0, 0, null);
@@ -877,7 +899,6 @@ public class UI extends javax.swing.JFrame {
     }
 
     //</editor-fold>
-
     //<editor-fold defaultstate="collapsed" desc=" Utility Functions ">
     void error(InterruptedException e) {
         java.util.logging.Logger.getLogger(
@@ -947,4 +968,20 @@ public class UI extends javax.swing.JFrame {
         return b;
     }
     //</editor-fold>
+
+    public ScienceMenu getScienceMenu() {
+        return scncMenu;
+    }
+
+    private int getCellX(int i, int j, Sprite tile) {
+
+        return getWidth() / 2 - ( j-i + 1) * tile.getCellWidth() / 2;
+    }
+
+    private int getCellY(int i, int j, Sprite tile) {
+        return (int) ((i + j) * tile.getCellHeight() / 2
+                - RENDER_HEIGHT * tile.getCellHeight() / 2
+                + MARGIN_Y+
+                getHeight()/2);
+    }
 }

@@ -6,7 +6,6 @@ package colonygame.ui;
 
 import colonygame.Main;
 import colonygame.game.Building;
-import colonygame.uitool.Build;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -27,8 +26,8 @@ public class BuildingRightClick {
     Color backDrop;
     Color text;
     ArrayList<String> aText;
-    int fontHeight = 12;
-    int fontWidth = 7;
+    int fontHeight = 11;
+    int fontWidth = 5;
 
     public BuildingRightClick(int x, int y, int width, int height,
             Building blding, Color backDrop, Color text) {
@@ -49,10 +48,36 @@ public class BuildingRightClick {
                 + "Workers " + blding.getType().getCapacity() + "\n"
                 + "Power " + blding.getType().getPower();
 
+
+        if (blding.getType().getSupplyFood() != 0) {
+            message += "\n+Food " + blding.getType().getSupplyFood();
+        }
+
+        if (blding.getType().getSupplyHousing() != 0) {
+            message += "\n+Housing " + blding.getType().getSupplyHousing();
+        }
+
+        if (blding.getType().getSupplyMedical() != 0) {
+            message += "\n+Medical " + blding.getType().getSupplyMedical();
+        }
+
+        if (blding.getType().getSupplyOre() != 0) {
+            message += "\n+Ore " + blding.getType().getSupplyOre();
+        }
+
+        if (blding.getType().getSupplyPower() != 0) {
+            message += "\n+Power " + blding.getType().getSupplyPower();
+        }
+
+        if (blding.getType().getSupplyScience() != 0) {
+            message += "\n+Science " + blding.getType().getSupplyScience();
+        }
+
+
         int charsPerLine = width / fontWidth;
 
-
-        for (int i = 0; i < height / fontHeight; i++) {
+        int i = 0;
+        for (i = 0; i < height / fontHeight; i++) {
             int nextSplit = Math.min(message.indexOf("\n"), charsPerLine);
             if (nextSplit == -1) {
                 if (message.length() > charsPerLine) {
@@ -66,6 +91,8 @@ public class BuildingRightClick {
             aText.add(message.substring(0, nextSplit));
             message = message.substring(nextSplit + 1);
         }
+        
+        this.height = Math.min(height,(aText.size()+3)*(fontHeight));
     }
 
     public int getX() {
@@ -130,6 +157,9 @@ public class BuildingRightClick {
             g.setColor(backDrop);
             g.fillRect(x, y, width, height);
 
+            g.setColor(backDrop.darker());
+            g.drawRect(x, y, width, height);
+            
             //add toggle button
             //if there is none
             if (myButtons.isEmpty()) {
@@ -156,7 +186,7 @@ public class BuildingRightClick {
 
                 //add to my references so i can delete it.s
                 myButtons.add(btn);
-                
+
                 //force repaint
                 Main.ui.forceRepaint();
             }
@@ -166,7 +196,7 @@ public class BuildingRightClick {
 
             while (iter.hasNext()) {
                 line++;
-                g.drawString(iter.next(), x, y + line * fontHeight);
+                g.drawString(iter.next(), x+3, y + line * fontHeight);
             }
 
         }

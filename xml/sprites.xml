@@ -147,6 +147,19 @@ and open the template in the editor.
         <height>4</height>
     </sprite>
   
+  
+    <sprite>
+        <id>NORTH_MARKER</id>
+        <file>BITMAPS\NOTH.BMP</file>
+        <x>0</x>
+        <y>0</y>
+        <xOff>0</xOff>
+        <yOff>0</yOff>
+        <xDelta>0</xDelta>
+        <yDelta>0</yDelta>
+        <width>1</width>
+        <height>1</height>
+    </sprite>
 </sprites>
     
 

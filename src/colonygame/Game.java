@@ -41,6 +41,7 @@ public class Game implements Runnable, ActionListener {
     int powerTotal;
     int power;
     int housingTotal;
+    int housingNeed;
     int workerNeed;
     int agriculture;
     int agrigultureStored;
@@ -152,6 +153,7 @@ public class Game implements Runnable, ActionListener {
 
     private void simulatePopulation() {
 
+        housingNeed = 0;
         workerCount = 0;
 
         //iterate through our people
@@ -165,11 +167,11 @@ public class Game implements Runnable, ActionListener {
             focus = pIter.next();
 
             //if we are homeless, or our house is too full
-            if (focus.getHome() == null
-                    || focus.getHome().getCurrent() > focus.getHome().getType().getCapacity()) {
-                //move focus to a home
-                move(focus);
-            }
+//            if (focus.getHome() == null
+//                    || focus.getHome().getCurrent() > focus.getHome().getType().getCapacity()) {
+            //move focus to a home
+//                move(focus);
+//            }
 
             //get singles ready to mingle
             if (!focus.isState(Person.STATE_MARRIED)
@@ -246,8 +248,8 @@ public class Game implements Runnable, ActionListener {
         scienceProduced = 0;
         medicineProduced = 0;
         medicineUsed = 0;
-        
-        double modifier =1.0;
+        double modifier;
+
 
         Collections.sort(bld);
 
@@ -255,58 +257,56 @@ public class Game implements Runnable, ActionListener {
         iter = bld.iterator();
 
         while (iter.hasNext()) {
+            modifier = 1.0;
             temp_bld = iter.next();
 
             //am i onlone?
             if (!temp_bld.isOnline()) {
                 continue;
             }
-            
+
             //am i not disabled
-            if(temp_bld.isDisabled()){
+            if (temp_bld.isDisabled()) {
                 continue;
             }
-            
-            if(!temp_bld.isConected()){
-                modifier = 0.75;
-            }
-            
-
 
             temp = temp_bld.getType();
 
 
+            if (!temp_bld.isConected() && !temp.isType(BuildingType.TYPE_LANDER)) {
+                modifier = 0.75;
+            }
 
             //
             // update power //
             //
-            powerTotal += temp.getSupplyPower()*modifier;
-            power += temp.getPower()*modifier;
+            powerTotal += temp.getSupplyPower() * modifier;
+            power += temp.getPower();
 
 
             //
             // Update Housing/worker Resources //
             //
-            housingTotal += temp.getSupplyHousing()*modifier;
+            housingTotal += temp.getSupplyHousing() * modifier;
 
 
 
             //
             // update food
             //
-            agriculture += temp.getSupplyFood()*modifier;
+            agriculture += temp.getSupplyFood() * modifier;
 
             //
             // update ore
             //
-            ore += temp.getSupplyOre()*modifier;
+            ore += temp.getSupplyOre() * modifier;
 
 
             //update science
-            scienceProduced += temp.getSupplyScience()*modifier;
+            scienceProduced += temp.getSupplyScience() * modifier;
 
             //update medicine
-            medicineProduced += temp.getSupplyMedical()*modifier;
+            medicineProduced += temp.getSupplyMedical() * modifier;
 
         }
 
@@ -585,14 +585,14 @@ public class Game implements Runnable, ActionListener {
         map.setBuilding(x, y, z, b);
     }
 
-    private void move(Person focus) {
-        //@todo
-    }
+//    private void move(Person focus) {
+//        //@todo
+//    }
 
     public boolean isMedicalAvailable() {
         medicineUsed++;
-        
-        return medicineUsed<=medicineProduced;
+
+        return medicineUsed <= medicineProduced;
     }
 
     public boolean addPerson(Person person) {
@@ -608,6 +608,9 @@ public class Game implements Runnable, ActionListener {
     }
 
     public Person getBreedableMale() {
+        if (maleMinglers.isEmpty()) {
+            return null;
+        }
         return maleMinglers.remove(rnd.nextInt(maleMinglers.size()));
     }
 
@@ -670,5 +673,15 @@ public class Game implements Runnable, ActionListener {
 
     public Science getCurrentGoal() {
         return currentGoal;
+    }
+
+    public boolean hasHousing() {
+        housingNeed++;
+
+        return (housingNeed <= housingTotal);
+    }
+
+    public void setCurrentGoal(Science currentGoal) {
+        this.currentGoal = currentGoal;
     }
 }

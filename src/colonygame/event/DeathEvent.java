@@ -38,6 +38,10 @@ public class DeathEvent extends GameEvent{
     @Override
     public boolean doEvent() {
         p.addState(Person.STATE_DEAD);
+        if(p.getMate()!=null){
+            p.setMate(null);
+            p.removeState(Person.STATE_MARRIED);
+        }
         return true;
     }
 
