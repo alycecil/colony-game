@@ -274,6 +274,6 @@ public class Science implements Comparable<Science>{
 
     @Override
     public int compareTo(Science o) {
-        return o.getCost()-getCost();
+        return getCost()-o.getCost();
     }
 }

@@ -84,7 +84,7 @@ public class UIButton {
         
         //write string
         g.setColor(cText);
-        g.drawString(sText, x+4, y+14);
+        g.drawString(getText(), x+4, y+14);
         
     }
     

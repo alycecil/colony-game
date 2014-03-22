@@ -52,10 +52,15 @@ public class UI extends javax.swing.JFrame {
     public static final int ORE_COLOR = 0x593104;
     public static final int INFO_BOX_COLOR = 0x6b6b6b;
     public static final int RESOURCE_BOX_COLOR = INFO_BOX_COLOR;
+    public static final int SCIENCE_COLOR = 0x1f91ea;
     public static final int BUTTON_HEIGHT = 25;
     public static final int BUTTON_WIDTH_1 = 80;
     public static final int BUTTON_WIDTH_2 = 50;
     public static final int PADDING_DEFAULT = 2;
+    public static final int RIGHT_CLICK_WIDTH= 100;
+    public static final int RIGHT_CLICK_HEIGHT = 120;
+    public static final int RIGHT_CLICK_BACKGROUND = INFO_BOX_COLOR;
+    public static final int RIGHT_CLICK_TEXT = 0x56f84c;
     private Vector touch = null;
     int[][] hitBoxRef;
     BufferedImage hitBox;
@@ -71,6 +76,7 @@ public class UI extends javax.swing.JFrame {
     String desc;
     ColonistTracker cTracker;
     EventLog eLog;
+    BuildingRightClick rightClick;
 
     // <editor-fold defaultstate="collapsed" desc=" Constructor ">   
     /**
@@ -102,7 +108,8 @@ public class UI extends javax.swing.JFrame {
                 BUILDMENU_WIDTH, BUILDMENU_HEIGHT);
 
 
-        //speed controls
+        //right click
+        rightClick = null;
 
 
         //create buttons
@@ -282,7 +289,7 @@ public class UI extends javax.swing.JFrame {
             eLog = new EventLog();
             eLog.setVisible(true);
         }
-        
+
         if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
 
 
@@ -321,6 +328,13 @@ public class UI extends javax.swing.JFrame {
     private void jCanvasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCanvasMouseClicked
         //clean up last click
         desc = null;
+        
+        if(rightClick != null){
+            if(!rightClick.isInside(evt.getX(), evt.getY())){
+                rightClick.setVisible(false);
+                rightClick = null;
+            }
+        }
 
         //is left or right click?
 
@@ -397,6 +411,16 @@ public class UI extends javax.swing.JFrame {
                                 (int) touch.getX(),
                                 (int) touch.getY(),
                                 z);
+
+                        Building b = Main.game.getMap().getBuilding((int) touch.getX(), (int) touch.getY(), z);
+                        if (b != null) {
+                            rightClick = new BuildingRightClick(
+                                    evt.getX(), evt.getY(),
+                                    RIGHT_CLICK_WIDTH, RIGHT_CLICK_HEIGHT, 
+                                    b, new Color(RIGHT_CLICK_BACKGROUND), 
+                                    new Color(RIGHT_CLICK_TEXT));
+                            rightClick.setVisible(true);
+                        }
                     }
                 }
             }
@@ -451,6 +475,7 @@ public class UI extends javax.swing.JFrame {
         });
     }
     //</editor-fold>
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jpCanvas;
     // End of variables declaration//GEN-END:variables
@@ -462,13 +487,16 @@ public class UI extends javax.swing.JFrame {
     public synchronized void renderFrame() {
 
         //
-        if(cTracker!=null)
+        if (cTracker != null) {
             cTracker.renderFrame();
-        
+        }
+
         //
-        if(eLog!=null){
+        if (eLog != null) {
             eLog.renderFrame();
         }
+
+        
         
         //Sprite
         Sprite tile = Main.game.getMap().getWorld().getTile();
@@ -566,7 +594,7 @@ public class UI extends javax.swing.JFrame {
                 g.drawImage(tile.getCell(mapBlock[i][j]),
                         cellx,
                         celly, null);
-                
+
 
 
 
@@ -635,18 +663,20 @@ public class UI extends javax.swing.JFrame {
                             cellx + tType.getDeltaX(),
                             celly + tType.getDeltaY(),
                             null);
-                    
+
                     //are we online?
-                    if(!buildingBlock[i][j].isOnline()){
+                    if(buildingBlock[i][j].isDisabled()){
+                        g.setColor(Color.black);
+                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3, celly + tile.getCellHeight() / 2 - 3, 5, 5);
+                        
+                    }else if (!buildingBlock[i][j].isOnline()) {
                         //if not put a red dot over the building
                         g.setColor(Color.red);
-                        g.fillOval(cellx+tile.getCellWidth()/ 2-3, celly+tile.getCellHeight() / 2-3, 5, 5);
-                    }
-                    
-                    else if(!buildingBlock[i][j].isConected()){
+                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3, celly + tile.getCellHeight() / 2 - 3, 5, 5);
+                    } else if (!buildingBlock[i][j].isConected()) {
                         //if not connected put a yellow dot over the building
                         g.setColor(Color.yellow);
-                        g.fillOval(cellx+tile.getCellWidth()/ 2-3, celly+tile.getCellHeight() / 2-3, 5, 5);
+                        g.fillOval(cellx + tile.getCellWidth() / 2 - 3, celly + tile.getCellHeight() / 2 - 3, 5, 5);
                     }
                 }
             }
@@ -659,11 +689,16 @@ public class UI extends javax.swing.JFrame {
         //draw map
         drawMap(g, gHit);
 
+        //draw right click
+        if(rightClick!=null){
+            rightClick.render(g);
+        }
+        
         //draw buttons
         renderButtons(g);
 
         //if i need to draw bnutton boxes
-        if (bResized) {
+        if (bResized && gHit!=null) {
             renderButtonsHit(gHit);
         }
 
@@ -673,7 +708,8 @@ public class UI extends javax.swing.JFrame {
         }
 
         //resized repainting off
-        bResized = false;
+        if(gHit!=null)
+            bResized = false;
 
         //and draw buffer to panel
         gFinal.drawImage(tempImg, 0, 0, null);
@@ -763,8 +799,9 @@ public class UI extends javax.swing.JFrame {
         writeText(g, "Population::" + Main.game.getPopulation() + "/"
                 + Main.game.getHousingTotal(), i++, false);
 
-        writeText(g, "Workers::" + Main.game.getWorkers(), i++,false);
-        
+        writeText(g, "Workers::" + Main.game.getWorkersAvailable()
+                + "/" + Main.game.getWorkers(), i++, false);
+
         g.setColor(new Color(FOOD_COLOR));
         writeText(g, "Food::" + Main.game.getAgriculture() + "/"
                 + Main.game.getAgrigultureStored(), i++, false);
@@ -775,10 +812,17 @@ public class UI extends javax.swing.JFrame {
 
         g.setColor(new Color(ORE_COLOR));
         writeText(g, "Ore::" + Main.game.getOre(), i++, false);
+
+        g.setColor(new Color(SCIENCE_COLOR));
+        writeText(g, "Science::" + Main.game.getScience(), i++, false);
+
+
     }
 
     private void drawInfoBox(Graphics g) {
 
+
+        int i = 0;
 
         //DRAW TEXT BOX
         g.setColor(new Color(INFO_BOX_COLOR));
@@ -789,32 +833,42 @@ public class UI extends javax.swing.JFrame {
         //write in it
 
         g.setColor(Color.white);
-        writeText(g, "Tick::" + Main.game.getTimeStamp(), 0, true);
+        writeText(g, "Tick::" + Main.game.getTimeStamp(), i++, true);
 
         g.setColor(Color.red);
-        writeText(g, "Map::x:" + x + " y:" + y, 1, true);
+        writeText(g, "Map::x:" + x + " y:" + y, i++, true);
 
 
         writeText(g,
                 "Click::x:" + (int) touch.getX()
-                + " y:" + (int) touch.getY(), 2, true);
+                + " y:" + (int) touch.getY(), i++, true);
 
         g.setColor(Color.MAGENTA);
         if (currentTool != null) {
             writeText(g,
-                    "Tool::" + currentTool.toString(), 3, true);
+                    "Tool::" + currentTool.toString(), i++, true);
 
         } else {
             writeText(g,
-                    "No Tool", 3, true);
+                    "No Tool", i++, true);
         }
 
+        g.setColor(new Color(SCIENCE_COLOR));
+        if (Main.game.getCurrentGoal() != null) {
+            writeText(g,
+                    "Studying " + Main.game.getCurrentGoal().getShortDesc(),
+                    i++, true);
+        } else {
+            writeText(g,
+                    "No Science Goal", i++, true);
+        }
+
+
         if (desc != null) {
-            int i = 4;
             String[] s = desc.split("\n");
             for (int j = 0; j < s.length; j++) {
                 g.setColor(Color.white);
-                writeText(g, s[j], i + j, true);
+                writeText(g, s[j], i++, true);
             }
         }
 
@@ -823,7 +877,7 @@ public class UI extends javax.swing.JFrame {
     }
 
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc=" Utility Functions ">
     void error(InterruptedException e) {
         java.util.logging.Logger.getLogger(

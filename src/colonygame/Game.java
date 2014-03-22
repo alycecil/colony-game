@@ -46,6 +46,7 @@ public class Game implements Runnable, ActionListener {
     int agrigultureStored;
     int scienceProduced;
     int medicineProduced;
+    int medicineUsed;
     int ore;
     int workerCount;
     public static final long seed = System.currentTimeMillis();
@@ -79,6 +80,8 @@ public class Game implements Runnable, ActionListener {
         ore = 0;
         workerCount = 0;
         scienceProduced = 0;
+        medicineProduced = 0;
+        medicineUsed = 0;
 
         Set<String> maps = Main.resources.getMaps();
 
@@ -199,7 +202,7 @@ public class Game implements Runnable, ActionListener {
             Person m = maleMinglers.remove(rnd.nextInt(maleMinglers.size()));
             Person f = femaleMinglers.remove(rnd.nextInt(femaleMinglers.size()));
 
-            offerEvent(new MarriageEvent(m,f));
+            offerEvent(new MarriageEvent(m, f));
         }
 
         //simulation pass
@@ -242,6 +245,9 @@ public class Game implements Runnable, ActionListener {
         agriculture = 0;
         scienceProduced = 0;
         medicineProduced = 0;
+        medicineUsed = 0;
+        
+        double modifier =1.0;
 
         Collections.sort(bld);
 
@@ -255,6 +261,16 @@ public class Game implements Runnable, ActionListener {
             if (!temp_bld.isOnline()) {
                 continue;
             }
+            
+            //am i not disabled
+            if(temp_bld.isDisabled()){
+                continue;
+            }
+            
+            if(!temp_bld.isConected()){
+                modifier = 0.75;
+            }
+            
 
 
             temp = temp_bld.getType();
@@ -264,33 +280,33 @@ public class Game implements Runnable, ActionListener {
             //
             // update power //
             //
-            powerTotal += temp.getSupplyPower();
-            power += temp.getPower();
+            powerTotal += temp.getSupplyPower()*modifier;
+            power += temp.getPower()*modifier;
 
 
             //
             // Update Housing/worker Resources //
             //
-            housingTotal += temp.getSupplyHousing();
+            housingTotal += temp.getSupplyHousing()*modifier;
 
 
 
             //
             // update food
             //
-            agriculture += temp.getSupplyFood();
+            agriculture += temp.getSupplyFood()*modifier;
 
             //
             // update ore
             //
-            ore += temp.getSupplyOre();
+            ore += temp.getSupplyOre()*modifier;
 
 
             //update science
-            scienceProduced += temp.getSupplyScience();
+            scienceProduced += temp.getSupplyScience()*modifier;
 
             //update medicine
-            medicineProduced += temp.getSupplyScience();
+            medicineProduced += temp.getSupplyMedical()*modifier;
 
         }
 
@@ -313,7 +329,7 @@ public class Game implements Runnable, ActionListener {
 
         Building neighbor;
 
-        //workerNeed = 0;
+        workerNeed = 0;
         iter = bld.iterator();
 
 
@@ -357,17 +373,20 @@ public class Game implements Runnable, ActionListener {
 
             }
 
-            if (powerTotal >= temp.getPower()
-                    && workerCount >= temp.getCapacity()) {
+            if (!temp_bld.isDisabled()) {
+                if (powerTotal >= temp.getPower()
+                        && workerCount >= temp.getCapacity()) {
 
-                temp_bld.setOnline(true);
+                    temp_bld.setOnline(true);
 
-                powerTotal -= temp.getPower();
-                workerCount -= temp.getCapacity();
-            } else {
-                temp_bld.setOnline(false);
+                    powerTotal -= temp.getPower();
+                    workerCount -= temp.getCapacity();
+                    workerNeed += temp.getCapacity();
+                } else {
+                    temp_bld.setOnline(false);
 
 //                workerNeed += temp.getCapacity();
+                }
             }
         }
 
@@ -492,7 +511,7 @@ public class Game implements Runnable, ActionListener {
             if (!e.doEvent()) {
                 Logger.getLogger(Game.class.getName()).log(
                         Level.WARNING, "Event Failed : {0}", e);
-            }else{
+            } else {
                 log.add(e.logEvent());
             }
         }
@@ -571,8 +590,9 @@ public class Game implements Runnable, ActionListener {
     }
 
     public boolean isMedicalAvailable() {
-        //@todo
-        return false;
+        medicineUsed++;
+        
+        return medicineUsed<=medicineProduced;
     }
 
     public boolean addPerson(Person person) {
@@ -617,14 +637,13 @@ public class Game implements Runnable, ActionListener {
         } else {
             //update current goal by payinginto it
             if (currentGoal.pay(
-                    Math.pow(scienceProduced,
-                    Settings.DEFAULT_SCIENCE_DIMINISH))) {
+                    getScience())) {
 
                 //enque research event
                 offerEvent(new ScienceEvent(currentGoal));
-                
-                
-                
+
+
+
                 //set no goal
                 researched.add(currentGoal);
                 currentGoal = null;
@@ -639,5 +658,17 @@ public class Game implements Runnable, ActionListener {
     public ArrayList<Science> getResearched() {
         return researched;
     }
-    
+
+    public int getWorkersAvailable() {
+        return workerCount - workerNeed;
+    }
+
+    public double getScience() {
+        return Math.round(Math.pow(scienceProduced,
+                Settings.DEFAULT_SCIENCE_DIMINISH) * 100.00) / 100.00;
+    }
+
+    public Science getCurrentGoal() {
+        return currentGoal;
+    }
 }

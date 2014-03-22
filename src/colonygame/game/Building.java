@@ -18,6 +18,7 @@ public class Building implements Comparable<Building>{
     int x, y, z;
     boolean stateOn = false;
     boolean isConected = false;
+    boolean disabled = false;
 
     public Building(BuildingType type, int current, int x, int y, int z) {
         this.type = type;
@@ -72,6 +73,16 @@ public class Building implements Comparable<Building>{
         return z;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    
+    
     @Override
     public int compareTo(Building o) {
         return this.getType().compareTo(o.getType());

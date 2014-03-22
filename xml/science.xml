@@ -29,7 +29,7 @@ and open the template in the editor.
         <long>Agricultural improvements for nonstandard gravity.</long>
         <tech>3</tech>
         <requires>2</requires>
-        <cost>1000</cost>
+        <cost>3000</cost>
         <image>BITMAPS\590.BMP</image>
     </research>
     <research>
@@ -38,7 +38,7 @@ and open the template in the editor.
         <long>Agricultural improvements never before dreamed of!</long>
         <tech>4</tech>
         <requires>3,8</requires>
-        <cost>6000</cost>
+        <cost>8000</cost>
         <image>BITMAPS\590.BMP</image>
     </research>
     <research>
@@ -56,7 +56,7 @@ and open the template in the editor.
         <long>Essental traumatic medical technologies.</long>
         <tech>6</tech>
         <requires>5</requires>
-        <cost>6000</cost>
+        <cost>10000</cost>
         <image>BITMAPS\593.BMP</image>
     </research>
     <research>

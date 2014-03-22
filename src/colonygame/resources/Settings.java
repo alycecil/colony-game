@@ -94,7 +94,7 @@ public class Settings {
     public static final double DEFAULT_MARRIAGE_CHANCE = .5 / (3500-1900);
     
     
-    public static final double DEFAULT_SCIENCE_DIMINISH = .9;
+    public static final double DEFAULT_SCIENCE_DIMINISH = .5;
     
     /**
      * 3/4ths of a year

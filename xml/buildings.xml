@@ -251,8 +251,8 @@ Special Types
         <description>An early extra-terran laboritory</description>
         <type>science</type>
         <power>10</power>
-        <sprite>tile2</sprite>
-        <cellx>2</cellx>
+        <sprite>tile1</sprite>
+        <cellx>3</cellx>
         <celly>1</celly>
         <celldx>7</celldx>
         <celldy>-24</celldy>
