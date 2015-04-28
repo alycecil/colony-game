@@ -2,7 +2,7 @@ colony-game
 ===========
 
 
-An Outpost by sierra remake using files available from http://www.outpostuniverse.net/outpost1.php
+An Outpost by sierra remake using files available from http://www.outpost2.net/outpost1.php
 
 Libraries
 ===========
