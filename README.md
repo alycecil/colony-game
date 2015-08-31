@@ -4,6 +4,13 @@ colony-game
 
 An Outpost by sierra remake using files available from http://www.outpost2.net/outpost1.php
 
+This was done in a week span and is full of rubbish code.
+
+
+License
+===========
+cc0
+
 Libraries
 ===========
 
